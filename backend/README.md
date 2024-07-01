@@ -3,7 +3,17 @@
 Deploy contract on localhost:
 ```
 $ pnpm hardhat node
-$ pnpm hardhat ignition deploy ignition/modules/Ballot.ts --network localhost
+$ pnpm hardhat ignition deploy ignition/modules/TCO2.ts --network localhost
+```
+
+Deploy contract on Polygon zkEVM testnet (Cardona):
+```
+$ pnpm hardhat ignition deploy ignition/modules/TCO2.ts --network polygonZkEvmCardona
+```
+
+Deploy contract on Polygon zkEVM mainnet:
+```
+$ pnpm hardhat ignition deploy ignition/modules/TCO2.ts --network polygonZkEvm
 ```
 
 Run hardhat tests with coverage
