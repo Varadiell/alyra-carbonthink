@@ -22,19 +22,13 @@ export function Web3Provider({ children }: { children: React.ReactNode }) {
             '--ck-connectbutton-balance-background': 'hsl(var(--muted))',
             '--ck-connectbutton-balance-color': 'hsl(var(--accent-foreground))',
             '--ck-connectbutton-balance-hover-background': 'hsl(var(--muted))',
-            '--ck-connectbutton-balance-active-background':
-              'hsl(var(--background))',
+            '--ck-connectbutton-balance-active-background': 'hsl(var(--background))',
             '--ck-connectbutton-box-shadow': '0 0 0 1px hsl(var(--input))',
-            '--ck-connectbutton-balance-box-shadow':
-              '0 0 0 1px hsl(var(--input))',
-            '--ck-connectbutton-hover-box-shadow':
-              '0 0 0 1px hsl(var(--input))',
-            '--ck-connectbutton-balance-hover-box-shadow':
-              '0 0 0 1px hsl(var(--input))',
-            '--ck-connectbutton-active-box-shadow':
-              '0 0 0 1px hsl(var(--input))',
-            '--ck-connectbutton-balance-active-box-shadow':
-              '0 0 0 1px hsl(var(--input))',
+            '--ck-connectbutton-balance-box-shadow': '0 0 0 1px hsl(var(--input))',
+            '--ck-connectbutton-hover-box-shadow': '0 0 0 1px hsl(var(--input))',
+            '--ck-connectbutton-balance-hover-box-shadow': '0 0 0 1px hsl(var(--input))',
+            '--ck-connectbutton-active-box-shadow': '0 0 0 1px hsl(var(--input))',
+            '--ck-connectbutton-balance-active-box-shadow': '0 0 0 1px hsl(var(--input))',
           }}
           options={{
             language: 'en-US',

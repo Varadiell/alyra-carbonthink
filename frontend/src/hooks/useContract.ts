@@ -1,20 +1,12 @@
 'use client';
 
 import { useEffect } from 'react';
-import {
-  useWriteContract,
-  useWaitForTransactionReceipt,
-  useAccount,
-} from 'wagmi';
+import { useWriteContract, useWaitForTransactionReceipt, useAccount } from 'wagmi';
 import { toast as sonner } from 'sonner';
 
 export function useContract(successCallback: () => void) {
   const { isConnected } = useAccount();
-  const {
-    data: writeContractHash,
-    status: writeContractStatus,
-    writeContract,
-  } = useWriteContract();
+  const { data: writeContractHash, status: writeContractStatus, writeContract } = useWriteContract();
   const { status: transactionStatus } = useWaitForTransactionReceipt({
     hash: writeContractHash,
   });
@@ -25,10 +17,7 @@ export function useContract(successCallback: () => void) {
         description: 'Transaction failed.',
         position: 'bottom-right',
       });
-    } else if (
-      writeContractStatus === 'success' &&
-      transactionStatus === 'pending'
-    ) {
+    } else if (writeContractStatus === 'success' && transactionStatus === 'pending') {
       sonner.info('Pending...', {
         description: 'Transaction is being processed...',
         position: 'bottom-right',
@@ -45,9 +34,7 @@ export function useContract(successCallback: () => void) {
 
   return {
     isConnected: isConnected,
-    isPending:
-      transactionStatus === 'pending' &&
-      !['idle', 'error'].includes(writeContractStatus),
+    isPending: transactionStatus === 'pending' && !['idle', 'error'].includes(writeContractStatus),
     writeContract,
   };
 }

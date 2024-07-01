@@ -33,7 +33,5 @@ export const DataContext = createContext<DataType>({
 export function DataProvider({ children }: { children: React.ReactNode }) {
   const data = useData();
   console.log(data); // TODO: remove debug
-  return (
-    <DataContext.Provider value={{ ...data }}>{children}</DataContext.Provider>
-  );
+  return <DataContext.Provider value={{ ...data }}>{children}</DataContext.Provider>;
 }

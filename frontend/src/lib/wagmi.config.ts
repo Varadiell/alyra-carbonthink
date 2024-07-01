@@ -31,12 +31,8 @@ export const config = createConfig(
     ssr: true,
     transports: {
       [hardhat.id]: http(),
-      [polygonZkEvmCardona.id]: http(
-        `${ALCHEMY_ENDPOINT_URL_POLYGON_ZKEVM_CARDONA}${ALCHEMY_API_KEY}`,
-      ),
-      [polygonZkEvm.id]: http(
-        `${ALCHEMY_ENDPOINT_URL_POLYGON_ZKEVM_MAINNET}${ALCHEMY_API_KEY}`,
-      ),
+      [polygonZkEvmCardona.id]: http(`${ALCHEMY_ENDPOINT_URL_POLYGON_ZKEVM_CARDONA}${ALCHEMY_API_KEY}`),
+      [polygonZkEvm.id]: http(`${ALCHEMY_ENDPOINT_URL_POLYGON_ZKEVM_MAINNET}${ALCHEMY_API_KEY}`),
     },
     walletConnectProjectId: WALLET_CONNECT_PROJECT_ID,
   }),
