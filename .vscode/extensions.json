@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "juanblanco.solidity",
+    "shd101wyy.markdown-preview-enhanced",
+    "bradlc.vscode-tailwindcss"
+  ]
+}

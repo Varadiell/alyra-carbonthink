@@ -1,0 +1,131 @@
+name: CI Tests
+
+on:
+  pull_request: {}
+  push:
+    branches: ["main", "dev"]
+  workflow_dispatch: {}
+
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend-lint:
+    timeout-minutes: 2
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up environment
+        uses: ./.github/actions/setup
+        with:
+          directory: "backend"
+
+      - name: Run lint check
+        run: |
+          cd backend
+          pnpm lint
+
+  frontend-lint:
+    timeout-minutes: 2
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up environment
+        uses: ./.github/actions/setup
+        with:
+          directory: "frontend"
+
+      - name: Run lint check
+        run: |
+          cd frontend
+          pnpm lint
+
+  backend-tests-hardhat:
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up environment
+        uses: ./.github/actions/setup
+        with:
+          directory: "backend"
+
+      - name: Run tests with coverage
+        run: |
+          cd backend
+          pnpm hardhat coverage
+
+      - name: Code coverage at 100%
+        uses: VeryGoodOpenSource/very_good_coverage@v3
+        with:
+          path: "./backend/coverage/lcov.info"
+          min_coverage: 100
+
+  backend-tests-foundry:
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: Run Forge build
+        run: |
+          cd backend
+          forge --version
+          forge build --sizes
+
+      - name: Run Forge tests
+        run: |
+          cd backend
+          forge coverage -vvv --report lcov
+
+      - name: Code coverage at 100%
+        uses: VeryGoodOpenSource/very_good_coverage@v3
+        with:
+          path: "./backend/lcov.info"
+          min_coverage: 100
+
+  slither:
+    timeout-minutes: 2
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up environment
+        uses: ./.github/actions/setup
+        with:
+          directory: "backend"
+
+      - name: Run Slither
+        uses: crytic/slither-action@v0.4.0
+        with:
+          target: "backend/"
+          solc-version: "0.8.24"
+          slither-config: "./backend/slither.config.json"
+
+  codespell:
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run CodeSpell
+        uses: codespell-project/actions-codespell@v2.0
+        with:
+          check_hidden: true
+          check_filenames: true
+          skip: pnpm-lock.yaml,./.git/objects

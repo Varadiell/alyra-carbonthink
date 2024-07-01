@@ -1,0 +1,20 @@
+{
+    "language": "en",
+    "words": [
+      "cmdk",
+      "connectbutton",
+      "connectkit",
+      "embla",
+      "nomicfoundation",
+      "sonner",
+      "struct",
+      "typechain",
+      "vaul",
+      "viem",
+      "wagmi"
+    ],
+    "ignorePaths": [
+      "**/lib/**",
+      "*.config.*"
+    ]
+}
