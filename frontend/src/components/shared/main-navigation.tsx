@@ -1,24 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import {
-  DatabaseZap,
-  Landmark,
-  LayoutDashboard,
-  LucideProps,
-  Menu,
-  ScrollText,
-  Users,
-  Vote,
-} from 'lucide-react';
+import { Leaf, LayoutDashboard, LucideProps, Menu } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { usePathname } from 'next/navigation';
 import { ConnectKitButton } from 'connectkit';
-import { useContext } from 'react';
-import { DataContext } from '@/contexts/data-provider';
 import { Skeleton } from '@/components/ui/skeleton';
 
 type PageType = {
@@ -30,9 +19,6 @@ type PageType = {
 
 export function MainNavigation({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const {
-    data: { eventLogsCount, proposalsCount, votesCount },
-  } = useContext(DataContext);
 
   const pages: PageType[] = [
     {
@@ -41,20 +27,7 @@ export function MainNavigation({ children }: { children: React.ReactNode }) {
       label: 'Dashboard',
       url: '/dashboard',
     },
-    { count: undefined, icon: Users, label: 'Voters', url: '/voters' },
-    {
-      count: proposalsCount,
-      icon: ScrollText,
-      label: 'Proposals',
-      url: '/proposals',
-    },
-    { count: votesCount, icon: Vote, label: 'Votes', url: '/votes' },
-    {
-      count: eventLogsCount,
-      icon: DatabaseZap,
-      label: 'Events',
-      url: '/events',
-    },
+    // TODO: other pages
   ];
 
   return (
@@ -63,8 +36,8 @@ export function MainNavigation({ children }: { children: React.ReactNode }) {
         <div className="flex h-full max-h-screen flex-col gap-2">
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
             <Link href="/" className="flex items-center gap-2 font-semibold">
-              <Landmark className="h-6 w-6" />
-              <span>The Ballot Project</span>
+              <Leaf className="h-6 w-6" />
+              <span>CarbonThink</span>
             </Link>
           </div>
           <div className="flex-1">
@@ -110,8 +83,8 @@ export function MainNavigation({ children }: { children: React.ReactNode }) {
                   href="#"
                   className="flex items-center gap-2 text-lg font-semibold"
                 >
-                  <Landmark className="h-6 w-6" />
-                  <span>The Ballot Project</span>
+                  <Leaf className="h-6 w-6" />
+                  <span>CarbonThink</span>
                 </Link>
                 {pages.map((page, index) => (
                   <Link

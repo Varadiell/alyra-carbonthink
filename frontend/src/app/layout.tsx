@@ -15,7 +15,7 @@ const fontSans = FontSans({
 });
 
 export const metadata: Metadata = {
-  title: 'The Ballot Project',
+  title: 'CarbonThink',
   description: '',
 };
 

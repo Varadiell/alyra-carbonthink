@@ -12,15 +12,15 @@ const {
 
 export const config = createConfig(
   getDefaultConfig({
-    appDescription: 'The Ballot Project',
+    appDescription: 'CarbonThink',
     // appIcon: "",
-    appName: 'The Ballot Project',
+    appName: 'CarbonThink',
     // appUrl: "",
     chains: [hardhat, polygonZkEvmCardona, polygonZkEvm],
     connectors: [
       metaMask({
         dappMetadata: {
-          name: 'The Ballot Project',
+          name: 'CarbonThink',
         },
       }),
       coinbaseWallet(),
