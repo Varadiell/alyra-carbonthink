@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 import {ERC1155} from "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import {ERC1155Burnable} from "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
 import {AccessManaged} from "@openzeppelin/contracts/access/manager/AccessManaged.sol";
@@ -28,24 +27,25 @@ contract TCO2 is ERC1155, ERC1155Burnable, AccessManaged, ERC1155Supply {
     /// @param amount The amount of tokens to mint.
     /// @param metadata The metadata associated with the token.
     function mint(address account, uint256 id, uint256 amount, string memory metadata) public restricted {
-        _mint(account, id, amount, "");
-        if (bytes(metadata).length > 0) {
+        // Set metadata before mint because of "exists" check.
+        if (!exists(id)) {
             _setMetadata(id, metadata);
         }
+        _mint(account, id, amount, "");
         emit TokenMinted(account, id, amount);
     }
 
     /// @notice Internal function to set metadata for a token id when the metadata is empty.
-    /// @param _id The token id to set the metadata for.
-    /// @param _metadata The metadata to set.
-    function _setMetadata(uint256 _id, string memory _metadata) internal {
-        if (bytes(_metadatas[_id]).length > 0) {
-            revert MetadataAlreadySet({tokenId: _id});
+    /// @param id The token id to set the metadata for.
+    /// @param metadata The metadata to set.
+    function _setMetadata(uint256 id, string memory metadata) internal {
+        if (bytes(_metadatas[id]).length > 0) {
+            revert MetadataAlreadySet({tokenId: id});
         }
-        if (bytes(_metadata).length == 0) {
+        if (bytes(metadata).length == 0) {
             revert EmptyMetadata();
         }
-        _metadatas[_id] = _metadata;
+        _metadatas[id] = metadata;
     }
 
     /// @notice Override required by Solidity for token transfer updates.
@@ -65,12 +65,12 @@ contract TCO2 is ERC1155, ERC1155Burnable, AccessManaged, ERC1155Supply {
 
     /// @notice Override the URI function to provide on-chain token-specific metadata.
     /// @dev This function returns the metadata URI for a given token id.
-    /// @param _tokenId The token id to get the metadata URI for.
+    /// @param tokenId The token id to get the metadata URI for.
     /// @return string The metadata URI for the given token id.
-    function uri(uint256 _tokenId) public view override returns (string memory) {
-        string memory json = _metadatas[_tokenId];
+    function uri(uint256 tokenId) public view override returns (string memory) {
+        string memory json = _metadatas[tokenId];
         if (bytes(json).length == 0) {
-            revert TokenNotFound({tokenId: _tokenId});
+            revert TokenNotFound({tokenId: tokenId});
         }
         return string.concat("data:application/json;utf8,", json);
     }
