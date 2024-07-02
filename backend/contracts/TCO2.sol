@@ -19,19 +19,32 @@ contract TCO2 is ERC1155, ERC1155Burnable, AccessManaged, ERC1155Supply {
     /// @param initialAuthority The address of the initial authority.
     constructor(address initialAuthority) ERC1155("") AccessManaged(initialAuthority) {}
 
+    // TODO: add "restricted" and configure an AccessManager
     /// @notice Mint a new token with the specified metadata.
     /// @dev Mints a specified amount of tokens of a given id to the specified address.
     /// @param account The address to mint the tokens to.
     /// @param id The token id to mint.
     /// @param amount The amount of tokens to mint.
     /// @param metadata The metadata associated with the token.
-    function mint(address account, uint256 id, uint256 amount, string memory metadata) public restricted {
+    function mint(address account, uint256 id, uint256 amount, string memory metadata) public /**restricted*/ {
         // Set metadata before mint because of "exists" check.
         if (!exists(id)) {
             _setMetadata(id, metadata);
         }
         _mint(account, id, amount, "");
         emit TokenMinted(account, id, amount);
+    }
+
+    /// @notice Override the URI function to provide on-chain token-specific metadata.
+    /// @dev This function returns the metadata URI for a given token id.
+    /// @param tokenId The token id to get the metadata URI for.
+    /// @return string The metadata URI for the given token id.
+    function uri(uint256 tokenId) public view override returns (string memory) {
+        string memory json = _metadatas[tokenId]; // TODO: decode metadata
+        if (bytes(json).length == 0) {
+            return "";
+        }
+        return string.concat("data:application/json;utf8,", json);
     }
 
     /// @notice Internal function to set metadata for a token id when the metadata is empty.
@@ -44,7 +57,7 @@ contract TCO2 is ERC1155, ERC1155Burnable, AccessManaged, ERC1155Supply {
         if (bytes(metadata).length == 0) {
             revert EmptyMetadata();
         }
-        _metadatas[id] = metadata;
+        _metadatas[id] = metadata; // TODO: encode metadata
     }
 
     /// @notice Override required by Solidity for token transfer updates.
@@ -60,17 +73,5 @@ contract TCO2 is ERC1155, ERC1155Burnable, AccessManaged, ERC1155Supply {
         uint256[] memory values
     ) internal override(ERC1155, ERC1155Supply) {
         super._update(from, to, ids, values);
-    }
-
-    /// @notice Override the URI function to provide on-chain token-specific metadata.
-    /// @dev This function returns the metadata URI for a given token id.
-    /// @param tokenId The token id to get the metadata URI for.
-    /// @return string The metadata URI for the given token id.
-    function uri(uint256 tokenId) public view override returns (string memory) {
-        string memory json = _metadatas[tokenId];
-        if (bytes(json).length == 0) {
-            return "";
-        }
-        return string.concat("data:application/json;utf8,", json);
     }
 }
