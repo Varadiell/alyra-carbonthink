@@ -8,7 +8,6 @@ import {ERC1155Supply} from "@openzeppelin/contracts/token/ERC1155/extensions/ER
 
 error EmptyMetadata();
 error MetadataAlreadySet(uint256 tokenId);
-error TokenNotFound(uint256 tokenId);
 
 /// @custom:security-contact security@carbonthink.xyz
 contract TCO2 is ERC1155, ERC1155Burnable, AccessManaged, ERC1155Supply {
@@ -70,7 +69,7 @@ contract TCO2 is ERC1155, ERC1155Burnable, AccessManaged, ERC1155Supply {
     function uri(uint256 tokenId) public view override returns (string memory) {
         string memory json = _metadatas[tokenId];
         if (bytes(json).length == 0) {
-            revert TokenNotFound({tokenId: tokenId});
+            return "";
         }
         return string.concat("data:application/json;utf8,", json);
     }
