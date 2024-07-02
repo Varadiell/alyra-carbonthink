@@ -47,6 +47,24 @@ contract TCO2 is ERC1155, ERC1155Burnable, AccessManaged, ERC1155Supply {
         return string.concat("data:application/json;utf8,", json);
     }
 
+    /// @notice Returns the contract-level metadata for the collection.
+    /// @dev This function returns a JSON string that contains metadata about the contract, formatted as a data URI.
+    /// @return string A JSON string containing the contract metadata, including name, description, and images.
+    function contractURI() public pure returns (string memory) {
+        return
+            string.concat(
+                "data:application/json;utf8,",
+                "{",
+                '"name":"CarbonThink TCO2",',
+                '"description":"CarbonThink TCO2 tokens collection",',
+                '"image":"https://ipfs.io/ipfs/QmUyTvasFiWDhxg3WwTT3B4WMKP4jTxyDGVo5zD7chngPS?filename=TCO2%20TEST.png",',
+                '"banner_image":"https://ipfs.io/ipfs/QmSVu54cWLxa9JBPsqaQd7xB3hNoe2jSJj7Zqe91h3EfDK?filename=TCO2%20BANNER%20TEST.png",',
+                '"featured_image":"https://ipfs.io/ipfs/QmUyTvasFiWDhxg3WwTT3B4WMKP4jTxyDGVo5zD7chngPS?filename=TCO2%20TEST.png",',
+                '"external_link":"https://alyra-carbonthink.vercel.app/"',
+                "}"
+            );
+    }
+
     /// @notice Internal function to set metadata for a token id when the metadata is empty.
     /// @param id The token id to set the metadata for.
     /// @param metadata The metadata to set.

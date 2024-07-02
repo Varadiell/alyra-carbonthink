@@ -11,7 +11,6 @@ const rules = [
   'no-console',
   'no-global-import',
   'no-unused-vars',
-  'quotes',
   'use-forbidden-name',
   'var-name-mixedcase',
   'visibility-modifier-order',
