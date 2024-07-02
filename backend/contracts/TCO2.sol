@@ -1,38 +1,50 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
+import {Base64} from "@openzeppelin/contracts/utils/Base64.sol";
 import {ERC1155} from "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import {ERC1155Burnable} from "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
-import {AccessManaged} from "@openzeppelin/contracts/access/manager/AccessManaged.sol";
 import {ERC1155Supply} from "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
 error EmptyMetadata();
 error MetadataAlreadySet(uint256 tokenId);
 
 /// @custom:security-contact security@carbonthink.xyz
-contract TCO2 is ERC1155, ERC1155Burnable, AccessManaged, ERC1155Supply {
-    event TokenMinted(address indexed account, uint256 indexed id, uint256 amount);
-
+contract TCO2 is ERC1155, ERC1155Burnable, ERC1155Supply, Ownable {
     mapping(uint256 => string) private _metadatas;
 
-    /// @notice Constructor to initialize the contract with an initial authority.
-    /// @param initialAuthority The address of the initial authority.
-    constructor(address initialAuthority) ERC1155("") AccessManaged(initialAuthority) {}
+    /// @notice Constructor to initialize the contract with an initial owner.
+    /// @dev No ERC1155 uri is set because we override the uri method.
+    constructor() ERC1155("") Ownable(msg.sender) {}
 
-    // TODO: add "restricted" and configure an AccessManager
     /// @notice Mint a new token with the specified metadata.
     /// @dev Mints a specified amount of tokens of a given id to the specified address.
     /// @param account The address to mint the tokens to.
     /// @param id The token id to mint.
     /// @param amount The amount of tokens to mint.
-    /// @param metadata The metadata associated with the token.
-    function mint(address account, uint256 id, uint256 amount, string memory metadata) public /**restricted*/ {
+    /// @param base64Metadata The metadata associated with the token, encoded in base64.
+    function mint(address account, uint256 id, uint256 amount, string memory base64Metadata) external onlyOwner {
         // Set metadata before mint because of "exists" check.
         if (!exists(id)) {
-            _setMetadata(id, metadata);
+            _setMetadata(id, base64Metadata);
         }
         _mint(account, id, amount, "");
-        emit TokenMinted(account, id, amount);
+    }
+
+    /// @notice Returns the contract-level metadata for the collection.
+    /// @dev This function returns a JSON string that contains metadata about the contract, formatted as a data URI.
+    /// @return string A JSON string containing the contract metadata, including name, description, and images.
+    function contractURI() external pure returns (string memory) {
+        return
+            string.concat(
+                "data:application/json;utf8,",
+                "{",
+                '"name":"CarbonThink TCO2",',
+                '"description":"CarbonThink TCO2 tokens collection.",',
+                '"external_link":"https://alyra-carbonthink.vercel.app/"',
+                "}"
+            );
     }
 
     /// @notice Override the URI function to provide on-chain token-specific metadata.
@@ -40,42 +52,22 @@ contract TCO2 is ERC1155, ERC1155Burnable, AccessManaged, ERC1155Supply {
     /// @param tokenId The token id to get the metadata URI for.
     /// @return string The metadata URI for the given token id.
     function uri(uint256 tokenId) public view override returns (string memory) {
-        string memory json = _metadatas[tokenId]; // TODO: decode metadata
-        if (bytes(json).length == 0) {
+        string memory jsonBase64 = _metadatas[tokenId];
+        if (bytes(jsonBase64).length == 0) {
             return "";
         }
-        return string.concat("data:application/json;utf8,", json);
+        return string.concat("data:application/json;base64,", jsonBase64);
     }
 
-    /// @notice Returns the contract-level metadata for the collection.
-    /// @dev This function returns a JSON string that contains metadata about the contract, formatted as a data URI.
-    /// @return string A JSON string containing the contract metadata, including name, description, and images.
-    function contractURI() public pure returns (string memory) {
-        return
-            string.concat(
-                "data:application/json;utf8,",
-                "{",
-                '"name":"CarbonThink TCO2",',
-                '"description":"CarbonThink TCO2 tokens collection",',
-                '"image":"https://ipfs.io/ipfs/QmUyTvasFiWDhxg3WwTT3B4WMKP4jTxyDGVo5zD7chngPS?filename=TCO2%20TEST.png",',
-                '"banner_image":"https://ipfs.io/ipfs/QmSVu54cWLxa9JBPsqaQd7xB3hNoe2jSJj7Zqe91h3EfDK?filename=TCO2%20BANNER%20TEST.png",',
-                '"featured_image":"https://ipfs.io/ipfs/QmUyTvasFiWDhxg3WwTT3B4WMKP4jTxyDGVo5zD7chngPS?filename=TCO2%20TEST.png",',
-                '"external_link":"https://alyra-carbonthink.vercel.app/"',
-                "}"
-            );
-    }
-
-    /// @notice Internal function to set metadata for a token id when the metadata is empty.
+    /// @notice Internal function to set the json metadata for a token id when a new token is created.
+    /// @dev This function shall not be called on an already existing token.
     /// @param id The token id to set the metadata for.
     /// @param metadata The metadata to set.
     function _setMetadata(uint256 id, string memory metadata) internal {
-        if (bytes(_metadatas[id]).length > 0) {
-            revert MetadataAlreadySet({tokenId: id});
-        }
         if (bytes(metadata).length == 0) {
             revert EmptyMetadata();
         }
-        _metadatas[id] = metadata; // TODO: encode metadata
+        _metadatas[id] = Base64.encode(bytes(metadata));
     }
 
     /// @notice Override required by Solidity for token transfer updates.
