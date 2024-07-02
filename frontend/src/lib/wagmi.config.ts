@@ -1,5 +1,5 @@
 import { http, createConfig } from 'wagmi';
-import { hardhat, base, baseSepolia } from 'wagmi/chains';
+import { hardhat, base, baseSepolia, sepolia } from 'wagmi/chains';
 import { getDefaultConfig } from 'connectkit';
 import { metaMask, coinbaseWallet, injected, safe } from 'wagmi/connectors';
 import 'dotenv/config';
@@ -8,6 +8,7 @@ const {
   ALCHEMY_API_KEY = '',
   ALCHEMY_ENDPOINT_URL_BASE_MAINNET = '',
   ALCHEMY_ENDPOINT_URL_BASE_SEPOLIA = '',
+  ALCHEMY_ENDPOINT_URL_ETH_SEPOLIA = '',
   WALLET_CONNECT_PROJECT_ID = '',
 } = process.env;
 
@@ -17,7 +18,7 @@ export const config = createConfig(
     // appIcon: "",
     appName: 'CarbonThink',
     // appUrl: "",
-    chains: [hardhat, base, baseSepolia],
+    chains: [hardhat, sepolia, base, baseSepolia],
     connectors: [
       metaMask({
         dappMetadata: {
@@ -32,6 +33,7 @@ export const config = createConfig(
     ssr: true,
     transports: {
       [hardhat.id]: http(),
+      [sepolia.id]: http(`${ALCHEMY_ENDPOINT_URL_ETH_SEPOLIA}${ALCHEMY_API_KEY}`),
       [base.id]: http(`${ALCHEMY_ENDPOINT_URL_BASE_MAINNET}${ALCHEMY_API_KEY}`),
       [baseSepolia.id]: http(`${ALCHEMY_ENDPOINT_URL_BASE_SEPOLIA}${ALCHEMY_API_KEY}`),
     },

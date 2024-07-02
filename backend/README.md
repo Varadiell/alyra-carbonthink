@@ -6,14 +6,19 @@ $ pnpm hardhat node
 $ pnpm hardhat ignition deploy ignition/modules/TCO2.ts --network localhost
 ```
 
+Deploy contract on Ethereum testnet (Sepolia):
+```
+$ pnpm hardhat ignition deploy ignition/modules/TCO2.ts --network ethSepolia --verify
+```
+
 Deploy contract on Base testnet (Sepolia):
 ```
-$ pnpm hardhat ignition deploy ignition/modules/TCO2.ts --network baseSepolia
+$ pnpm hardhat ignition deploy ignition/modules/TCO2.ts --network baseSepolia --verify
 ```
 
 Deploy contract on Base mainnet:
 ```
-$ pnpm hardhat ignition deploy ignition/modules/TCO2.ts --network baseMainnet
+$ pnpm hardhat ignition deploy ignition/modules/TCO2.ts --network baseMainnet --verify
 ```
 
 Run hardhat tests with coverage
