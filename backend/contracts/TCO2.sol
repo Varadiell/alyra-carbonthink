@@ -16,7 +16,7 @@ contract TCO2 is ERC1155, ERC1155Burnable, ERC1155Supply, Ownable {
 
     /// @notice Constructor to initialize the contract with an initial owner.
     /// @dev No ERC1155 uri is set because we override the uri method.
-    constructor() ERC1155("") Ownable(msg.sender) {}
+    constructor(address initialOwner) ERC1155("") Ownable(initialOwner) {}
 
     /// @notice Mint a new token with the specified metadata.
     /// @dev Mints a specified amount of tokens of a given id to the specified address.
