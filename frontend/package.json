@@ -48,6 +48,7 @@
     "cmdk": "^1.0.0",
     "connectkit": "^1.8.1",
     "date-fns": "^3.6.0",
+    "dotenv": "^16.4.5",
     "embla-carousel-react": "^8.1.5",
     "input-otp": "^1.2.4",
     "lucide-react": "^0.395.0",

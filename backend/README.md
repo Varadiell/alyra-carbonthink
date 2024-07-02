@@ -6,14 +6,14 @@ $ pnpm hardhat node
 $ pnpm hardhat ignition deploy ignition/modules/TCO2.ts --network localhost
 ```
 
-Deploy contract on Polygon zkEVM testnet (Cardona):
+Deploy contract on Base testnet (Sepolia):
 ```
-$ pnpm hardhat ignition deploy ignition/modules/TCO2.ts --network polygonZkEvmCardona
+$ pnpm hardhat ignition deploy ignition/modules/TCO2.ts --network baseSepolia
 ```
 
-Deploy contract on Polygon zkEVM mainnet:
+Deploy contract on Base mainnet:
 ```
-$ pnpm hardhat ignition deploy ignition/modules/TCO2.ts --network polygonZkEvm
+$ pnpm hardhat ignition deploy ignition/modules/TCO2.ts --network baseMainnet
 ```
 
 Run hardhat tests with coverage
