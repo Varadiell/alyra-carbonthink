@@ -13,7 +13,7 @@ error TokenMetadataExists(uint256 tokenId); // New metadata should not be set to
 
 /// @custom:security-contact security@carbonthink.xyz
 contract TCO2 is ERC1155, ERC1155Burnable, ERC1155Supply, ERC2981, Ownable {
-    mapping(uint256 => string) private _metadatas;
+    mapping(uint256 => string) internal _metadatas;
 
     /// @notice Constructor to initialize the contract with an initial owner.
     /// @dev No ERC1155 uri is set because we override the uri function for on-chain metadata.
@@ -51,10 +51,10 @@ contract TCO2 is ERC1155, ERC1155Burnable, ERC1155Supply, ERC2981, Ownable {
                 "{",
                 '"name":"CarbonThink TCO2",',
                 '"description":"CarbonThink TCO2 tokens collection.",',
-                '"image":"ipfs://bafybeidcsrvmcxoqoxqgmiidnyrovb4hqx2f5mm6tyjsgyrjz7ribbwkpe/",',
-                '"banner_image":"ipfs://bafybeib5zu3kakff2ax67e7el4erucdwivlcdr3l4i7hbxhtddp6w36oji/",',
-                '"featured_image":"ipfs://bafybeidcsrvmcxoqoxqgmiidnyrovb4hqx2f5mm6tyjsgyrjz7ribbwkpe/",',
-                '"external_link":"https://alyra-carbonthink.vercel.app/"',
+                '"external_link":"https://alyra-carbonthink.vercel.app/",',
+                '"image_data":"',
+                _getSvg(),
+                '"',
                 "}"
             );
     }
@@ -77,6 +77,14 @@ contract TCO2 is ERC1155, ERC1155Burnable, ERC1155Supply, ERC2981, Ownable {
             return "";
         }
         return string.concat("data:application/json;base64,", jsonBase64);
+    }
+
+    /// @notice Generates CarbonThink logo SVG image as a string.
+    /// @dev This function generates an SVG image with specific attributes and returns it as a string.
+    /// @return string A string representing the SVG image.
+    function _getSvg() internal pure returns (string memory) {
+        return
+            "<svg width='500' height='500' viewBox='0 0 24 24' fill='green' stroke='#004000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z'></path><path d='M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12'></path></svg>";
     }
 
     /// @notice Override required by Solidity for token transfer updates.
