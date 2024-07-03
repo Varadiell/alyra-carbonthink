@@ -18,7 +18,8 @@
   "dependencies": {
     "@openzeppelin/contracts": "^5.0.2",
     "dotenv": "^16.4.5",
-    "hardhat": "^2.22.6"
+    "hardhat": "^2.22.6",
+    "tsconfig-paths": "^4.2.0"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",

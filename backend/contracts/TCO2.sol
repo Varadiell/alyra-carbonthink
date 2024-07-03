@@ -28,14 +28,16 @@ contract TCO2 is ERC1155, ERC1155Burnable, ERC1155Supply, ERC2981, Ownable {
     /// @param amount The amount of tokens to mint.
     /// @param base64Metadata The metadata associated with the token, encoded in base64.
     function mint(address account, uint256 id, uint256 amount, string memory base64Metadata) external onlyOwner {
+        bool tokenExists = exists(id);
+        bool hasMetadata = bytes(base64Metadata).length > 0;
         if (amount == 0) {
             revert MintAmountZero();
-        } else if (exists(id) && bytes(base64Metadata).length > 0) {
+        } else if (tokenExists && hasMetadata) {
             revert TokenMetadataExists(id);
-        } else if (!exists(id) && bytes(base64Metadata).length == 0) {
-            revert MintEmptyMetadata();
-        } else {
+        } else if (!tokenExists && hasMetadata) {
             _metadatas[id] = base64Metadata;
+        } else if (!tokenExists && !hasMetadata) {
+            revert MintEmptyMetadata();
         }
         // Mint after "exists" checks.
         _mint(account, id, amount, "");

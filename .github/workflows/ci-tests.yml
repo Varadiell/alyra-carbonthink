@@ -6,6 +6,9 @@ on:
     branches: ["main", "dev"]
   workflow_dispatch: {}
 
+env:
+  PRIVATE_KEY: "00b5de54126bfb82602c77b3e148ad59626eb5b87a98d5cb19e89508c045b9a6" # Random private key, account "0xA39D018Dd954a6E7a02433483136eC836897382d".
+
 concurrency:
   group: checks-${{ github.ref }}
   cancel-in-progress: true
