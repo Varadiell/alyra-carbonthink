@@ -7,9 +7,14 @@ import {ERC1155Supply} from "@openzeppelin/contracts/token/ERC1155/extensions/ER
 import {ERC2981} from "@openzeppelin/contracts/token/common/ERC2981.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
-error MintAmountZero(); // Mint amount should not be zero.
-error MintEmptyMetadata(); // Mint metadata to set should not be empty (on token creation).
-error TokenMetadataExists(uint256 tokenId); // New metadata should not be set to an already existing token.
+/// @notice Error thrown when the mint amount is zero.
+error MintAmountZero();
+
+/// @notice Error thrown when the metadata to be set during mint is empty.
+error MintEmptyMetadata();
+
+/// @notice Error thrown when trying to set metadata for an already existing token.
+error TokenMetadataExists(uint256 tokenId);
 
 /// @custom:security-contact security@carbonthink.xyz
 contract TCO2 is ERC1155, ERC1155Burnable, ERC1155Supply, ERC2981, Ownable {
@@ -17,6 +22,7 @@ contract TCO2 is ERC1155, ERC1155Burnable, ERC1155Supply, ERC2981, Ownable {
 
     /// @notice Constructor to initialize the contract with an initial owner.
     /// @dev No ERC1155 uri is set because we override the uri function for on-chain metadata.
+    /// @param initialOwner The address of the initial owner of the contract.
     constructor(address initialOwner) ERC1155("") Ownable(initialOwner) {
         _setDefaultRoyalty(initialOwner, 500); // Set royalties to 5%.
     }
@@ -82,7 +88,7 @@ contract TCO2 is ERC1155, ERC1155Burnable, ERC1155Supply, ERC2981, Ownable {
     /// @return string A string representing the SVG image.
     function _getSvg() internal pure returns (string memory) {
         return
-            "data:image/svg+xml;utf8,<svg width='500' height='500' viewBox='0 0 24 24' fill='green' stroke='#004000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z'></path><path d='M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12'></path></svg>";
+            "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='500' height='500' viewBox='0 0 24 24' fill='green' stroke='#004000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z'></path><path d='M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12'></path></svg>";
     }
 
     /// @notice Override required by Solidity for token transfer updates.
