@@ -126,4 +126,22 @@ describe('TCO2 token contract tests', () => {
       );
     });
   });
+
+  describe('supportsInterface', () => {
+    it('should support the interface ERC-1155 (Multi Token Standard)', async () => {
+      expect(await tco2Contract.supportsInterface('0xd9b67a26')).to.equal(true);
+    });
+
+    it('should support the interface ERC-2981 (NFT Royalty Standard)', async () => {
+      expect(await tco2Contract.supportsInterface('0x2a55205a')).to.equal(true);
+    });
+
+    it('should support the interface ERC-165 (Standard Interface Detection)', async () => {
+      expect(await tco2Contract.supportsInterface('0x01ffc9a7')).to.equal(true);
+    });
+
+    it('should not support a random interface hash', async () => {
+      expect(await tco2Contract.supportsInterface('0x00000000')).to.equal(false);
+    });
+  });
 });
