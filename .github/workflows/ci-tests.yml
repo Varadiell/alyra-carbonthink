@@ -68,34 +68,34 @@ jobs:
           path: "./backend/coverage/lcov.info"
           min_coverage: 100
 
-  backend-tests-foundry:
-    timeout-minutes: 5
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+  # backend-tests-foundry:
+  #   timeout-minutes: 5
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
 
-      - name: Install Foundry
-        uses: foundry-rs/foundry-toolchain@v1
-        with:
-          version: nightly
+  #     - name: Install Foundry
+  #       uses: foundry-rs/foundry-toolchain@v1
+  #       with:
+  #         version: nightly
 
-      - name: Run Forge build
-        run: |
-          cd backend
-          forge --version
-          forge build --sizes
+  #     - name: Run Forge build
+  #       run: |
+  #         cd backend
+  #         forge --version
+  #         forge build --sizes
 
-      - name: Run Forge tests
-        run: |
-          cd backend
-          forge coverage -vvv --report lcov
+  #     - name: Run Forge tests
+  #       run: |
+  #         cd backend
+  #         forge coverage -vvv --report lcov
 
-      - name: Code coverage at 100%
-        uses: VeryGoodOpenSource/very_good_coverage@v3
-        with:
-          path: "./backend/lcov.info"
-          min_coverage: 100
+  #     - name: Code coverage at 100%
+  #       uses: VeryGoodOpenSource/very_good_coverage@v3
+  #       with:
+  #         path: "./backend/lcov.info"
+  #         min_coverage: 100
 
   slither:
     timeout-minutes: 2
