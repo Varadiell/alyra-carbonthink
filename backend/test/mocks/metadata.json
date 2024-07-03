@@ -30,6 +30,11 @@
       "value": "Nantes"
     },
     {
+      "display_type": "string",
+      "trait_type": "Coordinates",
+      "value": "47.211444, -1.576306"
+    },
+    {
       "display_type": "number",
       "trait_type": "Hectares",
       "value": 40
