@@ -5,6 +5,7 @@ import { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/signers';
 import { loadFixture } from '@nomicfoundation/hardhat-toolbox/network-helpers';
 import { btoa } from 'buffer';
 import { json as project1_json, base64 as project1_base64 } from '@/test/mocks/metadata_project_1.data';
+import { json as project2_json, base64 as project2_base64 } from '@/test/mocks/metadata_project_2.data';
 
 enum CustomError {
   MintAmountZero = 'MintAmountZero',
@@ -57,9 +58,7 @@ describe('TCO2 token contract tests', () => {
       const ACCOUNT_TO = addr1;
       const TOKEN_ID = 0;
       const MINT_AMOUNT = 10;
-      await tco2Contract
-        .connect(owner)
-        .mint(ACCOUNT_TO, TOKEN_ID, MINT_AMOUNT, toBase64(JSON.stringify(project1_json)));
+      await tco2Contract.connect(owner).mint(ACCOUNT_TO, TOKEN_ID, MINT_AMOUNT, toBase64(project1_json));
       expect(await tco2Contract.exists(TOKEN_ID)).to.equal(true);
       expect(await tco2Contract.balanceOf(ACCOUNT_TO, TOKEN_ID)).to.equal(MINT_AMOUNT);
       expect(await tco2Contract['totalSupply()']()).to.equal(MINT_AMOUNT);
@@ -74,9 +73,7 @@ describe('TCO2 token contract tests', () => {
       const MINT_AMOUNT = 10;
       const INITIAL_MINT_AMOUNT = 100;
       // First mint.
-      await tco2Contract
-        .connect(owner)
-        .mint(ACCOUNT_TO, TOKEN_ID, INITIAL_MINT_AMOUNT, toBase64(JSON.stringify(project1_json)));
+      await tco2Contract.connect(owner).mint(ACCOUNT_TO, TOKEN_ID, INITIAL_MINT_AMOUNT, toBase64(project1_json));
       // Mint additional tokens.
       await tco2Contract.connect(owner).mint(ACCOUNT_TO, TOKEN_ID, MINT_AMOUNT, '');
       expect(await tco2Contract.exists(TOKEN_ID)).to.equal(true);
@@ -84,7 +81,6 @@ describe('TCO2 token contract tests', () => {
       expect(await tco2Contract['totalSupply()']()).to.equal(INITIAL_MINT_AMOUNT + MINT_AMOUNT);
       expect(await tco2Contract['totalSupply(uint256)'](TOKEN_ID)).to.equal(INITIAL_MINT_AMOUNT + MINT_AMOUNT);
       expect(await tco2Contract['totalSupply(uint256)'](TOKEN_ID + 1)).to.equal(0);
-      console.log(await tco2Contract.uri(TOKEN_ID));
       expect(await tco2Contract.uri(TOKEN_ID)).to.equal(`data:application/json;base64,${project1_base64}`);
     });
 
@@ -98,22 +94,22 @@ describe('TCO2 token contract tests', () => {
     it('should revert with an error when the token exists and the metadata is not empty', async () => {
       const TOKEN_ID = 0;
       // First mint.
-      await tco2Contract.connect(owner).mint(addr1, TOKEN_ID, 10, toBase64(JSON.stringify(project1_json)));
+      await tco2Contract.connect(owner).mint(addr1, TOKEN_ID, 10, toBase64(project1_json));
       // Mint additional tokens with metadata.
-      await expect(tco2Contract.connect(owner).mint(addr1, TOKEN_ID, 10, toBase64(JSON.stringify(project1_json))))
+      await expect(tco2Contract.connect(owner).mint(addr1, TOKEN_ID, 10, toBase64(project1_json)))
         .to.be.revertedWithCustomError(tco2Contract, CustomError.TokenMetadataExists)
         .withArgs(TOKEN_ID);
     });
 
     it('should revert with an error when the token amount to mint is 0', async () => {
       await expect(
-        tco2Contract.connect(owner).mint(addr1, 0, 0, toBase64(JSON.stringify(project1_json))),
+        tco2Contract.connect(owner).mint(addr1, 0, 0, toBase64(project1_json)),
       ).to.be.revertedWithCustomError(tco2Contract, CustomError.MintAmountZero);
     });
 
     it('should revert with an error when the msg.sender is not the owner of the contract', async () => {
       const ACCOUNT_TO = addr1;
-      await expect(tco2Contract.connect(addr1).mint(ACCOUNT_TO, 0, 10, toBase64(JSON.stringify(project1_json))))
+      await expect(tco2Contract.connect(addr1).mint(ACCOUNT_TO, 0, 10, toBase64(project1_json)))
         .to.be.revertedWithCustomError(tco2Contract, CustomError.OwnableUnauthorizedAccount)
         .withArgs(ACCOUNT_TO);
     });
@@ -142,6 +138,20 @@ describe('TCO2 token contract tests', () => {
 
     it('should not support a random interface hash', async () => {
       expect(await tco2Contract.supportsInterface('0x00000000')).to.equal(false);
+    });
+  });
+
+  describe('uri', () => {
+    it('should return the correct uri for the given tokenId', async () => {
+      const TOKEN_ID = 0;
+      await tco2Contract.mint(owner, TOKEN_ID, 10, toBase64(project1_json));
+      expect(await tco2Contract.uri(TOKEN_ID)).to.equal(`data:application/json;base64,${project1_base64}`);
+    });
+
+    it('should return the correct uri for another given tokenId', async () => {
+      const TOKEN_ID = 1;
+      await tco2Contract.mint(owner, TOKEN_ID, 11, toBase64(project2_json));
+      expect(await tco2Contract.uri(TOKEN_ID)).to.equal(`data:application/json;base64,${project2_base64}`);
     });
   });
 });

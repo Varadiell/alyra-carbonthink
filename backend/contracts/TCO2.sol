@@ -74,11 +74,7 @@ contract TCO2 is ERC1155, ERC1155Burnable, ERC1155Supply, ERC2981, Ownable {
     /// @param tokenId The token id to get the metadata URI for.
     /// @return string The metadata URI for the given token id.
     function uri(uint256 tokenId) public view override returns (string memory) {
-        string memory jsonBase64 = _metadatas[tokenId];
-        if (bytes(jsonBase64).length == 0) {
-            return "";
-        }
-        return string.concat("data:application/json;base64,", jsonBase64);
+        return string.concat("data:application/json;base64,", _metadatas[tokenId]);
     }
 
     /// @notice Generates CarbonThink logo SVG image as a string.
