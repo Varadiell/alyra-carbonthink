@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import {Base64} from "@openzeppelin/contracts/utils/Base64.sol";
 import {ERC1155} from "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import {ERC1155Burnable} from "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
 import {ERC1155Supply} from "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
@@ -42,6 +41,9 @@ contract TCO2 is ERC1155, ERC1155Burnable, ERC1155Supply, Ownable {
                 "{",
                 '"name":"CarbonThink TCO2",',
                 '"description":"CarbonThink TCO2 tokens collection.",',
+                '"image":"ipfs://bafybeidcsrvmcxoqoxqgmiidnyrovb4hqx2f5mm6tyjsgyrjz7ribbwkpe/",',
+                '"banner_image":"ipfs://bafybeib5zu3kakff2ax67e7el4erucdwivlcdr3l4i7hbxhtddp6w36oji/",',
+                '"featured_image":"ipfs://bafybeidcsrvmcxoqoxqgmiidnyrovb4hqx2f5mm6tyjsgyrjz7ribbwkpe/",',
                 '"external_link":"https://alyra-carbonthink.vercel.app/"',
                 "}"
             );
@@ -62,12 +64,12 @@ contract TCO2 is ERC1155, ERC1155Burnable, ERC1155Supply, Ownable {
     /// @notice Internal function to set the json metadata for a token id when a new token is created.
     /// @dev This function shall not be called on an already existing token.
     /// @param id The token id to set the metadata for.
-    /// @param metadata The metadata to set.
-    function _setMetadata(uint256 id, string memory metadata) internal {
-        if (bytes(metadata).length == 0) {
+    /// @param base64Metadata The metadata to set.
+    function _setMetadata(uint256 id, string memory base64Metadata) internal {
+        if (bytes(base64Metadata).length == 0) {
             revert EmptyMetadata();
         }
-        _metadatas[id] = Base64.encode(bytes(metadata));
+        _metadatas[id] = base64Metadata;
     }
 
     /// @notice Override required by Solidity for token transfer updates.
