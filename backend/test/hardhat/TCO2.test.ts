@@ -118,4 +118,12 @@ describe('TCO2 token contract tests', () => {
         .withArgs(ACCOUNT_TO);
     });
   });
+
+  describe('contractURI', () => {
+    it('should return the contract uri', async () => {
+      expect(await tco2Contract.contractURI()).to.equal(
+        `data:application/json;utf8,{"name":"CarbonThink TCO2","description":"CarbonThink TCO2 tokens collection.","external_link":"https://alyra-carbonthink.vercel.app/","image_data":"data:image/svg+xml;utf8,<svg width='500' height='500' viewBox='0 0 24 24' fill='green' stroke='#004000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z'></path><path d='M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12'></path></svg>"}`,
+      );
+    });
+  });
 });
