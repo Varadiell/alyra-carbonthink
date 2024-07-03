@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { Leaf, LayoutDashboard, LucideProps, Menu } from 'lucide-react';
+import Image from 'next/image';
+import { LayoutDashboard, LucideProps, Menu } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -9,6 +10,7 @@ import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { usePathname } from 'next/navigation';
 import { ConnectKitButton } from 'connectkit';
 import { Skeleton } from '@/components/ui/skeleton';
+import carbonThinkIcon from 'public/carbonthink.svg';
 
 type PageType = {
   count: number | undefined | null;
@@ -36,7 +38,7 @@ export function MainNavigation({ children }: { children: React.ReactNode }) {
         <div className="flex h-full max-h-screen flex-col gap-2">
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
             <Link href="/" className="flex items-center gap-2 font-semibold">
-              <Leaf className="h-6 w-6" />
+              <Image alt="CarbonThink logo" className="h-6 w-6" src={carbonThinkIcon} />
               <span>CarbonThink</span>
             </Link>
           </div>
@@ -76,7 +78,7 @@ export function MainNavigation({ children }: { children: React.ReactNode }) {
             <SheetContent side="left" className="flex flex-col">
               <nav className="grid gap-2 text-lg font-medium">
                 <Link href="#" className="flex items-center gap-2 text-lg font-semibold">
-                  <Leaf className="h-6 w-6" />
+                  <Image alt="CarbonThink logo" className="h-6 w-6" src={carbonThinkIcon} />
                   <span>CarbonThink</span>
                 </Link>
                 {pages.map((page, index) => (
