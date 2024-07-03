@@ -19,5 +19,8 @@
     "ignorePaths": [
       "**/lib/**",
       "*.config.*"
+    ],
+    "ignoreRegExpList": [
+      "ipfs:\\/\\/\\w*\\/"
     ]
 }
