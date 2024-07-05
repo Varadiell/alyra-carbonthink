@@ -288,4 +288,27 @@ describe('ProjectManager contract tests', () => {
       );
     });
   });
+
+  describe('get', () => {
+    beforeEach(async () => {
+      // Create two projects.
+      await projectManagerContract.create(CREATE_1);
+      await projectManagerContract.create(CREATE_2);
+    });
+
+    it('should get the first project', async () => {
+      expect((await projectManagerContract.get(0)).data.location).to.equal(CREATE_1.data.location);
+    });
+
+    it('should get the second project', async () => {
+      expect((await projectManagerContract.get(1)).data.location).to.equal(CREATE_2.data.location);
+    });
+
+    it('should revert with an error when the project does not exist', async () => {
+      await expect(projectManagerContract.get(2)).to.revertedWithCustomError(
+        projectManagerContract,
+        CustomError.ProjectDoesNotExist,
+      );
+    });
+  });
 });
