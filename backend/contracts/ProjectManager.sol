@@ -57,8 +57,8 @@ contract ProjectManager is Ownable {
         uint8[] unSDGs;
     }
 
-    address public securityFund;
-    TCO2 public tco2Contract;
+    address public immutable securityFund;
+    TCO2 public immutable tco2Contract;
 
     uint256 public totalProjects;
     mapping(uint256 => Project) internal _projects;
@@ -87,79 +87,81 @@ contract ProjectManager is Ownable {
     }
 
     function addDocument(
-        uint256 _projectId,
-        string memory _documentUrl
-    ) external onlyOwner exists(_projectId) notInactive(_projectId) {
-        _get(_projectId).documentUrls.push(_documentUrl);
-        emit DocumentAdded(_projectId);
+        uint256 projectId,
+        string memory documentUrl
+    ) external onlyOwner exists(projectId) notInactive(projectId) {
+        _get(projectId).documentUrls.push(documentUrl);
+        emit DocumentAdded(projectId);
     }
 
     function addPhoto(
-        uint256 _projectId,
-        string memory _photoUrl
-    ) external onlyOwner exists(_projectId) notInactive(_projectId) {
-        _get(_projectId).photoUrls.push(_photoUrl);
-        emit PhotoAdded(_projectId);
+        uint256 projectId,
+        string memory photoUrl
+    ) external onlyOwner exists(projectId) notInactive(projectId) {
+        _get(projectId).photoUrls.push(photoUrl);
+        emit PhotoAdded(projectId);
     }
 
-    function create(Project memory _project) external onlyOwner {
-        _projects[totalProjects] = _project;
+    function create(Project memory project) external onlyOwner {
+        _projects[totalProjects] = project;
         totalProjects++;
-        emit Created(_project.id);
+        emit Created(project.id);
     }
 
-    function get(uint256 _projectId) external view exists(_projectId) returns (Project memory) {
-        return _projects[_projectId];
+    function get(uint256 projectId) external view exists(projectId) returns (Project memory) {
+        return _projects[projectId];
     }
 
     function mintTokens(
-        uint256 _projectId,
-        address _receiver,
-        uint256 _tokenId,
-        uint256 _amount,
-        string memory _base64Metadata
-    ) external onlyOwner exists(_projectId) notInactive(_projectId) {
-        if (_receiver == address(0)) {
+        uint256 projectId,
+        address receiver,
+        uint256 amount,
+        string memory base64Metadata
+    ) external onlyOwner exists(projectId) notInactive(projectId) {
+        if (receiver == address(0)) {
             revert AddressZero();
         }
-        if (_amount == 0) {
+        if (amount == 0) {
             revert CannotMintZeroToken();
         }
-        bool needsMetadata = tco2Contract.exists(_tokenId);
+        bool needsMetadata = tco2Contract.exists(projectId);
         if (
-            (needsMetadata && bytes(_base64Metadata).length == 0) ||
-            (!needsMetadata && bytes(_base64Metadata).length > 0)
+            (needsMetadata && bytes(base64Metadata).length == 0) || (!needsMetadata && bytes(base64Metadata).length > 0)
         ) {
             revert InvalidMetadata();
         }
-        (uint256 receiverAmount, uint256 securityFundAmount) = _splitMint(_amount, 80);
+        (uint256 receiverAmount, uint256 securityFundAmount) = _splitMint(amount, 80);
+        bool hasSecurityFundAmount = securityFundAmount > 0;
+        // Events are emitted before the calls to please the Slither god regarding reentrancy warnings.
+        emit Minted(projectId, receiver, receiverAmount);
+        if (hasSecurityFundAmount) {
+            emit Minted(projectId, securityFund, securityFundAmount);
+        }
         // Metadata are set only once at token creation.
-        tco2Contract.mint(_receiver, _tokenId, receiverAmount, needsMetadata ? _base64Metadata : "");
-        emit Minted(_projectId, _receiver, receiverAmount);
+        tco2Contract.mint(receiver, projectId, receiverAmount, needsMetadata ? base64Metadata : "");
         // No need to mint for the Security Fund when the allocated amount is 0.
-        if (securityFundAmount > 0) {
+        if (hasSecurityFundAmount) {
             // No metadata to add after the first mint.
-            tco2Contract.mint(securityFund, _tokenId, securityFundAmount, "");
-            emit Minted(_projectId, securityFund, securityFundAmount);
+            tco2Contract.mint(securityFund, projectId, securityFundAmount, "");
         }
     }
 
     function setStatus(
-        uint256 _projectId,
-        ProjectStatus _status
-    ) external onlyOwner exists(_projectId) notInactive(_projectId) {
-        _get(_projectId).status = _status;
-        emit StatusChanged(_projectId, _status);
+        uint256 projectId,
+        ProjectStatus status
+    ) external onlyOwner exists(projectId) notInactive(projectId) {
+        _get(projectId).status = status;
+        emit StatusChanged(projectId, status);
     }
 
-    function _get(uint256 _projectId) internal view returns (Project storage) {
-        return _projects[_projectId];
+    function _get(uint256 projectId) internal view returns (Project storage) {
+        return _projects[projectId];
     }
 
-    function _splitMint(uint256 _totalAmount, uint8 _splitPercent) internal pure returns (uint256, uint256) {
-        uint256 receiverAmount = (_totalAmount * (100 - _splitPercent)) / 100;
-        uint256 securityFundAmount = (_totalAmount * _splitPercent) / 100;
-        if (_totalAmount > (receiverAmount + securityFundAmount)) {
+    function _splitMint(uint256 totalAmount, uint8 splitPercent) internal pure returns (uint256, uint256) {
+        uint256 receiverAmount = (totalAmount * (100 - splitPercent)) / 100;
+        uint256 securityFundAmount = (totalAmount * splitPercent) / 100;
+        if (totalAmount > (receiverAmount + securityFundAmount)) {
             receiverAmount++;
         }
         return (receiverAmount, securityFundAmount);
