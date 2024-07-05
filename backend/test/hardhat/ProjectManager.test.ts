@@ -3,6 +3,7 @@ import { ethers } from 'hardhat';
 import { ProjectManager, TCO2 } from '@/typechain-types/contracts';
 import { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/signers';
 import { loadFixture } from '@nomicfoundation/hardhat-toolbox/network-helpers';
+import { CREATE_1 } from '@/test/mocks/mocks';
 
 enum Event {
   DocumentAdded = 'DocumentAdded',
@@ -82,36 +83,16 @@ describe('ProjectManager contract tests', () => {
   });
 
   describe('addDocument', () => {
+    const DOCUMENT_URL = 'ipfs://QmT5pFzHUqAutGTabky8Kgbc51GS8WSU2yjM9mDYEikQSx/';
+    const DOCUMENT_2_URL = 'ipfs://QmPeKYLrTzwHCsbviFdePdXochzcdMWVwrTH3zy2N6LenU/';
+
     beforeEach(async () => {
       // Create a project.
-      await projectManagerContract.create({
-        projectHolder: addr1,
-        name: 'Project 1',
-        description: 'The first CarbonThink project.',
-        externalUrl: 'https://alyra-carbonthink.vercel.app/project/0',
-        image: 'ipfs://bafybeifkvccastjvmile7ovjnuhdahy3gsv2omoppr5zqzlimchwpz4vli/',
-        data: {
-          duration: BigInt(15),
-          ares: BigInt(40000),
-          expectedCo2Tons: BigInt(0),
-          startDate: BigInt(1710889200),
-          continent: 'Europe',
-          country: 'France',
-          region: 'Pays de la loire',
-          province: 'Loire-Atlantique',
-          city: 'Nantes',
-          location: 'Place Général Mellinet',
-          coordinates: '47.211449, -1.576292',
-          plantedSpecies: 'Bamboo',
-          calculationMethod: 'VCS',
-          unSDGs: [BigInt(6), BigInt(11), BigInt(12), BigInt(13), BigInt(14), BigInt(15)],
-        },
-      } satisfies ProjectManager.CreateParamsStruct);
+      await projectManagerContract.create(CREATE_1);
     });
 
     it('should add a document to a given project', async () => {
       const PROJECT_ID = 0;
-      const DOCUMENT_URL = 'ipfs://QmT5pFzHUqAutGTabky8Kgbc51GS8WSU2yjM9mDYEikQSx/';
       await expect(projectManagerContract.addDocument(PROJECT_ID, DOCUMENT_URL))
         .to.emit(projectManagerContract, Event.DocumentAdded)
         .withArgs(PROJECT_ID);
@@ -122,8 +103,6 @@ describe('ProjectManager contract tests', () => {
 
     it('should add multiple documents to a given project', async () => {
       const PROJECT_ID = 0;
-      const DOCUMENT_URL = 'ipfs://QmT5pFzHUqAutGTabky8Kgbc51GS8WSU2yjM9mDYEikQSx/';
-      const DOCUMENT_2_URL = 'ipfs://QmPeKYLrTzwHCsbviFdePdXochzcdMWVwrTH3zy2N6LenU/';
       await expect(projectManagerContract.addDocument(PROJECT_ID, DOCUMENT_URL))
         .to.emit(projectManagerContract, Event.DocumentAdded)
         .withArgs(PROJECT_ID);
@@ -139,29 +118,99 @@ describe('ProjectManager contract tests', () => {
     it('should not add a document when the project is inactive (case: status completed)', async () => {
       const PROJECT_ID = 0;
       await projectManagerContract.setStatus(PROJECT_ID, Status.Completed);
-      await expect(
-        projectManagerContract.addDocument(PROJECT_ID, 'ipfs://QmT5pFzHUqAutGTabky8Kgbc51GS8WSU2yjM9mDYEikQSx/'),
-      ).to.revertedWithCustomError(projectManagerContract, CustomError.InactiveProject);
+      await expect(projectManagerContract.addDocument(PROJECT_ID, DOCUMENT_URL)).to.revertedWithCustomError(
+        projectManagerContract,
+        CustomError.InactiveProject,
+      );
     });
 
     it('should not add a document when the project is inactive (case: status canceled)', async () => {
       const PROJECT_ID = 0;
       await projectManagerContract.setStatus(PROJECT_ID, Status.Canceled);
-      await expect(
-        projectManagerContract.addDocument(PROJECT_ID, 'ipfs://QmT5pFzHUqAutGTabky8Kgbc51GS8WSU2yjM9mDYEikQSx/'),
-      ).to.revertedWithCustomError(projectManagerContract, CustomError.InactiveProject);
+      await expect(projectManagerContract.addDocument(PROJECT_ID, DOCUMENT_URL)).to.revertedWithCustomError(
+        projectManagerContract,
+        CustomError.InactiveProject,
+      );
     });
 
     it('should not add a document when the project does not exist', async () => {
-      await expect(
-        projectManagerContract.addDocument(1, 'ipfs://QmT5pFzHUqAutGTabky8Kgbc51GS8WSU2yjM9mDYEikQSx/'),
-      ).to.revertedWithCustomError(projectManagerContract, CustomError.ProjectDoesNotExist);
+      await expect(projectManagerContract.addDocument(1, DOCUMENT_URL)).to.revertedWithCustomError(
+        projectManagerContract,
+        CustomError.ProjectDoesNotExist,
+      );
     });
 
-    it('should not add a document when the project does not exist', async () => {
-      await expect(
-        projectManagerContract.connect(addr1).addDocument(0, 'ipfs://QmT5pFzHUqAutGTabky8Kgbc51GS8WSU2yjM9mDYEikQSx/'),
-      ).to.revertedWithCustomError(projectManagerContract, CustomError.OwnableUnauthorizedAccount);
+    it('should not add a document when the user has no rights', async () => {
+      await expect(projectManagerContract.connect(addr1).addDocument(0, DOCUMENT_URL)).to.revertedWithCustomError(
+        projectManagerContract,
+        CustomError.OwnableUnauthorizedAccount,
+      );
+    });
+  });
+
+  describe('addPhoto', () => {
+    const PHOTO_URL = 'ipfs://QmZpq4777YFLQkZpxnckC7a6pvhN7YdfxDHmTkkSPPLp4y/';
+    const PHOTO_2_URL = 'ipfs://QmUyTvasFiWDhxg3WwTT3B4WMKP4jTxyDGVo5zD7chngPS/';
+
+    beforeEach(async () => {
+      // Create a project.
+      await projectManagerContract.create(CREATE_1);
+    });
+
+    it('should add a photo to a given project', async () => {
+      const PROJECT_ID = 0;
+      await expect(projectManagerContract.addPhoto(PROJECT_ID, PHOTO_URL))
+        .to.emit(projectManagerContract, Event.PhotoAdded)
+        .withArgs(PROJECT_ID);
+      const photoUrls = (await projectManagerContract.get(PROJECT_ID)).photoUrls;
+      expect(photoUrls.length).to.equal(1);
+      expect(photoUrls[0]).to.equal(PHOTO_URL);
+    });
+
+    it('should add multiple photos to a given project', async () => {
+      const PROJECT_ID = 0;
+      await expect(projectManagerContract.addPhoto(PROJECT_ID, PHOTO_URL))
+        .to.emit(projectManagerContract, Event.PhotoAdded)
+        .withArgs(PROJECT_ID);
+      await expect(projectManagerContract.addPhoto(PROJECT_ID, PHOTO_2_URL))
+        .to.emit(projectManagerContract, Event.PhotoAdded)
+        .withArgs(PROJECT_ID);
+      const photoUrls = (await projectManagerContract.get(0)).photoUrls;
+      expect(photoUrls.length).to.equal(2);
+      expect(photoUrls[0]).to.equal(PHOTO_URL);
+      expect(photoUrls[1]).to.equal(PHOTO_2_URL);
+    });
+
+    it('should not add a photo when the project is inactive (case: status completed)', async () => {
+      const PROJECT_ID = 0;
+      await projectManagerContract.setStatus(PROJECT_ID, Status.Completed);
+      await expect(projectManagerContract.addPhoto(PROJECT_ID, PHOTO_URL)).to.revertedWithCustomError(
+        projectManagerContract,
+        CustomError.InactiveProject,
+      );
+    });
+
+    it('should not add a photo when the project is inactive (case: status canceled)', async () => {
+      const PROJECT_ID = 0;
+      await projectManagerContract.setStatus(PROJECT_ID, Status.Canceled);
+      await expect(projectManagerContract.addPhoto(PROJECT_ID, PHOTO_URL)).to.revertedWithCustomError(
+        projectManagerContract,
+        CustomError.InactiveProject,
+      );
+    });
+
+    it('should not add a photo when the project does not exist', async () => {
+      await expect(projectManagerContract.addPhoto(1, PHOTO_URL)).to.revertedWithCustomError(
+        projectManagerContract,
+        CustomError.ProjectDoesNotExist,
+      );
+    });
+
+    it('should not add a photo when the user has no rights', async () => {
+      await expect(projectManagerContract.connect(addr1).addPhoto(0, PHOTO_URL)).to.revertedWithCustomError(
+        projectManagerContract,
+        CustomError.OwnableUnauthorizedAccount,
+      );
     });
   });
 });
