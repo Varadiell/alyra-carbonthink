@@ -8,8 +8,11 @@ import {TCO2} from "./TCO2.sol";
 
 // TODO: add events
 
+error AddressZero();
 error CannotChangeProjectState();
+error CannotMintZeroToken();
 error InactiveProject();
+error InvalidMetadata();
 error ProjectDoesNotExist();
 
 enum ProjectStatus {
@@ -56,7 +59,7 @@ contract ProjectManager is Ownable {
     TCO2 public tco2Contract;
 
     uint256 public totalProjects;
-    mapping(uint256 => Project) private _projects;
+    mapping(uint256 => Project) internal _projects;
 
     modifier exists(uint256 _projectId) {
         if (!_projects[_projectId].isRegistered) {
@@ -74,6 +77,9 @@ contract ProjectManager is Ownable {
     }
 
     constructor(address _initialOwner, address _securityFund, address _tco2Contract) Ownable(_initialOwner) {
+        if (_initialOwner == address(0) || _securityFund == address(0) || _tco2Contract == address(0)) {
+            revert AddressZero();
+        }
         tco2Contract = TCO2(_tco2Contract);
         securityFund = _securityFund;
     }
@@ -108,9 +114,27 @@ contract ProjectManager is Ownable {
         uint256 _amount,
         string memory _base64Metadata
     ) external onlyOwner exists(_projectId) notInactive(_projectId) {
-        // TODO: implement
-        // TODO: calculate amount for receiver & amount for security fund.
-        // tco2Contract.mint(_receiver, _tokenId, _amount, _base64Metadata);
+        if (_receiver == address(0)) {
+            revert AddressZero();
+        }
+        if (_amount == 0) {
+            revert CannotMintZeroToken();
+        }
+        bool needsMetadata = tco2Contract.exists(_tokenId);
+        if (
+            (needsMetadata && bytes(_base64Metadata).length == 0) ||
+            (!needsMetadata && bytes(_base64Metadata).length > 0)
+        ) {
+            revert InvalidMetadata();
+        }
+        (uint256 receiverAmount, uint256 securityFundAmount) = _splitMint(_amount, 80);
+        // Metadata are set only once at token creation.
+        tco2Contract.mint(_receiver, _tokenId, receiverAmount, needsMetadata ? _base64Metadata : "");
+        // No need to mint for the Security Fund when the allocated amount is 0.
+        if (securityFundAmount > 0) {
+            // No metadata to add after the first mint.
+            tco2Contract.mint(securityFund, _tokenId, securityFundAmount, "");
+        }
     }
 
     function setStatus(
@@ -122,5 +146,14 @@ contract ProjectManager is Ownable {
 
     function _get(uint256 _projectId) internal view returns (Project storage) {
         return _projects[_projectId];
+    }
+
+    function _splitMint(uint256 _totalAmount, uint8 _splitPercent) internal pure returns (uint256, uint256) {
+        uint256 receiverAmount = (_totalAmount * (100 - _splitPercent)) / 100;
+        uint256 securityFundAmount = (_totalAmount * _splitPercent) / 100;
+        if (_totalAmount > (receiverAmount + securityFundAmount)) {
+            receiverAmount++;
+        }
+        return (receiverAmount, securityFundAmount);
     }
 }
