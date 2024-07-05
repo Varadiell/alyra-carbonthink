@@ -38,15 +38,32 @@ contract ProjectManager is Ownable {
     /// @notice Emitted when the status of a project changes.
     /// @param projectId The ID of the project.
     /// @param status The new status of the project.
-    event StatusChanged(uint256 indexed projectId, ProjectStatus indexed status);
+    event StatusChanged(uint256 indexed projectId, Status indexed status);
 
     /// @notice The possible statuses of a project.
     /// @dev Once the status is either "Canceled" or "Completed", it can not be altered anymore.
-    enum ProjectStatus {
+    enum Status {
         Canceled,
         Pending,
         Active,
         Completed
+    }
+
+    /// @notice Represents the details of a new project to be created.
+    /// @dev This structure is used to store the initial information for a new project.
+    /// @param projectHolder The address of the project holder.
+    /// @param name The name of the project.
+    /// @param description A brief description of the project.
+    /// @param externalUrl The external URL related to the project.
+    /// @param image The image URL of the project.
+    /// @param data The detailed data of the project (see "ProjectData" struct).
+    struct CreateParams {
+        address projectHolder;
+        string name;
+        string description;
+        string externalUrl;
+        string image;
+        ProjectData data;
     }
 
     /// @notice The structure representing a project.
@@ -60,7 +77,7 @@ contract ProjectManager is Ownable {
     /// @param photoUrls The photo URLs related to the project, stored with IPFS.
     /// @param documentUrls The document URLs related to the project, stored with IPFS.
     /// @param data The detailed data of the project (see "ProjectData" struct).
-    /// @param status The current status of the project (see "ProjectStatus" enum).
+    /// @param status The current status of the project (see "Status" enum).
     struct Project {
         bool isRegistered;
         address projectHolder;
@@ -72,7 +89,7 @@ contract ProjectManager is Ownable {
         string[] photoUrls;
         string[] documentUrls;
         ProjectData data;
-        ProjectStatus status;
+        Status status;
     }
 
     /// @notice The detailed data of a project.
@@ -129,8 +146,8 @@ contract ProjectManager is Ownable {
     /// @notice Ensures the project is not inactive (Canceled or Completed).
     /// @param _projectId The ID of the project.
     modifier notInactive(uint256 _projectId) {
-        ProjectStatus status = _projects[_projectId].status;
-        if (status == ProjectStatus.Canceled || status == ProjectStatus.Completed) {
+        Status status = _projects[_projectId].status;
+        if (status == Status.Canceled || status == Status.Completed) {
             revert InactiveProject();
         }
         _;
@@ -171,11 +188,40 @@ contract ProjectManager is Ownable {
     }
 
     /// @notice Creates a new project.
-    /// @param project The project data (see "Project" struct).
-    function create(Project memory project) external onlyOwner {
-        _projects[totalProjects] = project;
+    /// @param newProject The project data (see "CreateParams" struct).
+    function create(CreateParams memory newProject) external onlyOwner {
+        string[] memory emptyArray;
+        ProjectData memory projectData = ProjectData(
+            newProject.data.duration,
+            newProject.data.ares,
+            newProject.data.expectedCo2Tons,
+            newProject.data.startDate,
+            newProject.data.continent,
+            newProject.data.country,
+            newProject.data.region,
+            newProject.data.province,
+            newProject.data.city,
+            newProject.data.location,
+            newProject.data.coordinates,
+            newProject.data.plantedSpecies,
+            newProject.data.calculationMethod,
+            newProject.data.unSDGs
+        );
+        _projects[totalProjects] = Project(
+            true, // isRegistered
+            newProject.projectHolder,
+            totalProjects, // id
+            newProject.name,
+            newProject.description,
+            newProject.externalUrl,
+            newProject.image,
+            emptyArray, // photoUrls
+            emptyArray, // documentUrls
+            projectData,
+            Status.Pending
+        );
+        emit Created(totalProjects);
         totalProjects++;
-        emit Created(project.id);
     }
 
     /// @notice Returns the project details.
@@ -228,10 +274,7 @@ contract ProjectManager is Ownable {
     /// @notice Sets the status of the project.
     /// @param projectId The ID of the project.
     /// @param status The new status of the project.
-    function setStatus(
-        uint256 projectId,
-        ProjectStatus status
-    ) external onlyOwner exists(projectId) notInactive(projectId) {
+    function setStatus(uint256 projectId, Status status) external onlyOwner exists(projectId) notInactive(projectId) {
         _get(projectId).status = status;
         emit StatusChanged(projectId, status);
     }

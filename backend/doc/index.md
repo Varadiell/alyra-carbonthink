@@ -113,7 +113,7 @@ Emitted when tokens are minted for a project.
 ### StatusChanged
 
 ```solidity
-event StatusChanged(uint256 projectId, enum ProjectManager.ProjectStatus status)
+event StatusChanged(uint256 projectId, enum ProjectManager.Status status)
 ```
 
 Emitted when the status of a project changes.
@@ -123,20 +123,42 @@ Emitted when the status of a project changes.
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | projectId | uint256 | The ID of the project. |
-| status | enum ProjectManager.ProjectStatus | The new status of the project. |
+| status | enum ProjectManager.Status | The new status of the project. |
 
-### ProjectStatus
+### Status
 
 The possible statuses of a project.
 
 _Once the status is either "Canceled" or "Completed", it can not be altered anymore._
 
 ```solidity
-enum ProjectStatus {
+enum Status {
   Canceled,
   Pending,
   Active,
   Completed
+}
+```
+
+### CreateParams
+
+Represents the details of a new project to be created.
+
+_This structure is used to store the initial information for a new project._
+
+#### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+
+```solidity
+struct CreateParams {
+  address projectHolder;
+  string name;
+  string description;
+  string externalUrl;
+  string image;
+  struct ProjectManager.ProjectData data;
 }
 ```
 
@@ -161,7 +183,7 @@ struct Project {
   string[] photoUrls;
   string[] documentUrls;
   struct ProjectManager.ProjectData data;
-  enum ProjectManager.ProjectStatus status;
+  enum ProjectManager.Status status;
 }
 ```
 
@@ -302,7 +324,7 @@ Adds a photo URL (stored with IPFS) to the project.
 ### create
 
 ```solidity
-function create(struct ProjectManager.Project project) external
+function create(struct ProjectManager.CreateParams newProject) external
 ```
 
 Creates a new project.
@@ -311,7 +333,7 @@ Creates a new project.
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| project | struct ProjectManager.Project | The project data (see "Project" struct). |
+| newProject | struct ProjectManager.CreateParams | The project data (see "CreateParams" struct). |
 
 ### get
 
@@ -355,7 +377,7 @@ _Do not include metadata when the project already has minted tokens._
 ### setStatus
 
 ```solidity
-function setStatus(uint256 projectId, enum ProjectManager.ProjectStatus status) external
+function setStatus(uint256 projectId, enum ProjectManager.Status status) external
 ```
 
 Sets the status of the project.
@@ -365,7 +387,7 @@ Sets the status of the project.
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | projectId | uint256 | The ID of the project. |
-| status | enum ProjectManager.ProjectStatus | The new status of the project. |
+| status | enum ProjectManager.Status | The new status of the project. |
 
 ### _get
 

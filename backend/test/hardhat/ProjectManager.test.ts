@@ -4,6 +4,13 @@ import { ProjectManager, TCO2 } from '@/typechain-types/contracts';
 import { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/signers';
 import { loadFixture } from '@nomicfoundation/hardhat-toolbox/network-helpers';
 
+enum Status {
+  Canceled,
+  Pending,
+  Active,
+  Completed,
+}
+
 enum CustomError {
   AddressZero = 'AddressZero',
   CannotChangeProjectState = 'CannotChangeProjectState',
@@ -11,6 +18,7 @@ enum CustomError {
   InactiveProject = 'InactiveProject',
   InvalidMetadata = 'InvalidMetadata',
   OwnableInvalidOwner = 'OwnableInvalidOwner',
+  OwnableUnauthorizedAccount = 'OwnableUnauthorizedAccount',
   ProjectDoesNotExist = 'ProjectDoesNotExist',
 }
 
@@ -62,6 +70,83 @@ describe('ProjectManager contract tests', () => {
       await expect(
         ethers.deployContract('ProjectManager', [ethers.ZeroAddress, addr2, tco2Contract]),
       ).to.be.revertedWithCustomError(projectManagerContract, CustomError.OwnableInvalidOwner);
+    });
+  });
+
+  describe('addDocument', () => {
+    beforeEach(async () => {
+      // Create a project.
+      await projectManagerContract.create({
+        projectHolder: addr1,
+        name: 'Project 1',
+        description: 'The first CarbonThink project.',
+        externalUrl: 'https://alyra-carbonthink.vercel.app/project/0',
+        image: 'ipfs://bafybeifkvccastjvmile7ovjnuhdahy3gsv2omoppr5zqzlimchwpz4vli/',
+        data: {
+          duration: BigInt(15),
+          ares: BigInt(40000),
+          expectedCo2Tons: BigInt(0),
+          startDate: BigInt(1710889200),
+          continent: 'Europe',
+          country: 'France',
+          region: 'Pays de la loire',
+          province: 'Loire-Atlantique',
+          city: 'Nantes',
+          location: 'Place Général Mellinet',
+          coordinates: '47.211449, -1.576292',
+          plantedSpecies: 'Bamboo',
+          calculationMethod: 'VCS',
+          unSDGs: [BigInt(6), BigInt(11), BigInt(12), BigInt(13), BigInt(14), BigInt(15)],
+        },
+      } satisfies ProjectManager.CreateParamsStruct);
+    });
+
+    it('should add a document to a given project', async () => {
+      const DOCUMENT_URL = 'ipfs://QmT5pFzHUqAutGTabky8Kgbc51GS8WSU2yjM9mDYEikQSx/';
+      await projectManagerContract.addDocument(0, DOCUMENT_URL);
+      const documentUrls = (await projectManagerContract.get(0)).documentUrls;
+      expect(documentUrls.length).to.equal(1);
+      expect(documentUrls[0]).to.equal(DOCUMENT_URL);
+    });
+
+    it('should add multiple documents to a given project', async () => {
+      const PROJECT_ID = 0;
+      const DOCUMENT_URL = 'ipfs://QmT5pFzHUqAutGTabky8Kgbc51GS8WSU2yjM9mDYEikQSx/';
+      const DOCUMENT_2_URL = 'ipfs://QmPeKYLrTzwHCsbviFdePdXochzcdMWVwrTH3zy2N6LenU/';
+      await projectManagerContract.addDocument(PROJECT_ID, DOCUMENT_URL);
+      await projectManagerContract.addDocument(PROJECT_ID, DOCUMENT_2_URL);
+      const documentUrls = (await projectManagerContract.get(0)).documentUrls;
+      expect(documentUrls.length).to.equal(2);
+      expect(documentUrls[0]).to.equal(DOCUMENT_URL);
+      expect(documentUrls[1]).to.equal(DOCUMENT_2_URL);
+    });
+
+    it('should not add a document when the project is inactive (case: status completed)', async () => {
+      const PROJECT_ID = 0;
+      await projectManagerContract.setStatus(PROJECT_ID, Status.Completed);
+      await expect(
+        projectManagerContract.addDocument(PROJECT_ID, 'ipfs://QmT5pFzHUqAutGTabky8Kgbc51GS8WSU2yjM9mDYEikQSx/'),
+      ).to.revertedWithCustomError(projectManagerContract, CustomError.InactiveProject);
+    });
+
+    it('should not add a document when the project is inactive (case: status canceled)', async () => {
+      const PROJECT_ID = 0;
+      await projectManagerContract.setStatus(PROJECT_ID, Status.Canceled);
+      await expect(
+        projectManagerContract.addDocument(PROJECT_ID, 'ipfs://QmT5pFzHUqAutGTabky8Kgbc51GS8WSU2yjM9mDYEikQSx/'),
+      ).to.revertedWithCustomError(projectManagerContract, CustomError.InactiveProject);
+    });
+
+    it('should not add a document when the project does not exist', async () => {
+      await expect(
+        projectManagerContract.addDocument(1, 'ipfs://QmT5pFzHUqAutGTabky8Kgbc51GS8WSU2yjM9mDYEikQSx/'),
+      ).to.revertedWithCustomError(projectManagerContract, CustomError.ProjectDoesNotExist);
+    });
+
+    it('should not add a document when the project does not exist', async () => {
+      await expect(
+        projectManagerContract.connect(addr1).addDocument(0, 'ipfs://QmT5pFzHUqAutGTabky8Kgbc51GS8WSU2yjM9mDYEikQSx/'),
+      ).to.revertedWithCustomError(projectManagerContract, CustomError.OwnableUnauthorizedAccount);
     });
   });
 });
