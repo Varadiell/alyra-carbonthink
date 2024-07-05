@@ -21,7 +21,7 @@ export const json = JSON.stringify({
     },
     {
       display_type: 'string',
-      trait_type: 'Department',
+      trait_type: 'Province',
       value: 'Loire-Atlantique',
     },
     {
@@ -36,8 +36,8 @@ export const json = JSON.stringify({
     },
     {
       display_type: 'number',
-      trait_type: 'Hectares',
-      value: 40,
+      trait_type: 'Ares',
+      value: 4000,
     },
     {
       display_type: 'string',
@@ -56,7 +56,7 @@ export const json = JSON.stringify({
     },
     {
       display_type: 'number',
-      trait_type: 'Project Duration (Years)',
+      trait_type: 'Duration (Years)',
       value: 5,
     },
     {
@@ -66,11 +66,11 @@ export const json = JSON.stringify({
     },
     {
       display_type: 'date',
-      trait_type: 'Project start date',
+      trait_type: 'Start Date',
       value: 1710892800,
     },
   ],
 });
 
 export const base64 =
-  'eyJuYW1lIjoiQmFtYm9vIFByb2plY3QgMSIsImRlc2NyaXB0aW9uIjoiQmVzdCBiYW1ib28gcHJvamVjdCBmcm9tIENhcmJvblRoaW5rLiIsImV4dGVybmFsX3VybCI6Imh0dHBzOi8vYWx5cmEtY2FyYm9udGhpbmsudmVyY2VsLmFwcC9wcm9qZWN0LzEiLCJpbWFnZSI6ImlwZnM6Ly9iYWZ5YmVpZmt2Y2Nhc3Rqdm1pbGU3b3ZqbnVoZGFoeTNnc3Yyb21vcHByNXpxemxpbWNod3B6NHZsaS8iLCJhdHRyaWJ1dGVzIjpbeyJkaXNwbGF5X3R5cGUiOiJzdHJpbmciLCJ0cmFpdF90eXBlIjoiQ29udGluZW50IiwidmFsdWUiOiJFdXJvcGUifSx7ImRpc3BsYXlfdHlwZSI6InN0cmluZyIsInRyYWl0X3R5cGUiOiJDb3VudHJ5IiwidmFsdWUiOiJGcmFuY2UifSx7ImRpc3BsYXlfdHlwZSI6InN0cmluZyIsInRyYWl0X3R5cGUiOiJSZWdpb24iLCJ2YWx1ZSI6IlBheXMgZGUgbGEgTG9pcmUifSx7ImRpc3BsYXlfdHlwZSI6InN0cmluZyIsInRyYWl0X3R5cGUiOiJEZXBhcnRtZW50IiwidmFsdWUiOiJMb2lyZS1BdGxhbnRpcXVlIn0seyJkaXNwbGF5X3R5cGUiOiJzdHJpbmciLCJ0cmFpdF90eXBlIjoiQ2l0eSIsInZhbHVlIjoiTmFudGVzIn0seyJkaXNwbGF5X3R5cGUiOiJzdHJpbmciLCJ0cmFpdF90eXBlIjoiQ29vcmRpbmF0ZXMiLCJ2YWx1ZSI6IjQ3LjIxMTQ0NCwgLTEuNTc2MzA2In0seyJkaXNwbGF5X3R5cGUiOiJudW1iZXIiLCJ0cmFpdF90eXBlIjoiSGVjdGFyZXMiLCJ2YWx1ZSI6NDB9LHsiZGlzcGxheV90eXBlIjoic3RyaW5nIiwidHJhaXRfdHlwZSI6IlBsYW50ZWQgU3BlY2llcyIsInZhbHVlIjoiQmFtYm9vIn0seyJkaXNwbGF5X3R5cGUiOiJzdHJpbmciLCJ0cmFpdF90eXBlIjoiQ08yIENhbGN1bGF0aW9ucyBNZXRob2QiLCJ2YWx1ZSI6IlZlcmlmaWVkIENhcmJvbiBTdGFuZGFyZCAoVkNTKSJ9LHsiZGlzcGxheV90eXBlIjoibnVtYmVyIiwidHJhaXRfdHlwZSI6IkV4cGVjdGVkIENPMiBUb25zIiwidmFsdWUiOjI4MH0seyJkaXNwbGF5X3R5cGUiOiJudW1iZXIiLCJ0cmFpdF90eXBlIjoiUHJvamVjdCBEdXJhdGlvbiAoWWVhcnMpIiwidmFsdWUiOjV9LHsiZGlzcGxheV90eXBlIjoibnVtYmVyIiwidHJhaXRfdHlwZSI6Ik9mZnNldCBEdXJhdGlvbiBHdWFyYW50ZWUgKFllYXJzKSIsInZhbHVlIjoxNX0seyJkaXNwbGF5X3R5cGUiOiJkYXRlIiwidHJhaXRfdHlwZSI6IlByb2plY3Qgc3RhcnQgZGF0ZSIsInZhbHVlIjoxNzEwODkyODAwfV19';
+  'eyJuYW1lIjoiQmFtYm9vIFByb2plY3QgMSIsImRlc2NyaXB0aW9uIjoiQmVzdCBiYW1ib28gcHJvamVjdCBmcm9tIENhcmJvblRoaW5rLiIsImV4dGVybmFsX3VybCI6Imh0dHBzOi8vYWx5cmEtY2FyYm9udGhpbmsudmVyY2VsLmFwcC9wcm9qZWN0LzEiLCJpbWFnZSI6ImlwZnM6Ly9iYWZ5YmVpZmt2Y2Nhc3Rqdm1pbGU3b3ZqbnVoZGFoeTNnc3Yyb21vcHByNXpxemxpbWNod3B6NHZsaS8iLCJhdHRyaWJ1dGVzIjpbeyJkaXNwbGF5X3R5cGUiOiJzdHJpbmciLCJ0cmFpdF90eXBlIjoiQ29udGluZW50IiwidmFsdWUiOiJFdXJvcGUifSx7ImRpc3BsYXlfdHlwZSI6InN0cmluZyIsInRyYWl0X3R5cGUiOiJDb3VudHJ5IiwidmFsdWUiOiJGcmFuY2UifSx7ImRpc3BsYXlfdHlwZSI6InN0cmluZyIsInRyYWl0X3R5cGUiOiJSZWdpb24iLCJ2YWx1ZSI6IlBheXMgZGUgbGEgTG9pcmUifSx7ImRpc3BsYXlfdHlwZSI6InN0cmluZyIsInRyYWl0X3R5cGUiOiJQcm92aW5jZSIsInZhbHVlIjoiTG9pcmUtQXRsYW50aXF1ZSJ9LHsiZGlzcGxheV90eXBlIjoic3RyaW5nIiwidHJhaXRfdHlwZSI6IkNpdHkiLCJ2YWx1ZSI6Ik5hbnRlcyJ9LHsiZGlzcGxheV90eXBlIjoic3RyaW5nIiwidHJhaXRfdHlwZSI6IkNvb3JkaW5hdGVzIiwidmFsdWUiOiI0Ny4yMTE0NDQsIC0xLjU3NjMwNiJ9LHsiZGlzcGxheV90eXBlIjoibnVtYmVyIiwidHJhaXRfdHlwZSI6IkFyZXMiLCJ2YWx1ZSI6NDAwMH0seyJkaXNwbGF5X3R5cGUiOiJzdHJpbmciLCJ0cmFpdF90eXBlIjoiUGxhbnRlZCBTcGVjaWVzIiwidmFsdWUiOiJCYW1ib28ifSx7ImRpc3BsYXlfdHlwZSI6InN0cmluZyIsInRyYWl0X3R5cGUiOiJDTzIgQ2FsY3VsYXRpb25zIE1ldGhvZCIsInZhbHVlIjoiVmVyaWZpZWQgQ2FyYm9uIFN0YW5kYXJkIChWQ1MpIn0seyJkaXNwbGF5X3R5cGUiOiJudW1iZXIiLCJ0cmFpdF90eXBlIjoiRXhwZWN0ZWQgQ08yIFRvbnMiLCJ2YWx1ZSI6MjgwfSx7ImRpc3BsYXlfdHlwZSI6Im51bWJlciIsInRyYWl0X3R5cGUiOiJEdXJhdGlvbiAoWWVhcnMpIiwidmFsdWUiOjV9LHsiZGlzcGxheV90eXBlIjoibnVtYmVyIiwidHJhaXRfdHlwZSI6Ik9mZnNldCBEdXJhdGlvbiBHdWFyYW50ZWUgKFllYXJzKSIsInZhbHVlIjoxNX0seyJkaXNwbGF5X3R5cGUiOiJkYXRlIiwidHJhaXRfdHlwZSI6IlN0YXJ0IERhdGUiLCJ2YWx1ZSI6MTcxMDg5MjgwMH1dfQ==';
