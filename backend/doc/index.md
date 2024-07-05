@@ -1,5 +1,419 @@
 # Solidity API
 
+## ProjectManager
+
+This contract manages projects and mints TCO2 tokens based on the projects' data.
+
+### AddressZero
+
+```solidity
+error AddressZero()
+```
+
+Emitted when the zero address is provided where it is not allowed.
+
+### CannotChangeProjectState
+
+```solidity
+error CannotChangeProjectState()
+```
+
+Emitted when the project state cannot be altered.
+
+### CannotMintZeroToken
+
+```solidity
+error CannotMintZeroToken()
+```
+
+Emitted when attempting to mint zero tokens.
+
+### InactiveProject
+
+```solidity
+error InactiveProject()
+```
+
+Emitted when an action is attempted on an inactive project.
+
+### InvalidMetadata
+
+```solidity
+error InvalidMetadata()
+```
+
+Emitted when invalid metadata is provided.
+
+### ProjectDoesNotExist
+
+```solidity
+error ProjectDoesNotExist()
+```
+
+Emitted when a project does not exist.
+
+### DocumentAdded
+
+```solidity
+event DocumentAdded(uint256 projectId)
+```
+
+Emitted when a document is added to a project.
+
+#### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| projectId | uint256 | The ID of the project. |
+
+### PhotoAdded
+
+```solidity
+event PhotoAdded(uint256 projectId)
+```
+
+Emitted when a photo is added to a project.
+
+#### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| projectId | uint256 | The ID of the project. |
+
+### Created
+
+```solidity
+event Created(uint256 projectId)
+```
+
+Emitted when a project is created.
+
+#### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| projectId | uint256 | The ID of the created project. |
+
+### Minted
+
+```solidity
+event Minted(uint256 projectId, address account, uint256 amount)
+```
+
+Emitted when tokens are minted for a project.
+
+#### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| projectId | uint256 | The ID of the project. |
+| account | address | The account receiving the minted tokens. |
+| amount | uint256 | The amount of tokens minted. |
+
+### StatusChanged
+
+```solidity
+event StatusChanged(uint256 projectId, enum ProjectManager.ProjectStatus status)
+```
+
+Emitted when the status of a project changes.
+
+#### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| projectId | uint256 | The ID of the project. |
+| status | enum ProjectManager.ProjectStatus | The new status of the project. |
+
+### ProjectStatus
+
+The possible statuses of a project.
+
+_Once the status is either "Canceled" or "Completed", it can not be altered anymore._
+
+```solidity
+enum ProjectStatus {
+  Canceled,
+  Pending,
+  Active,
+  Completed
+}
+```
+
+### Project
+
+The structure representing a project.
+
+#### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+
+```solidity
+struct Project {
+  bool isRegistered;
+  address projectHolder;
+  uint256 id;
+  string name;
+  string description;
+  string externalUrl;
+  string image;
+  string[] photoUrls;
+  string[] documentUrls;
+  struct ProjectManager.ProjectData data;
+  enum ProjectManager.ProjectStatus status;
+}
+```
+
+### ProjectData
+
+The detailed data of a project.
+
+#### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+
+```solidity
+struct ProjectData {
+  uint8 duration;
+  uint64 ares;
+  uint64 expectedCo2Tons;
+  uint64 startDate;
+  string continent;
+  string country;
+  string region;
+  string province;
+  string city;
+  string location;
+  string coordinates;
+  string plantedSpecies;
+  string calculationMethod;
+  uint8[] unSDGs;
+}
+```
+
+### securityFund
+
+```solidity
+address securityFund
+```
+
+The address of the security fund.
+
+### tco2Contract
+
+```solidity
+contract TCO2 tco2Contract
+```
+
+The TCO2 contract instance.
+
+### totalProjects
+
+```solidity
+uint256 totalProjects
+```
+
+The total number of projects.
+
+### _projects
+
+```solidity
+mapping(uint256 => struct ProjectManager.Project) _projects
+```
+
+The mapping of project IDs to projects.
+
+### exists
+
+```solidity
+modifier exists(uint256 _projectId)
+```
+
+Ensures the project exists.
+
+#### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| _projectId | uint256 | The ID of the project. |
+
+### notInactive
+
+```solidity
+modifier notInactive(uint256 _projectId)
+```
+
+Ensures the project is not inactive (Canceled or Completed).
+
+#### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| _projectId | uint256 | The ID of the project. |
+
+### constructor
+
+```solidity
+constructor(address _initialOwner, address _securityFund, address _tco2Contract) public
+```
+
+Initializes the contract with the given parameters.
+
+#### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| _initialOwner | address | The initial owner of the contract. |
+| _securityFund | address | The address of the security fund. |
+| _tco2Contract | address | The address of the TCO2 contract. |
+
+### addDocument
+
+```solidity
+function addDocument(uint256 projectId, string documentUrl) external
+```
+
+Adds a document URL (stored with IPFS) to the project.
+
+#### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| projectId | uint256 | The ID of the project. |
+| documentUrl | string | The IPFS URL of the document to add. |
+
+### addPhoto
+
+```solidity
+function addPhoto(uint256 projectId, string photoUrl) external
+```
+
+Adds a photo URL (stored with IPFS) to the project.
+
+#### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| projectId | uint256 | The ID of the project. |
+| photoUrl | string | The URL of the photo to add. |
+
+### create
+
+```solidity
+function create(struct ProjectManager.Project project) external
+```
+
+Creates a new project.
+
+#### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| project | struct ProjectManager.Project | The project data (see "Project" struct). |
+
+### get
+
+```solidity
+function get(uint256 projectId) external view returns (struct ProjectManager.Project)
+```
+
+Returns the project details.
+
+#### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| projectId | uint256 | The ID of the project. |
+
+#### Return Values
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| [0] | struct ProjectManager.Project | Project The project details. |
+
+### mintTokens
+
+```solidity
+function mintTokens(uint256 projectId, address receiver, uint256 amount, string base64Metadata) external
+```
+
+Mints TCO2 tokens for the given project.
+
+_Do not include metadata when the project already has minted tokens._
+
+#### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| projectId | uint256 | The ID of the project. |
+| receiver | address | The address receiving the tokens. |
+| amount | uint256 | The amount of tokens to mint. |
+| base64Metadata | string | The metadata associated with the tokens, as a base64 string. |
+
+### setStatus
+
+```solidity
+function setStatus(uint256 projectId, enum ProjectManager.ProjectStatus status) external
+```
+
+Sets the status of the project.
+
+#### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| projectId | uint256 | The ID of the project. |
+| status | enum ProjectManager.ProjectStatus | The new status of the project. |
+
+### _get
+
+```solidity
+function _get(uint256 projectId) internal view returns (struct ProjectManager.Project)
+```
+
+Retrieves the project details for the given project ID.
+
+_This is an internal function to get project details._
+
+#### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| projectId | uint256 | The ID of the project. |
+
+#### Return Values
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| [0] | struct ProjectManager.Project | Project The project details stored in the contract. |
+
+### _splitMint
+
+```solidity
+function _splitMint(uint256 totalAmount, uint8 splitPercent) internal pure returns (uint256, uint256)
+```
+
+Splits the total amount into two parts based on the split percentage.
+
+_The function ensures that the total amount is properly divided between the receiver and the security fund.
+The receiver will always receive more than the security fund when the amount to be shared is not a round number._
+
+#### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| totalAmount | uint256 | The total amount to be split. |
+| splitPercent | uint8 | The percentage to allocate to the security fund. |
+
+#### Return Values
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| [0] | uint256 | receiverAmount The amount allocated to the receiver. |
+| [1] | uint256 | securityFundAmount The amount allocated to the security fund. |
+
 ## MintAmountZero
 
 ```solidity
