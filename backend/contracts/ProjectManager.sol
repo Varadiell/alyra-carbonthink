@@ -4,57 +4,59 @@ pragma solidity ^0.8.20;
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {TCO2} from "./TCO2.sol";
 
-// TODO: reorganize errors / enums / structs?
-
-// TODO: add events
-
-error AddressZero();
-error CannotChangeProjectState();
-error CannotMintZeroToken();
-error InactiveProject();
-error InvalidMetadata();
-error ProjectDoesNotExist();
-
-enum ProjectStatus {
-    Canceled,
-    Pending,
-    Active,
-    Completed
-}
-
-struct Project {
-    bool isRegistered;
-    address projectHolder;
-    uint256 id;
-    string name;
-    string description;
-    string externalUrl;
-    string image;
-    string[] photoUrls;
-    string[] documentUrls;
-    ProjectData data;
-    ProjectStatus status;
-}
-
-struct ProjectData {
-    uint8 duration;
-    uint64 ares;
-    uint64 expectedCo2Tons;
-    uint64 startDate;
-    string continent;
-    string country;
-    string region;
-    string province;
-    string city;
-    string location;
-    string coordinates;
-    string plantedSpecies;
-    string calculationMethod;
-    uint8[] unSDGs;
-}
-
 /// @custom:security-contact security@carbonthink.xyz
 contract ProjectManager is Ownable {
+    error AddressZero();
+    error CannotChangeProjectState();
+    error CannotMintZeroToken();
+    error InactiveProject();
+    error InvalidMetadata();
+    error ProjectDoesNotExist();
+
+    event DocumentAdded(uint256 indexed projectId);
+    event PhotoAdded(uint256 indexed projectId);
+    event Created(uint256 indexed projectId);
+    event Minted(uint256 indexed projectId, address indexed account, uint256 amount);
+    event StatusChanged(uint256 indexed projectId, ProjectStatus indexed status);
+
+    enum ProjectStatus {
+        Canceled,
+        Pending,
+        Active,
+        Completed
+    }
+
+    struct Project {
+        bool isRegistered;
+        address projectHolder;
+        uint256 id;
+        string name;
+        string description;
+        string externalUrl;
+        string image;
+        string[] photoUrls;
+        string[] documentUrls;
+        ProjectData data;
+        ProjectStatus status;
+    }
+
+    struct ProjectData {
+        uint8 duration;
+        uint64 ares;
+        uint64 expectedCo2Tons;
+        uint64 startDate;
+        string continent;
+        string country;
+        string region;
+        string province;
+        string city;
+        string location;
+        string coordinates;
+        string plantedSpecies;
+        string calculationMethod;
+        uint8[] unSDGs;
+    }
+
     address public securityFund;
     TCO2 public tco2Contract;
 
@@ -89,6 +91,7 @@ contract ProjectManager is Ownable {
         string memory _documentUrl
     ) external onlyOwner exists(_projectId) notInactive(_projectId) {
         _get(_projectId).documentUrls.push(_documentUrl);
+        emit DocumentAdded(_projectId);
     }
 
     function addPhoto(
@@ -96,11 +99,13 @@ contract ProjectManager is Ownable {
         string memory _photoUrl
     ) external onlyOwner exists(_projectId) notInactive(_projectId) {
         _get(_projectId).photoUrls.push(_photoUrl);
+        emit PhotoAdded(_projectId);
     }
 
-    function create() external onlyOwner {
-        // TODO: implement
-        // TODO: increment totalProjects number
+    function create(Project memory _project) external onlyOwner {
+        _projects[totalProjects] = _project;
+        totalProjects++;
+        emit Created(_project.id);
     }
 
     function get(uint256 _projectId) external view exists(_projectId) returns (Project memory) {
@@ -130,10 +135,12 @@ contract ProjectManager is Ownable {
         (uint256 receiverAmount, uint256 securityFundAmount) = _splitMint(_amount, 80);
         // Metadata are set only once at token creation.
         tco2Contract.mint(_receiver, _tokenId, receiverAmount, needsMetadata ? _base64Metadata : "");
+        emit Minted(_projectId, _receiver, receiverAmount);
         // No need to mint for the Security Fund when the allocated amount is 0.
         if (securityFundAmount > 0) {
             // No metadata to add after the first mint.
             tco2Contract.mint(securityFund, _tokenId, securityFundAmount, "");
+            emit Minted(_projectId, securityFund, securityFundAmount);
         }
     }
 
@@ -142,6 +149,7 @@ contract ProjectManager is Ownable {
         ProjectStatus _status
     ) external onlyOwner exists(_projectId) notInactive(_projectId) {
         _get(_projectId).status = _status;
+        emit StatusChanged(_projectId, _status);
     }
 
     function _get(uint256 _projectId) internal view returns (Project storage) {
