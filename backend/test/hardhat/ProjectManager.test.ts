@@ -4,6 +4,14 @@ import { ProjectManager, TCO2 } from '@/typechain-types/contracts';
 import { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/signers';
 import { loadFixture } from '@nomicfoundation/hardhat-toolbox/network-helpers';
 
+enum Event {
+  DocumentAdded = 'DocumentAdded',
+  PhotoAdded = 'PhotoAdded',
+  Created = 'Created',
+  Minted = 'Minted',
+  StatusChanged = 'StatusChanged',
+}
+
 enum Status {
   Canceled,
   Pending,
@@ -102,9 +110,12 @@ describe('ProjectManager contract tests', () => {
     });
 
     it('should add a document to a given project', async () => {
+      const PROJECT_ID = 0;
       const DOCUMENT_URL = 'ipfs://QmT5pFzHUqAutGTabky8Kgbc51GS8WSU2yjM9mDYEikQSx/';
-      await projectManagerContract.addDocument(0, DOCUMENT_URL);
-      const documentUrls = (await projectManagerContract.get(0)).documentUrls;
+      await expect(projectManagerContract.addDocument(PROJECT_ID, DOCUMENT_URL))
+        .to.emit(projectManagerContract, Event.DocumentAdded)
+        .withArgs(PROJECT_ID);
+      const documentUrls = (await projectManagerContract.get(PROJECT_ID)).documentUrls;
       expect(documentUrls.length).to.equal(1);
       expect(documentUrls[0]).to.equal(DOCUMENT_URL);
     });
@@ -113,8 +124,12 @@ describe('ProjectManager contract tests', () => {
       const PROJECT_ID = 0;
       const DOCUMENT_URL = 'ipfs://QmT5pFzHUqAutGTabky8Kgbc51GS8WSU2yjM9mDYEikQSx/';
       const DOCUMENT_2_URL = 'ipfs://QmPeKYLrTzwHCsbviFdePdXochzcdMWVwrTH3zy2N6LenU/';
-      await projectManagerContract.addDocument(PROJECT_ID, DOCUMENT_URL);
-      await projectManagerContract.addDocument(PROJECT_ID, DOCUMENT_2_URL);
+      await expect(projectManagerContract.addDocument(PROJECT_ID, DOCUMENT_URL))
+        .to.emit(projectManagerContract, Event.DocumentAdded)
+        .withArgs(PROJECT_ID);
+      await expect(projectManagerContract.addDocument(PROJECT_ID, DOCUMENT_2_URL))
+        .to.emit(projectManagerContract, Event.DocumentAdded)
+        .withArgs(PROJECT_ID);
       const documentUrls = (await projectManagerContract.get(0)).documentUrls;
       expect(documentUrls.length).to.equal(2);
       expect(documentUrls[0]).to.equal(DOCUMENT_URL);
