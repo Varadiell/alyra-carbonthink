@@ -33,7 +33,7 @@ describe('TCO2 token contract tests', () => {
 
   async function deployContractFixture() {
     const [owner, addr1, addr2] = await ethers.getSigners();
-    const tco2Contract = await ethers.deployContract('TCO2', [owner]);
+    const tco2Contract = await ethers.deployContract('TCO2', [owner, addr2]);
     return { tco2Contract, owner, addr1, addr2 };
   }
 
@@ -48,7 +48,7 @@ describe('TCO2 token contract tests', () => {
   describe('constructor', () => {
     it('should deploy the contract with the correct default values and owner address', async () => {
       const royaltyInfo = await tco2Contract.royaltyInfo(0, 10_000);
-      testRoyalty({ address: royaltyInfo[0], amount: royaltyInfo[1] }, { address: owner.address, amount: BigInt(500) });
+      testRoyalty({ address: royaltyInfo[0], amount: royaltyInfo[1] }, { address: addr2.address, amount: BigInt(500) });
       expect(await tco2Contract.owner()).to.equal(owner);
     });
   });

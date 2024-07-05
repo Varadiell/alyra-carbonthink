@@ -35,7 +35,7 @@ mapping(uint256 => string) _metadatas
 ### constructor
 
 ```solidity
-constructor(address initialOwner) public
+constructor(address initialOwner, address royaltiesAddress) public
 ```
 
 Constructor to initialize the contract with an initial owner.
@@ -47,6 +47,7 @@ _No ERC1155 uri is set because we override the uri function for on-chain metadat
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | initialOwner | address | The address of the initial owner of the contract. |
+| royaltiesAddress | address |  |
 
 ### mint
 

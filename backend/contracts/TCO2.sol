@@ -23,8 +23,8 @@ contract TCO2 is ERC1155, ERC1155Burnable, ERC1155Supply, ERC2981, Ownable {
     /// @notice Constructor to initialize the contract with an initial owner.
     /// @dev No ERC1155 uri is set because we override the uri function for on-chain metadata.
     /// @param initialOwner The address of the initial owner of the contract.
-    constructor(address initialOwner) ERC1155("") Ownable(initialOwner) {
-        _setDefaultRoyalty(initialOwner, 500); // Set royalties to 5%.
+    constructor(address initialOwner, address royaltiesAddress) ERC1155("") Ownable(initialOwner) {
+        _setDefaultRoyalty(royaltiesAddress, 500); // Set royalties to 5%.
     }
 
     /// @notice Mint a new token with the specified metadata.
