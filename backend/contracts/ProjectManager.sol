@@ -2,6 +2,11 @@
 pragma solidity ^0.8.20;
 
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {TCO2} from "./TCO2.sol";
+
+// TODO: reorganize errors / enums / structs?
+
+// TODO: add events
 
 error CannotChangeProjectState();
 error InactiveProject();
@@ -47,60 +52,75 @@ struct ProjectData {
 
 /// @custom:security-contact security@carbonthink.xyz
 contract ProjectManager is Ownable {
+    address public securityFund;
+    TCO2 public tco2Contract;
+
     uint256 public totalProjects;
     mapping(uint256 => Project) private _projects;
 
-    modifier exists(uint256 projectId) {
-        if (!_projects[projectId].isRegistered) {
+    modifier exists(uint256 _projectId) {
+        if (!_projects[_projectId].isRegistered) {
             revert ProjectDoesNotExist();
         }
         _;
     }
 
-    modifier notInactive(uint256 projectId) {
-        ProjectStatus status = _projects[projectId].status;
+    modifier notInactive(uint256 _projectId) {
+        ProjectStatus status = _projects[_projectId].status;
         if (status == ProjectStatus.Canceled || status == ProjectStatus.Completed) {
             revert InactiveProject();
         }
         _;
     }
 
-    constructor(address initialOwner) Ownable(initialOwner) {}
+    constructor(address _initialOwner, address _securityFund, address _tco2Contract) Ownable(_initialOwner) {
+        tco2Contract = TCO2(_tco2Contract);
+        securityFund = _securityFund;
+    }
 
     function addDocument(
-        uint256 projectId,
-        string memory documentUrl
-    ) external onlyOwner exists(projectId) notInactive(projectId) {
-        _get(projectId).documentUrls.push(documentUrl);
+        uint256 _projectId,
+        string memory _documentUrl
+    ) external onlyOwner exists(_projectId) notInactive(_projectId) {
+        _get(_projectId).documentUrls.push(_documentUrl);
     }
 
     function addPhoto(
-        uint256 projectId,
-        string memory photoUrl
-    ) external onlyOwner exists(projectId) notInactive(projectId) {
-        _get(projectId).photoUrls.push(photoUrl);
+        uint256 _projectId,
+        string memory _photoUrl
+    ) external onlyOwner exists(_projectId) notInactive(_projectId) {
+        _get(_projectId).photoUrls.push(_photoUrl);
     }
 
     function create() external onlyOwner {
         // TODO: implement
+        // TODO: increment totalProjects number
     }
 
-    function get(uint256 projectId) external view exists(projectId) returns (Project memory) {
-        return _projects[projectId];
+    function get(uint256 _projectId) external view exists(_projectId) returns (Project memory) {
+        return _projects[_projectId];
     }
 
-    function mintTokens(uint256 projectId) external onlyOwner exists(projectId) notInactive(projectId) {
+    function mintTokens(
+        uint256 _projectId,
+        address _receiver,
+        uint256 _tokenId,
+        uint256 _amount,
+        string memory _base64Metadata
+    ) external onlyOwner exists(_projectId) notInactive(_projectId) {
         // TODO: implement
+        // TODO: calculate amount for receiver & amount for security fund.
+        // tco2Contract.mint(_receiver, _tokenId, _amount, _base64Metadata);
     }
 
     function setStatus(
-        uint256 projectId,
-        ProjectStatus status
-    ) external onlyOwner exists(projectId) notInactive(projectId) {
-        _get(projectId).status = status;
+        uint256 _projectId,
+        ProjectStatus _status
+    ) external onlyOwner exists(_projectId) notInactive(_projectId) {
+        _get(_projectId).status = _status;
     }
 
-    function _get(uint256 projectId) internal view returns (Project storage) {
-        return _projects[projectId];
+    function _get(uint256 _projectId) internal view returns (Project storage) {
+        return _projects[_projectId];
     }
 }

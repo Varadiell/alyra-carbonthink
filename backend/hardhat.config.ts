@@ -14,7 +14,9 @@ const {
 } = process.env;
 
 const config: HardhatUserConfig = {
-  docgen: { outputDir: 'doc' },
+  docgen: {
+    outputDir: 'doc',
+  },
   etherscan: {
     apiKey: ETHERSCAN_API_KEY,
   },
