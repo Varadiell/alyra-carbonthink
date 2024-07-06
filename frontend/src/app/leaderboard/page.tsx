@@ -1,7 +1,14 @@
+import { Breadcrumbs } from '@/components/shared/breadcrumbs';
+
 export default function Leaderboard() {
   return (
     <>
-      <h1>Leaderboard</h1>
+      <Breadcrumbs
+        layers={[
+          { label: 'Home', url: '/' },
+          { label: 'Leaderboard', url: '' },
+        ]}
+      />
     </>
   );
 }

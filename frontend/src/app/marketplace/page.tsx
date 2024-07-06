@@ -1,7 +1,14 @@
+import { Breadcrumbs } from '@/components/shared/breadcrumbs';
+
 export default function Marketplace() {
   return (
     <>
-      <h1>Marketplace</h1>
+      <Breadcrumbs
+        layers={[
+          { label: 'Home', url: '/' },
+          { label: 'Marketplace', url: '' },
+        ]}
+      />
     </>
   );
 }

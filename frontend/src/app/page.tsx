@@ -1,3 +1,9 @@
+import { Breadcrumbs } from '@/components/shared/breadcrumbs';
+
 export default function Home() {
-  return <h1>Home</h1>;
+  return (
+    <>
+      <Breadcrumbs layers={[{ label: 'Home', url: '' }]} />
+    </>
+  );
 }

@@ -1,7 +1,14 @@
+import { Breadcrumbs } from '@/components/shared/breadcrumbs';
+
 export default function Offset() {
   return (
     <>
-      <h1>Offset</h1>
+      <Breadcrumbs
+        layers={[
+          { label: 'Home', url: '/' },
+          { label: 'Offset', url: '' },
+        ]}
+      />
     </>
   );
 }

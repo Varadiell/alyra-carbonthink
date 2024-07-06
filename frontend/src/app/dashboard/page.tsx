@@ -1,7 +1,14 @@
+import { Breadcrumbs } from '@/components/shared/breadcrumbs';
+
 export default function Dashboard() {
   return (
     <>
-      <h1>Dashboard</h1>
+      <Breadcrumbs
+        layers={[
+          { label: 'Home', url: '/' },
+          { label: 'Dashboard', url: '' },
+        ]}
+      />
     </>
   );
 }
