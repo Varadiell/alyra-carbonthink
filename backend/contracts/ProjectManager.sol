@@ -192,7 +192,7 @@ contract ProjectManager is Ownable {
     /// @notice Creates a new project.
     /// @param newProject The project data (see "CreateParams" struct).
     function create(CreateParams memory newProject) external onlyOwner {
-        string[] memory emptyArray;
+        string[] memory emptyArray = new string[](0);
         ProjectData memory projectData = ProjectData(
             newProject.data.duration,
             newProject.data.ares,
