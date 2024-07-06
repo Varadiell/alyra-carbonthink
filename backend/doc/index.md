@@ -52,6 +52,14 @@ error ProjectDoesNotExist()
 
 Emitted when a project does not exist.
 
+### SameStatus
+
+```solidity
+error SameStatus()
+```
+
+Emitted when attempting to set the same status to a project.
+
 ### DocumentAdded
 
 ```solidity

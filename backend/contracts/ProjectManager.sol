@@ -20,6 +20,8 @@ contract ProjectManager is Ownable {
     error InvalidMetadata();
     /// @notice Emitted when a project does not exist.
     error ProjectDoesNotExist();
+    /// @notice Emitted when attempting to set the same status to a project.
+    error SameStatus();
 
     /// @notice Emitted when a document is added to a project.
     /// @param projectId The ID of the project.
@@ -271,7 +273,11 @@ contract ProjectManager is Ownable {
     /// @param projectId The ID of the project.
     /// @param status The new status of the project.
     function setStatus(uint256 projectId, Status status) external onlyOwner exists(projectId) notInactive(projectId) {
-        _get(projectId).status = status;
+        Project storage project = _get(projectId);
+        if (project.status == status) {
+            revert SameStatus();
+        }
+        project.status = status;
         emit StatusChanged(projectId, status);
     }
 

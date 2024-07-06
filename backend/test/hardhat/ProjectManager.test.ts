@@ -31,6 +31,7 @@ enum CustomError {
   OwnableInvalidOwner = 'OwnableInvalidOwner',
   OwnableUnauthorizedAccount = 'OwnableUnauthorizedAccount',
   ProjectDoesNotExist = 'ProjectDoesNotExist',
+  SameStatus = 'SameStatus',
 }
 
 describe('ProjectManager contract tests', () => {
@@ -416,6 +417,69 @@ describe('ProjectManager contract tests', () => {
 
     it('should revert when the msg.sender has no rights', async () => {
       await expect(projectManagerContract.connect(addr1).mintTokens(0, 1, project1_base64)).to.revertedWithCustomError(
+        projectManagerContract,
+        CustomError.OwnableUnauthorizedAccount,
+      );
+    });
+  });
+
+  describe('setStatus', () => {
+    beforeEach(async () => {
+      // Create a project.
+      await projectManagerContract.create(CREATE_1);
+    });
+
+    it('should set the status of a given project', async () => {
+      const PROJECT_ID = 0;
+      await expect(projectManagerContract.setStatus(PROJECT_ID, Status.Completed))
+        .to.emit(projectManagerContract, Event.StatusChanged)
+        .withArgs(PROJECT_ID, Status.Completed);
+    });
+
+    it('should set the status of a given project multiple times', async () => {
+      const PROJECT_ID = 0;
+      await expect(projectManagerContract.setStatus(PROJECT_ID, Status.Active))
+        .to.emit(projectManagerContract, Event.StatusChanged)
+        .withArgs(PROJECT_ID, Status.Active);
+      await expect(projectManagerContract.setStatus(PROJECT_ID, Status.Pending))
+        .to.emit(projectManagerContract, Event.StatusChanged)
+        .withArgs(PROJECT_ID, Status.Pending);
+    });
+
+    it('should revert when trying to change the status to the same status', async () => {
+      await expect(projectManagerContract.setStatus(0, Status.Pending)).to.revertedWithCustomError(
+        projectManagerContract,
+        CustomError.SameStatus,
+      );
+    });
+
+    it('should revert when the project is inactive (case: canceled)', async () => {
+      const PROJECT_ID = 0;
+      await projectManagerContract.setStatus(PROJECT_ID, Status.Canceled);
+      await expect(projectManagerContract.setStatus(0, Status.Pending)).to.revertedWithCustomError(
+        projectManagerContract,
+        CustomError.InactiveProject,
+      );
+    });
+
+    it('should revert when the project is inactive (case: completed)', async () => {
+      const PROJECT_ID = 0;
+      await projectManagerContract.setStatus(PROJECT_ID, Status.Completed);
+      await expect(projectManagerContract.setStatus(0, Status.Pending)).to.revertedWithCustomError(
+        projectManagerContract,
+        CustomError.InactiveProject,
+      );
+    });
+
+    it('should revert when the project does not exist', async () => {
+      await expect(projectManagerContract.setStatus(1, Status.Active)).to.revertedWithCustomError(
+        projectManagerContract,
+        CustomError.ProjectDoesNotExist,
+      );
+    });
+
+    it('should revert when the msg.sender has no rights', async () => {
+      await expect(projectManagerContract.connect(addr1).setStatus(0, Status.Active)).to.revertedWithCustomError(
         projectManagerContract,
         CustomError.OwnableUnauthorizedAccount,
       );
