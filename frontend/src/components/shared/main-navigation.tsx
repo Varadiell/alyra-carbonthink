@@ -2,7 +2,17 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { CandlestickChart, Flame, LayoutDashboard, LucideProps, Menu, Settings, TreePine, Trophy } from 'lucide-react';
+import {
+  CandlestickChart,
+  DatabaseZap,
+  Flame,
+  LayoutDashboard,
+  LucideProps,
+  Menu,
+  Settings,
+  TreePine,
+  Trophy,
+} from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -11,6 +21,8 @@ import { usePathname } from 'next/navigation';
 import { ConnectKitButton } from 'connectkit';
 import { Skeleton } from '@/components/ui/skeleton';
 import carbonThinkIcon from 'public/carbonthink.svg';
+import { DataContext } from '@/contexts/data-provider';
+import { useContext } from 'react';
 
 type PageType = {
   count: number | undefined | null;
@@ -21,6 +33,9 @@ type PageType = {
 
 export function MainNavigation({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const {
+    data: { eventLogs },
+  } = useContext(DataContext);
 
   const pages: PageType[] = [
     {
@@ -58,6 +73,12 @@ export function MainNavigation({ children }: { children: React.ReactNode }) {
       icon: Settings,
       label: 'Admin',
       url: '/admin',
+    },
+    {
+      count: eventLogs?.length,
+      icon: DatabaseZap,
+      label: 'Events',
+      url: '/events',
     },
   ];
 
@@ -136,7 +157,7 @@ export function MainNavigation({ children }: { children: React.ReactNode }) {
           <ThemeToggle />
           <ConnectKitButton showAvatar={true} showBalance={true} />
         </header>
-        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 w-full max-w-screen-md place-self-center">
+        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 w-full max-w-screen-lg place-self-center">
           {children}
         </main>
       </div>

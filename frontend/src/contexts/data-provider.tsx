@@ -1,9 +1,9 @@
 'use client';
 
 import { useData } from '@/hooks/useData';
-import * as React from 'react';
 import { createContext } from 'react';
 import { Log } from 'viem';
+import { ReactNode } from 'react';
 
 export type EventLog = Log & {
   args: Record<string, unknown>;
@@ -16,7 +16,7 @@ export interface DataType {
     isConnected: boolean;
   };
   data: {
-    // TODO: data
+    eventLogs: EventLog[] | undefined;
   };
 }
 
@@ -26,11 +26,11 @@ export const DataContext = createContext<DataType>({
     isConnected: false,
   },
   data: {
-    // TODO: data
+    eventLogs: undefined,
   },
 });
 
-export function DataProvider({ children }: { children: React.ReactNode }) {
+export function DataProvider({ children }: { children: ReactNode }) {
   const data = useData();
   console.log(data); // TODO: remove debug
   return <DataContext.Provider value={{ ...data }}>{children}</DataContext.Provider>;
