@@ -10,6 +10,12 @@
     "editor.defaultFormatter": "JuanBlanco.solidity",
     "editor.tabSize": 4
   },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "files.associations": {
     "*.css": "tailwindcss"
   }
