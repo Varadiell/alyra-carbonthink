@@ -358,7 +358,7 @@ Returns the project details.
 ### mintTokens
 
 ```solidity
-function mintTokens(uint256 projectId, address receiver, uint256 amount, string base64Metadata) external
+function mintTokens(uint256 projectId, uint256 amount, string base64Metadata) external
 ```
 
 Mints TCO2 tokens for the given project.
@@ -370,7 +370,6 @@ _Do not include metadata when the project already has minted tokens._
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | projectId | uint256 | The ID of the project. |
-| receiver | address | The address receiving the tokens. |
 | amount | uint256 | The amount of tokens to mint. |
 | base64Metadata | string | The metadata associated with the tokens, as a base64 string. |
 

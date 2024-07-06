@@ -234,29 +234,25 @@ contract ProjectManager is Ownable {
     /// @notice Mints TCO2 tokens for the given project.
     /// @dev Do not include metadata when the project already has minted tokens.
     /// @param projectId The ID of the project.
-    /// @param receiver The address receiving the tokens.
     /// @param amount The amount of tokens to mint.
     /// @param base64Metadata The metadata associated with the tokens, as a base64 string.
     function mintTokens(
         uint256 projectId,
-        address receiver,
         uint256 amount,
         string memory base64Metadata
     ) external onlyOwner exists(projectId) notInactive(projectId) {
-        if (receiver == address(0)) {
-            revert AddressZero();
-        }
         if (amount == 0) {
             revert CannotMintZeroToken();
         }
-        bool needsMetadata = tco2Contract.exists(projectId);
+        bool needsMetadata = !tco2Contract.exists(projectId);
         if (
             (needsMetadata && bytes(base64Metadata).length == 0) || (!needsMetadata && bytes(base64Metadata).length > 0)
         ) {
             revert InvalidMetadata();
         }
-        (uint256 receiverAmount, uint256 securityFundAmount) = _splitMint(amount, 80);
+        (uint256 receiverAmount, uint256 securityFundAmount) = _splitMint(amount, 20);
         bool hasSecurityFundAmount = securityFundAmount > 0;
+        address receiver = _projects[projectId].projectHolder;
         // Events are emitted before the calls to please the Slither god regarding reentrancy warnings.
         emit Minted(projectId, receiver, receiverAmount);
         if (hasSecurityFundAmount) {

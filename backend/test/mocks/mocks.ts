@@ -41,7 +41,7 @@ export const CREATE_2: ProjectManager.CreateParamsStruct = {
     province: 'Palermo',
     city: 'Godrano',
     location: 'Fercolor Di Bellini Giuseppa',
-    coordinates: '37.904032, 13.428902',
+    coordinates: '37.903189, 13.422044',
     plantedSpecies: 'Bamboo',
     calculationMethod: 'VCS',
     unSDGs: [13, 14, 15],

@@ -3,6 +3,8 @@ import { ethers } from 'hardhat';
 import { ProjectManager, TCO2 } from '@/typechain-types/contracts';
 import { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/signers';
 import { loadFixture } from '@nomicfoundation/hardhat-toolbox/network-helpers';
+import { base64 as project1_base64 } from '@/test/mocks/metadata_project_1.data';
+import { base64 as project2_base64 } from '@/test/mocks/metadata_project_2.data';
 import { CREATE_1, CREATE_2 } from '@/test/mocks/mocks';
 
 enum Event {
@@ -308,6 +310,114 @@ describe('ProjectManager contract tests', () => {
       await expect(projectManagerContract.get(2)).to.revertedWithCustomError(
         projectManagerContract,
         CustomError.ProjectDoesNotExist,
+      );
+    });
+  });
+
+  describe('mintTokens', () => {
+    beforeEach(async () => {
+      // Create two projects.
+      await projectManagerContract.create(CREATE_1);
+      await projectManagerContract.create(CREATE_2);
+    });
+
+    it('should mint the first tokens of the first project and redistribute the correct amounts of tokens', async () => {
+      const PROJECT_ID = 0;
+      const AMOUNT = 101;
+      await expect(projectManagerContract.mintTokens(PROJECT_ID, AMOUNT, project1_base64))
+        .to.emit(projectManagerContract, Event.Minted)
+        .withArgs(PROJECT_ID, addr1, 81) // addr1 is the address of the project holder for this project.
+        .to.emit(projectManagerContract, Event.Minted)
+        .withArgs(PROJECT_ID, addr2, 20); // addr2 is the address of the security fund.
+      expect(await tco2Contract['totalSupply()']()).to.equal(AMOUNT);
+      expect(await tco2Contract.balanceOf(addr1, PROJECT_ID)).to.equal(81);
+      expect(await tco2Contract.balanceOf(addr2, PROJECT_ID)).to.equal(20);
+    });
+
+    it('should mint the first tokens of the second project and redistribute the correct amounts of tokens', async () => {
+      const PROJECT_ID = 1;
+      const AMOUNT = 100;
+      await expect(projectManagerContract.mintTokens(PROJECT_ID, AMOUNT, project2_base64))
+        .to.emit(projectManagerContract, Event.Minted)
+        .withArgs(PROJECT_ID, addr2, 80) // addr2 is the address of the project holder for this project.
+        .to.emit(projectManagerContract, Event.Minted)
+        .withArgs(PROJECT_ID, addr2, 20); // addr2 is also the address of the security fund.
+      expect(await tco2Contract['totalSupply()']()).to.equal(AMOUNT);
+      expect(await tco2Contract.balanceOf(addr1, PROJECT_ID)).to.equal(0);
+      expect(await tco2Contract.balanceOf(addr2, PROJECT_ID)).to.equal(100);
+    });
+
+    it('should mint multiple time some tokens for the first project and redistribute the correct amounts of tokens', async () => {
+      const PROJECT_ID = 0;
+      const FIRST_AMOUNT = 1;
+      const SECOND_AMOUNT = 10;
+      // Note: only one event for the first mint since there is no token to send to the security fund.
+      await expect(projectManagerContract.mintTokens(PROJECT_ID, FIRST_AMOUNT, project1_base64))
+        .to.emit(projectManagerContract, Event.Minted)
+        .withArgs(PROJECT_ID, addr1, 1); // addr1 is the address of the project holder for this project.
+      // Note: no metadata to send because they are already set.
+      await expect(projectManagerContract.mintTokens(PROJECT_ID, SECOND_AMOUNT, ''))
+        .to.emit(projectManagerContract, Event.Minted)
+        .withArgs(PROJECT_ID, addr1, 8) // addr1 is the address of the project holder for this project.
+        .to.emit(projectManagerContract, Event.Minted)
+        .withArgs(PROJECT_ID, addr2, 2); // addr2 is the address of the security fund.
+      expect(await tco2Contract['totalSupply()']()).to.equal(11);
+      expect(await tco2Contract.balanceOf(addr1, PROJECT_ID)).to.equal(9);
+      expect(await tco2Contract.balanceOf(addr2, PROJECT_ID)).to.equal(2);
+    });
+
+    it('should revert when the metadata is sent when not needed on a re-mint', async () => {
+      const PROJECT_ID = 0;
+      await projectManagerContract.mintTokens(PROJECT_ID, 1, project1_base64);
+      await expect(projectManagerContract.mintTokens(PROJECT_ID, 1, project1_base64)).to.revertedWithCustomError(
+        projectManagerContract,
+        CustomError.InvalidMetadata,
+      );
+    });
+
+    it('should revert when the metadata is not sent when needed on a first mint', async () => {
+      await expect(projectManagerContract.mintTokens(0, 1, '')).to.revertedWithCustomError(
+        projectManagerContract,
+        CustomError.InvalidMetadata,
+      );
+    });
+
+    it('should revert when the amount to mint is 0', async () => {
+      await expect(projectManagerContract.mintTokens(0, 0, project1_base64)).to.revertedWithCustomError(
+        projectManagerContract,
+        CustomError.CannotMintZeroToken,
+      );
+    });
+
+    it('should revert when the project to mint on is inactive (case: status completed)', async () => {
+      const PROJECT_ID = 0;
+      await projectManagerContract.setStatus(PROJECT_ID, Status.Completed);
+      await expect(projectManagerContract.mintTokens(PROJECT_ID, 1, project1_base64)).to.revertedWithCustomError(
+        projectManagerContract,
+        CustomError.InactiveProject,
+      );
+    });
+
+    it('should revert when the project to mint on is inactive (case: status canceled)', async () => {
+      const PROJECT_ID = 0;
+      await projectManagerContract.setStatus(PROJECT_ID, Status.Canceled);
+      await expect(projectManagerContract.mintTokens(PROJECT_ID, 1, project1_base64)).to.revertedWithCustomError(
+        projectManagerContract,
+        CustomError.InactiveProject,
+      );
+    });
+
+    it('should revert when the project to mint does not exist', async () => {
+      await expect(projectManagerContract.mintTokens(2, 1, project1_base64)).to.revertedWithCustomError(
+        projectManagerContract,
+        CustomError.ProjectDoesNotExist,
+      );
+    });
+
+    it('should revert when the msg.sender has no rights', async () => {
+      await expect(projectManagerContract.connect(addr1).mintTokens(0, 1, project1_base64)).to.revertedWithCustomError(
+        projectManagerContract,
+        CustomError.OwnableUnauthorizedAccount,
       );
     });
   });
