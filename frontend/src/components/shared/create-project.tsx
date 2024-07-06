@@ -100,7 +100,7 @@ export function CreateProject() {
           <CardDescription>As the admin, you can create new projects.</CardDescription>
         </CardHeader>
         <CardContent className="pt-6">
-          <div className="grid gap-5">
+          <div className="grid gap-5 sm:grid-cols-2">
             <div className="grid gap-3">
               <Label htmlFor="projectHolder">Project Holder Address</Label>
               <Input
@@ -116,7 +116,8 @@ export function CreateProject() {
                 value={projectHolder}
               />
             </div>
-            <div className="grid gap-3">
+            <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight sm:col-span-2 pt-6">Description</h3>
+            <div className="grid gap-3 sm:col-start-1">
               <Label htmlFor="name">Name</Label>
               <Input
                 className="w-full"
@@ -129,21 +130,6 @@ export function CreateProject() {
                 required={true}
                 type="text"
                 value={name}
-              />
-            </div>
-            <div className="grid gap-3">
-              <Label htmlFor="description">Description</Label>
-              <Input
-                className="w-full"
-                disabled={isPending || !isConnected}
-                id="description"
-                maxLength={250}
-                minLength={1}
-                onChange={(event) => setDescription(event.currentTarget.value)}
-                placeholder="Description"
-                required={true}
-                type="text"
-                value={description}
               />
             </div>
             <div className="grid gap-3">
@@ -161,46 +147,19 @@ export function CreateProject() {
                 value={image}
               />
             </div>
-            <div className="grid gap-3">
-              <Label htmlFor="duration">Duration (Years)</Label>
+            <div className="grid gap-3 sm:col-span-2">
+              <Label htmlFor="description">Description</Label>
               <Input
                 className="w-full"
                 disabled={isPending || !isConnected}
-                id="duration"
-                max={100}
-                min={1}
-                onChange={(event) => setDuration(Number(event.currentTarget.value))}
+                id="description"
+                maxLength={250}
+                minLength={1}
+                onChange={(event) => setDescription(event.currentTarget.value)}
+                placeholder="Description"
                 required={true}
-                type="number"
-                value={duration}
-              />
-            </div>
-            <div className="grid gap-3">
-              <Label htmlFor="ares">Ares {!!ares && <>({ares / 100} hectares)</>} </Label>
-              <Input
-                className="w-full"
-                disabled={isPending || !isConnected}
-                id="ares"
-                max={100_000_000}
-                min={1}
-                onChange={(event) => setAres(Number(event.currentTarget.value))}
-                required={true}
-                type="number"
-                value={ares}
-              />
-            </div>
-            <div className="grid gap-3">
-              <Label htmlFor="expectedCo2Tons">Expected CO2 Tons</Label>
-              <Input
-                className="w-full"
-                disabled={isPending || !isConnected}
-                id="expectedCo2Tons"
-                max={100_000_000}
-                min={1}
-                onChange={(event) => setExpectedCo2Tons(Number(event.currentTarget.value))}
-                required={true}
-                type="number"
-                value={expectedCo2Tons}
+                type="text"
+                value={description}
               />
             </div>
             <div className="grid gap-3">
@@ -217,6 +176,21 @@ export function CreateProject() {
                 value={startDate}
               />
             </div>
+            <div className="grid gap-3">
+              <Label htmlFor="duration">Duration (Years)</Label>
+              <Input
+                className="w-full"
+                disabled={isPending || !isConnected}
+                id="duration"
+                max={100}
+                min={1}
+                onChange={(event) => setDuration(Number(event.currentTarget.value))}
+                required={true}
+                type="number"
+                value={duration}
+              />
+            </div>
+            <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight sm:col-span-2 pt-6">Location</h3>
             <div className="grid gap-3">
               <Label htmlFor="continent">Continent</Label>
               <Input
@@ -292,7 +266,7 @@ export function CreateProject() {
                 value={city}
               />
             </div>
-            <div className="grid gap-3">
+            <div className="grid gap-3 sm:col-span-2">
               <Label htmlFor="location">Location</Label>
               <Input
                 className="w-full"
@@ -322,6 +296,21 @@ export function CreateProject() {
                 value={coordinates}
               />
             </div>
+            <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight sm:col-span-2 pt-6">Impact</h3>
+            <div className="grid gap-3 sm:col-start-1">
+              <Label htmlFor="ares">Ares {!!ares && <>({ares / 100} hectares)</>} </Label>
+              <Input
+                className="w-full"
+                disabled={isPending || !isConnected}
+                id="ares"
+                max={100_000_000}
+                min={1}
+                onChange={(event) => setAres(Number(event.currentTarget.value))}
+                required={true}
+                type="number"
+                value={ares}
+              />
+            </div>
             <div className="grid gap-3">
               <Label htmlFor="plantedSpecies">Planted Species</Label>
               <Input
@@ -335,6 +324,20 @@ export function CreateProject() {
                 required={true}
                 type="text"
                 value={plantedSpecies}
+              />
+            </div>
+            <div className="grid gap-3 sm:col-start-1">
+              <Label htmlFor="expectedCo2Tons">Expected CO2 Tons</Label>
+              <Input
+                className="w-full"
+                disabled={isPending || !isConnected}
+                id="expectedCo2Tons"
+                max={100_000_000}
+                min={1}
+                onChange={(event) => setExpectedCo2Tons(Number(event.currentTarget.value))}
+                required={true}
+                type="number"
+                value={expectedCo2Tons}
               />
             </div>
             <div className="grid gap-3">
