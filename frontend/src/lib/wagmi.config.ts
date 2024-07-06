@@ -15,9 +15,9 @@ const {
 export const config = createConfig(
   getDefaultConfig({
     appDescription: 'CarbonThink',
-    // appIcon: "",
+    appIcon: 'https://alyra-carbonthink.vercel.app/carbonthink.svg',
     appName: 'CarbonThink',
-    // appUrl: "",
+    appUrl: 'https://alyra-carbonthink.vercel.app/',
     chains: [hardhat, sepolia, base, baseSepolia],
     connectors: [
       metaMask({
@@ -29,7 +29,7 @@ export const config = createConfig(
       injected(),
       safe(),
     ],
-    pollingInterval: 3000, // Polygon zkEVM block time.
+    pollingInterval: 10000,
     ssr: true,
     transports: {
       [hardhat.id]: http(),
