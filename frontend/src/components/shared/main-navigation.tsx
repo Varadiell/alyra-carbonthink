@@ -72,7 +72,7 @@ export function MainNavigation({ children }: { children: React.ReactNode }) {
             </Link>
           </div>
           <div className="flex-1">
-            <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
+            <nav className="grid items-start px-2 font-medium lg:px-4">
               {pages.map((page, index) => (
                 <Link
                   key={index}
@@ -105,8 +105,8 @@ export function MainNavigation({ children }: { children: React.ReactNode }) {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="flex flex-col">
-              <nav className="grid gap-2 text-lg font-medium">
-                <Link href="#" className="flex items-center gap-2 text-lg font-semibold">
+              <nav className="grid gap-2 font-medium">
+                <Link href="/" className="flex items-center gap-2 text-lg font-semibold pb-6">
                   <Image alt="CarbonThink logo" className="h-6 w-6" src={carbonThinkIcon} />
                   <span>CarbonThink</span>
                 </Link>
