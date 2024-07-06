@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { LayoutDashboard, LucideProps, Menu } from 'lucide-react';
+import { CandlestickChart, Flame, LayoutDashboard, LucideProps, Menu, Settings, TreePine, Trophy } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -29,7 +29,36 @@ export function MainNavigation({ children }: { children: React.ReactNode }) {
       label: 'Dashboard',
       url: '/dashboard',
     },
-    // TODO: other pages
+    {
+      count: null,
+      icon: TreePine,
+      label: 'Projects',
+      url: '/projects',
+    },
+    {
+      count: null,
+      icon: CandlestickChart,
+      label: 'Marketplace',
+      url: '/marketplace',
+    },
+    {
+      count: null,
+      icon: Flame,
+      label: 'Offset',
+      url: '/offset',
+    },
+    {
+      count: null,
+      icon: Trophy,
+      label: 'Leaderboard',
+      url: '/leaderboard',
+    },
+    {
+      count: null,
+      icon: Settings,
+      label: 'Admin',
+      url: '/admin',
+    },
   ];
 
   return (
