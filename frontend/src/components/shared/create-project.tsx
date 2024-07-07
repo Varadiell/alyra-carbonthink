@@ -31,7 +31,11 @@ export function CreateProject() {
   const [name, setName] = useState<string>('');
   const [projectHolder, setProjectHolder] = useState<`0x${string}` | string>('');
 
-  const { account } = useData();
+  const {
+    account,
+    data: { totalProjects },
+    refetchTotalProjects,
+  } = useData();
   const { isConnected, isPending, writeContract } = useContract(() => {
     setAres(0);
     setCalculationMethod('');
@@ -51,10 +55,11 @@ export function CreateProject() {
     setImage('');
     setName('');
     setProjectHolder('');
+    refetchTotalProjects();
   });
 
   function submitAddProposal(event: React.FormEvent<HTMLFormElement>) {
-    const projectId = 0; // TODO: use context data to set the correct projectId.
+    const projectId = totalProjects;
     event.preventDefault();
     if (!account.address) {
       return;

@@ -6,6 +6,7 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
 import Link from 'next/link';
+import { Fragment } from 'react';
 
 type PageLayer = {
   label: string;
@@ -19,8 +20,10 @@ const LAYERS: PageLayer[] = [
   { label: 'Marketplace', url: '/marketplace' },
   { label: 'Offset', url: '/offset' },
   { label: 'Leaderboard', url: '/leaderboard' },
-  { label: 'Admin', url: '/admin' },
+  { label: 'Create', url: '/create' },
+  { label: 'Mint', url: '/mint' },
   { label: 'Events', url: '/events' },
+  { label: 'Events TCO2', url: '/eventstco2' },
 ];
 
 function getPageLayers(labels: string[]): PageLayer[] {
@@ -32,7 +35,7 @@ export function Breadcrumbs({ layers = [] }: { layers: string[] }) {
     <Breadcrumb>
       <BreadcrumbList>
         {getPageLayers(layers).map((layer, index, array) => (
-          <>
+          <Fragment key={index}>
             {index > 0 && <BreadcrumbSeparator />}
             {index >= array.length - 1 ? (
               <BreadcrumbPage>{layer.label}</BreadcrumbPage>
@@ -41,7 +44,7 @@ export function Breadcrumbs({ layers = [] }: { layers: string[] }) {
                 <Link href={layer.url}>{layer.label}</Link>
               </BreadcrumbItem>
             )}
-          </>
+          </Fragment>
         ))}
       </BreadcrumbList>
     </Breadcrumb>

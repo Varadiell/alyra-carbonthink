@@ -17,7 +17,12 @@ export interface DataType {
   };
   data: {
     eventLogs: EventLog[] | undefined;
+    projectManagerOwner: `0x${string}` | undefined;
+    tco2EventLogs: EventLog[] | undefined;
+    totalProjects: number | undefined;
   };
+  refetchProjectManagerOwner: () => void;
+  refetchTotalProjects: () => void;
 }
 
 export const DataContext = createContext<DataType>({
@@ -27,7 +32,12 @@ export const DataContext = createContext<DataType>({
   },
   data: {
     eventLogs: undefined,
+    projectManagerOwner: undefined,
+    tco2EventLogs: undefined,
+    totalProjects: undefined,
   },
+  refetchProjectManagerOwner: () => undefined,
+  refetchTotalProjects: () => undefined,
 });
 
 export function DataProvider({ children }: { children: ReactNode }) {

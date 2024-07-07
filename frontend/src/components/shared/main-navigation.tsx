@@ -4,12 +4,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import {
   CandlestickChart,
+  CirclePlus,
+  Coins,
   DatabaseZap,
   Flame,
   LayoutDashboard,
   LucideProps,
   Menu,
-  Settings,
   TreePine,
   Trophy,
 } from 'lucide-react';
@@ -34,7 +35,7 @@ type PageType = {
 export function MainNavigation({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const {
-    data: { eventLogs },
+    data: { eventLogs, tco2EventLogs, totalProjects },
   } = useContext(DataContext);
 
   const pages: PageType[] = [
@@ -45,7 +46,7 @@ export function MainNavigation({ children }: { children: React.ReactNode }) {
       url: '/dashboard',
     },
     {
-      count: null,
+      count: totalProjects,
       icon: TreePine,
       label: 'Projects',
       url: '/projects',
@@ -70,15 +71,27 @@ export function MainNavigation({ children }: { children: React.ReactNode }) {
     },
     {
       count: null,
-      icon: Settings,
-      label: 'Admin',
-      url: '/admin',
+      icon: CirclePlus,
+      label: 'Create',
+      url: '/create',
+    },
+    {
+      count: null,
+      icon: Coins,
+      label: 'Mint',
+      url: '/mint',
     },
     {
       count: eventLogs?.length,
       icon: DatabaseZap,
       label: 'Events',
       url: '/events',
+    },
+    {
+      count: tco2EventLogs?.length,
+      icon: DatabaseZap,
+      label: 'Events TCO2',
+      url: '/eventstco2',
     },
   ];
 

@@ -1,48 +1,10 @@
-'use client';
-
-import { DataContext, EventLog } from '@/contexts/data-provider';
-import { useContext } from 'react';
+import { EventLog } from '@/contexts/data-provider';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 
-function parseEvent(eventLog: EventLog) {
-  const eventName = eventLog.eventName;
-  if (eventName === 'OwnershipTransferred') {
-    const args = eventLog.args as { newOwner: string; previousOwner: string };
-    return {
-      newOwner: args.newOwner,
-      previousOwner: args.previousOwner,
-    };
-  } else if (['DocumentAdded', 'PhotoAdded', 'Created'].includes(eventName)) {
-    const args = eventLog.args as { projectId: string };
-    return {
-      projectId: String(args.projectId),
-    };
-  } else if (eventName === 'Minted') {
-    const args = eventLog.args as { projectId: number; account: string; amount: number };
-    return {
-      projectId: String(args.projectId),
-      account: args.account,
-      amount: String(args.amount),
-    };
-  } else if (eventName === 'StatusChanged') {
-    const args = eventLog.args as { projectId: number; status: number };
-    return {
-      projectId: String(args.projectId),
-      status: String(args.status),
-    };
-  } else {
-    return {};
-  }
-}
-
-export function EventsList() {
-  const {
-    data: { eventLogs },
-  } = useContext(DataContext);
-
+export function EventsList({ eventLogs = undefined }: { eventLogs: EventLog[] | undefined }) {
   return (
     <Card>
       <CardHeader className="bg-muted">
@@ -88,10 +50,10 @@ export function EventsList() {
                       <Badge>{event.eventName}</Badge>
                     </TableCell>
                     <TableCell className="flex gap-2 flex-col">
-                      {Object.entries(parseEvent(event)).map(([k, v], index) => (
+                      {Object.entries({ ...event.args }).map(([k, v], index) => (
                         <div key={index} className="flex gap-2">
                           {k}
-                          <Badge variant="secondary">{v}</Badge>
+                          <Badge variant="secondary">{String(v)}</Badge>
                         </div>
                       ))}
                     </TableCell>

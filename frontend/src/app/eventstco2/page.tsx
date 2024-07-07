@@ -5,15 +5,15 @@ import { EventsList } from '@/components/shared/events-list';
 import { DataContext } from '@/contexts/data-provider';
 import { useContext } from 'react';
 
-export default function Events() {
+export default function EventsTco2() {
   const {
-    data: { eventLogs },
+    data: { tco2EventLogs },
   } = useContext(DataContext);
 
   return (
     <>
-      <Breadcrumbs layers={['Home', 'Events']} />
-      <EventsList eventLogs={eventLogs} />
+      <Breadcrumbs layers={['Home', 'Events TCO2']} />
+      <EventsList eventLogs={tco2EventLogs} />
     </>
   );
 }
