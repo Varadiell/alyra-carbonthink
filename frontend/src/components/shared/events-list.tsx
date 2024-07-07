@@ -62,7 +62,7 @@ export function EventsList({ eventLogs = undefined }: { eventLogs: EventLog[] | 
                       ))}
                     </TableCell>
                     <TableCell>
-                      <a href={`https://sepolia.basescan.org/tx/${Number(event.transactionHash)}`} target="_blank">
+                      <a href={`https://sepolia.basescan.org/tx/${event.transactionHash}`} target="_blank">
                         <Badge variant="outline">
                           {event.transactionHash}
                           <ExternalLink className="h-3 w-3 ml-2" />

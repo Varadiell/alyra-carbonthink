@@ -3,13 +3,13 @@ import { base, baseSepolia, hardhat } from 'viem/chains';
 export const tco2 = (chainId: number) => {
   const address: Record<string, `0x${string}`> = {
     [hardhat.id]: '0x5FbDB2315678afecb367f032d93F642f64180aa3',
-    [baseSepolia.id]: '0x', // TODO: put baseSepolia address here
+    [baseSepolia.id]: '0xF6c0681b9295a25B90E3a12db897da566464F3C7',
     [base.id]: '0x', // TODO: put base mainnet address here
   };
 
   const fromBlock: Record<string, bigint> = {
     [hardhat.id]: BigInt(0),
-    [baseSepolia.id]: BigInt(0), // TODO: put baseSepolia fromBlock here
+    [baseSepolia.id]: BigInt(12312198), // TODO: put baseSepolia fromBlock here
     [base.id]: BigInt(0), // TODO: put base mainnet fromBlock here
   };
 

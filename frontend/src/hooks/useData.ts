@@ -24,6 +24,7 @@ export function useData(): DataType {
   useWatchContractEvent({
     ...projectManagerContract,
     chainId: chainId,
+    eventName: 'logs' as any, // Hack eventName because typescript is incorrect.
     onLogs: (logs) => setEventLogs(logs.reverse() as EventLog[]),
     enabled: !!chainId,
   });
@@ -31,6 +32,7 @@ export function useData(): DataType {
   useWatchContractEvent({
     ...tco2Contract,
     chainId: chainId,
+    eventName: 'logs' as any, // Hack eventName because typescript is incorrect.
     onLogs: (logs) => setTco2EventLogs(logs.reverse() as EventLog[]),
     enabled: !!chainId,
   });
