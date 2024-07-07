@@ -4,12 +4,7 @@ import { CreateProject } from '@/components/shared/create-project';
 export default function Admin() {
   return (
     <>
-      <Breadcrumbs
-        layers={[
-          { label: 'Home', url: '/' },
-          { label: 'Admin', url: '' },
-        ]}
-      />
+      <Breadcrumbs layers={['Home', 'Admin']} />
       <CreateProject />
     </>
   );

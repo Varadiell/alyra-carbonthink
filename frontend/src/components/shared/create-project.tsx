@@ -9,6 +9,7 @@ import { useContract } from '@/hooks/useContract';
 import { useData } from '@/hooks/useData';
 import { LoaderCircle } from 'lucide-react';
 import { useState } from 'react';
+import { Separator } from '@/components/ui/separator';
 
 export function CreateProject() {
   const [ares, setAres] = useState<number>(0);
@@ -101,6 +102,7 @@ export function CreateProject() {
         </CardHeader>
         <CardContent className="pt-6">
           <div className="grid gap-5 sm:grid-cols-2">
+            <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight sm:col-span-2">Receiver</h3>
             <div className="grid gap-3">
               <Label htmlFor="projectHolder">Project Holder Address</Label>
               <Input
@@ -116,7 +118,8 @@ export function CreateProject() {
                 value={projectHolder}
               />
             </div>
-            <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight sm:col-span-2 pt-6">Description</h3>
+            <Separator className="sm:col-span-2" />
+            <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight sm:col-span-2">Description</h3>
             <div className="grid gap-3 sm:col-start-1">
               <Label htmlFor="name">Name</Label>
               <Input
@@ -190,7 +193,8 @@ export function CreateProject() {
                 value={duration}
               />
             </div>
-            <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight sm:col-span-2 pt-6">Location</h3>
+            <Separator className="sm:col-span-2" />
+            <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight sm:col-span-2">Location</h3>
             <div className="grid gap-3">
               <Label htmlFor="continent">Continent</Label>
               <Input
@@ -296,7 +300,8 @@ export function CreateProject() {
                 value={coordinates}
               />
             </div>
-            <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight sm:col-span-2 pt-6">Impact</h3>
+            <Separator className="sm:col-span-2" />
+            <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight sm:col-span-2">Impact</h3>
             <div className="grid gap-3 sm:col-start-1">
               <Label htmlFor="ares">Ares {!!ares && <>({ares / 100} hectares)</>} </Label>
               <Input

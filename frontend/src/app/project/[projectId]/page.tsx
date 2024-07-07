@@ -1,15 +1,10 @@
 import { Breadcrumbs } from '@/components/shared/breadcrumbs';
 
+// TODO: project name
 export default function Project() {
   return (
     <>
-      <Breadcrumbs
-        layers={[
-          { label: 'Home', url: '/' },
-          { label: 'Projects', url: '/projects' },
-          { label: '<project name>', url: '' }, // TODO: project name
-        ]}
-      />
+      <Breadcrumbs layers={['Home', 'Projects', '<project name>']} />
     </>
   );
 }
