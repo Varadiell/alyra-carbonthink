@@ -15,6 +15,7 @@ export interface DataType {
     address: `0x${string}` | undefined;
     isConnected: boolean;
   };
+  chainId: number | undefined;
   data: {
     eventLogs: EventLog[] | undefined;
     projectManagerOwner: `0x${string}` | undefined;
@@ -30,6 +31,7 @@ export const DataContext = createContext<DataType>({
     address: undefined,
     isConnected: false,
   },
+  chainId: undefined,
   data: {
     eventLogs: undefined,
     projectManagerOwner: undefined,

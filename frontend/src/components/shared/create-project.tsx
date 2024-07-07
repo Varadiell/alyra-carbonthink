@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { projectManagerContract } from '@/contracts/projectManager.contract';
+import { projectManager } from '@/contracts/projectManager.contract';
 import { useContract } from '@/hooks/useContract';
 import { useData } from '@/hooks/useData';
 import { LoaderCircle } from 'lucide-react';
@@ -33,6 +33,7 @@ export function CreateProject() {
 
   const {
     account,
+    chainId,
     data: { totalProjects },
     refetchTotalProjects,
   } = useData();
@@ -61,11 +62,11 @@ export function CreateProject() {
   function submitAddProposal(event: React.FormEvent<HTMLFormElement>) {
     const projectId = totalProjects;
     event.preventDefault();
-    if (!account.address) {
+    if (!account.address || !chainId) {
       return;
     }
     writeContract({
-      ...projectManagerContract,
+      ...projectManager(chainId),
       account: account.address,
       args: [
         {

@@ -52,6 +52,7 @@ export function useData(): DataType {
       address: accountAddress,
       isConnected,
     },
+    chainId,
     data: {
       eventLogs,
       projectManagerOwner,
