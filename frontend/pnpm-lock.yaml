@@ -98,6 +98,15 @@ importers:
       '@tanstack/react-table':
         specifier: ^8.17.3
         version: 8.17.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@types/node':
+        specifier: ^20
+        version: 20.14.5
+      '@types/react':
+        specifier: ^18
+        version: 18.3.3
+      '@types/react-dom':
+        specifier: ^18
+        version: 18.3.0
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
@@ -174,15 +183,6 @@ importers:
         specifier: ^3.23.8
         version: 3.23.8
     devDependencies:
-      '@types/node':
-        specifier: ^20
-        version: 20.14.5
-      '@types/react':
-        specifier: ^18
-        version: 18.3.3
-      '@types/react-dom':
-        specifier: ^18
-        version: 18.3.0
       cspell:
         specifier: ^8.9.0
         version: 8.9.0
