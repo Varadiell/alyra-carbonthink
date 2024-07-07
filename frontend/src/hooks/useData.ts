@@ -13,6 +13,7 @@ export function useData(): DataType {
   useWatchContractEvent({
     ...projectManagerContract,
     onLogs: (logs) => setEventLogs(logs.reverse() as EventLog[]),
+    enabled: isConnected,
   });
 
   return {
