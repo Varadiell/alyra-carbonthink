@@ -1,3 +1,5 @@
+import { CREATE_1, CREATE_2 } from '@/test/mocks/mocks';
+import { objectToTuple } from '@/utils/objectToTuple';
 import { buildModule } from '@nomicfoundation/hardhat-ignition/modules';
 
 const ADDR_0 = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'; // Deployer.
@@ -17,7 +19,9 @@ const ProjectManagerModule = buildModule('ProjectManagerModule', (module) => {
     tco2,
   ]);
   // Transfer TCO2 ownership to the ProjectManager contract.
-  module.call(tco2, 'transferOwnership', [projectManager]);
+  module.call(tco2, 'transferOwnership', [projectManager], { id: 'TransferTco2Ownership' });
+  module.call(projectManager, 'create', [objectToTuple(CREATE_1)], { id: 'create_1' });
+  module.call(projectManager, 'create', [objectToTuple(CREATE_2)], { id: 'create_2' });
   return { tco2, projectManager };
 });
 
