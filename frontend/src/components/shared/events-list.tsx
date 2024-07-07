@@ -80,7 +80,7 @@ export function EventsList() {
               : eventLogs?.map((event, index) => (
                   <TableRow key={index}>
                     <TableCell>
-                      <a href={`https://basescan.org/block/${Number(event.blockNumber)}`} target="_blank">
+                      <a href={`https://sepolia.basescan.org/block/${Number(event.blockNumber)}`} target="_blank">
                         <Badge variant="secondary">{Number(event.blockNumber)}</Badge>
                       </a>
                     </TableCell>
@@ -96,7 +96,7 @@ export function EventsList() {
                       ))}
                     </TableCell>
                     <TableCell>
-                      <a href={`https://basescan.org/tx/${Number(event.transactionHash)}`} target="_blank">
+                      <a href={`https://sepolia.basescan.org/tx/${Number(event.transactionHash)}`} target="_blank">
                         <Badge variant="secondary">{event.transactionHash}</Badge>
                       </a>
                     </TableCell>
