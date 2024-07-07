@@ -1,3 +1,5 @@
+[![CI Tests](https://github.com/Varadiell/alyra-carbonthink/actions/workflows/ci-tests.yml/badge.svg?branch=main)](https://github.com/Varadiell/alyra-carbonthink/actions/workflows/ci-tests.yml)
+
 # dapp-boilerplate
 
 ## Backend install
