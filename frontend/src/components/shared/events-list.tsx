@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
+import { ExternalLink } from 'lucide-react';
 
 export function EventsList({ eventLogs = undefined }: { eventLogs: EventLog[] | undefined }) {
   return (
@@ -43,7 +44,10 @@ export function EventsList({ eventLogs = undefined }: { eventLogs: EventLog[] | 
                   <TableRow key={index}>
                     <TableCell>
                       <a href={`https://sepolia.basescan.org/block/${Number(event.blockNumber)}`} target="_blank">
-                        <Badge variant="secondary">{Number(event.blockNumber)}</Badge>
+                        <Badge variant="outline">
+                          {Number(event.blockNumber)}
+                          <ExternalLink className="h-3 w-3 ml-2" />
+                        </Badge>
                       </a>
                     </TableCell>
                     <TableCell>
@@ -59,7 +63,10 @@ export function EventsList({ eventLogs = undefined }: { eventLogs: EventLog[] | 
                     </TableCell>
                     <TableCell>
                       <a href={`https://sepolia.basescan.org/tx/${Number(event.transactionHash)}`} target="_blank">
-                        <Badge variant="secondary">{event.transactionHash}</Badge>
+                        <Badge variant="outline">
+                          {event.transactionHash}
+                          <ExternalLink className="h-3 w-3 ml-2" />
+                        </Badge>
                       </a>
                     </TableCell>
                   </TableRow>
