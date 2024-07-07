@@ -1,14 +1,16 @@
-import { baseSepolia, hardhat } from 'viem/chains';
+import { base, baseSepolia, hardhat } from 'viem/chains';
 
 export const projectManager = (chainId: number) => {
   const address: Record<string, `0x${string}`> = {
     [hardhat.id]: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
     [baseSepolia.id]: '0x', // TODO: put baseSepolia address here
+    [base.id]: '0x', // TODO: put base mainnet address here
   };
 
   const fromBlock: Record<string, bigint> = {
     [hardhat.id]: BigInt(0),
     [baseSepolia.id]: BigInt(0), // TODO: put baseSepolia fromBlock here
+    [base.id]: BigInt(0), // TODO: put base mainnet fromBlock here
   };
 
   return {

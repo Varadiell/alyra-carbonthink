@@ -8,7 +8,6 @@ const {
   ALCHEMY_API_KEY = '',
   ALCHEMY_ENDPOINT_URL_BASE_MAINNET = '',
   ALCHEMY_ENDPOINT_URL_BASE_SEPOLIA = '',
-  ALCHEMY_ENDPOINT_URL_ETH_SEPOLIA = '',
   ETHERSCAN_API_KEY = '',
   PRIVATE_KEY = '',
 } = process.env;
@@ -33,11 +32,6 @@ const config: HardhatUserConfig = {
       accounts: [PRIVATE_KEY],
       chainId: 84532,
       url: `${ALCHEMY_ENDPOINT_URL_BASE_SEPOLIA}${ALCHEMY_API_KEY}`,
-    },
-    ethSepolia: {
-      accounts: [PRIVATE_KEY],
-      chainId: 11155111,
-      url: `${ALCHEMY_ENDPOINT_URL_ETH_SEPOLIA}${ALCHEMY_API_KEY}`,
     },
     hardhat: {},
   },
