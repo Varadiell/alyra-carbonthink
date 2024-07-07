@@ -1,9 +1,9 @@
 'use client';
 
-import { useAccount, useChains, useReadContract, useWatchContractEvent } from 'wagmi';
+import { useAccount, useReadContract, useWatchContractEvent } from 'wagmi';
 import { DataType, EventLog } from '@/contexts/data-provider';
-import { projectManagerContract } from '@/contracts/projectManager.contract';
-import { tco2Contract } from '@/contracts/tco2.contract';
+import { tco2 } from '@/contracts/tco2.contract';
+import { projectManager } from '@/contracts/projectManager.contract';
 import { useEffect, useState } from 'react';
 import { config as wagmiConfig } from '@/lib/wagmi.config';
 
@@ -11,8 +11,9 @@ export function useData(): DataType {
   const [eventLogs, setEventLogs] = useState<EventLog[] | undefined>(undefined);
   const [tco2EventLogs, setTco2EventLogs] = useState<EventLog[] | undefined>(undefined);
 
-  const {} = useChains();
   const { isConnected, address: accountAddress, chainId = wagmiConfig.chains[0].id } = useAccount();
+  const tco2Contract = tco2(chainId);
+  const projectManagerContract = projectManager(chainId);
 
   useEffect(() => {
     // At chain change, reset data.
