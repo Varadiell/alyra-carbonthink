@@ -6,14 +6,9 @@ $ pnpm hardhat node
 $ pnpm hardhat ignition deploy ignition/modules/ProjectManager.ts --network localhost --parameters ignition/parameters-localhost.json
 ```
 
-Deploy contract on Ethereum testnet (Sepolia):
-```
-$ pnpm hardhat ignition deploy ignition/modules/ProjectManager.ts --network ethSepolia --verify
-```
-
 Deploy contract on Base testnet (Sepolia):
 ```
-$ pnpm hardhat ignition deploy ignition/modules/ProjectManager.ts --network baseSepolia --verify
+$ pnpm hardhat ignition deploy ignition/modules/ProjectManager.ts --network baseSepolia --verify --parameters ignition/parameters-base-sepolia.json
 ```
 
 Deploy contract on Base mainnet:

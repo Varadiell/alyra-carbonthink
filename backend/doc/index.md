@@ -63,7 +63,7 @@ Emitted when attempting to set the same status to a project.
 ### DocumentAdded
 
 ```solidity
-event DocumentAdded(uint256 projectId)
+event DocumentAdded(uint256 projectId, uint256 index)
 ```
 
 Emitted when a document is added to a project.
@@ -73,11 +73,12 @@ Emitted when a document is added to a project.
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | projectId | uint256 | The ID of the project. |
+| index | uint256 |  |
 
 ### PhotoAdded
 
 ```solidity
-event PhotoAdded(uint256 projectId)
+event PhotoAdded(uint256 projectId, uint256 index)
 ```
 
 Emitted when a photo is added to a project.
@@ -87,11 +88,12 @@ Emitted when a photo is added to a project.
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | projectId | uint256 | The ID of the project. |
+| index | uint256 |  |
 
 ### Created
 
 ```solidity
-event Created(uint256 projectId)
+event Created(uint256 projectId, address account)
 ```
 
 Emitted when a project is created.
@@ -101,6 +103,7 @@ Emitted when a project is created.
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | projectId | uint256 | The ID of the created project. |
+| account | address | The project holder of the created project. |
 
 ### Minted
 

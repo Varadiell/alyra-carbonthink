@@ -25,13 +25,16 @@ contract ProjectManager is Ownable {
 
     /// @notice Emitted when a document is added to a project.
     /// @param projectId The ID of the project.
-    event DocumentAdded(uint256 indexed projectId);
+    /// @param projectId The index of the document.
+    event DocumentAdded(uint256 indexed projectId, uint256 index);
     /// @notice Emitted when a photo is added to a project.
     /// @param projectId The ID of the project.
-    event PhotoAdded(uint256 indexed projectId);
+    /// @param projectId The index of the photo.
+    event PhotoAdded(uint256 indexed projectId, uint256 index);
     /// @notice Emitted when a project is created.
     /// @param projectId The ID of the created project.
-    event Created(uint256 indexed projectId);
+    /// @param account The project holder of the created project.
+    event Created(uint256 indexed projectId, address indexed account);
     /// @notice Emitted when tokens are minted for a project.
     /// @param projectId The ID of the project.
     /// @param account The account receiving the minted tokens.
@@ -174,8 +177,9 @@ contract ProjectManager is Ownable {
         uint256 projectId,
         string memory documentUrl
     ) external onlyOwner exists(projectId) notInactive(projectId) {
-        _get(projectId).documentUrls.push(documentUrl);
-        emit DocumentAdded(projectId);
+        Project storage project = _get(projectId);
+        emit DocumentAdded(projectId, project.documentUrls.length);
+        project.documentUrls.push(documentUrl);
     }
 
     /// @notice Adds a photo URL (stored with IPFS) to the project.
@@ -185,8 +189,9 @@ contract ProjectManager is Ownable {
         uint256 projectId,
         string memory photoUrl
     ) external onlyOwner exists(projectId) notInactive(projectId) {
-        _get(projectId).photoUrls.push(photoUrl);
-        emit PhotoAdded(projectId);
+        Project storage project = _get(projectId);
+        emit PhotoAdded(projectId, project.photoUrls.length);
+        project.photoUrls.push(photoUrl);
     }
 
     /// @notice Creates a new project.
@@ -222,7 +227,7 @@ contract ProjectManager is Ownable {
             projectData,
             Status.Pending
         );
-        emit Created(totalProjects);
+        emit Created(totalProjects, newProject.projectHolder);
         totalProjects++;
     }
 

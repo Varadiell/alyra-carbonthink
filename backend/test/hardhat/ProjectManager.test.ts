@@ -98,7 +98,7 @@ describe('ProjectManager contract tests', () => {
       const PROJECT_ID = 0;
       await expect(projectManagerContract.addDocument(PROJECT_ID, DOCUMENT_URL))
         .to.emit(projectManagerContract, Event.DocumentAdded)
-        .withArgs(PROJECT_ID);
+        .withArgs(PROJECT_ID, 0);
       const documentUrls = (await projectManagerContract.get(PROJECT_ID)).documentUrls;
       expect(documentUrls.length).to.equal(1);
       expect(documentUrls[0]).to.equal(DOCUMENT_URL);
@@ -108,10 +108,10 @@ describe('ProjectManager contract tests', () => {
       const PROJECT_ID = 0;
       await expect(projectManagerContract.addDocument(PROJECT_ID, DOCUMENT_URL))
         .to.emit(projectManagerContract, Event.DocumentAdded)
-        .withArgs(PROJECT_ID);
+        .withArgs(PROJECT_ID, 0);
       await expect(projectManagerContract.addDocument(PROJECT_ID, DOCUMENT_2_URL))
         .to.emit(projectManagerContract, Event.DocumentAdded)
-        .withArgs(PROJECT_ID);
+        .withArgs(PROJECT_ID, 1);
       const documentUrls = (await projectManagerContract.get(0)).documentUrls;
       expect(documentUrls.length).to.equal(2);
       expect(documentUrls[0]).to.equal(DOCUMENT_URL);
@@ -164,7 +164,7 @@ describe('ProjectManager contract tests', () => {
       const PROJECT_ID = 0;
       await expect(projectManagerContract.addPhoto(PROJECT_ID, PHOTO_URL))
         .to.emit(projectManagerContract, Event.PhotoAdded)
-        .withArgs(PROJECT_ID);
+        .withArgs(PROJECT_ID, 0);
       const photoUrls = (await projectManagerContract.get(PROJECT_ID)).photoUrls;
       expect(photoUrls.length).to.equal(1);
       expect(photoUrls[0]).to.equal(PHOTO_URL);
@@ -174,10 +174,10 @@ describe('ProjectManager contract tests', () => {
       const PROJECT_ID = 0;
       await expect(projectManagerContract.addPhoto(PROJECT_ID, PHOTO_URL))
         .to.emit(projectManagerContract, Event.PhotoAdded)
-        .withArgs(PROJECT_ID);
+        .withArgs(PROJECT_ID, 0);
       await expect(projectManagerContract.addPhoto(PROJECT_ID, PHOTO_2_URL))
         .to.emit(projectManagerContract, Event.PhotoAdded)
-        .withArgs(PROJECT_ID);
+        .withArgs(PROJECT_ID, 1);
       const photoUrls = (await projectManagerContract.get(0)).photoUrls;
       expect(photoUrls.length).to.equal(2);
       expect(photoUrls[0]).to.equal(PHOTO_URL);
@@ -222,7 +222,7 @@ describe('ProjectManager contract tests', () => {
       const PROJECT_ID = 0;
       await expect(projectManagerContract.create(CREATE_1))
         .to.emit(projectManagerContract, Event.Created)
-        .withArgs(PROJECT_ID);
+        .withArgs(PROJECT_ID, CREATE_1.projectHolder);
       const project = await projectManagerContract.get(PROJECT_ID);
       expect(project.isRegistered).to.equal(true);
       expect(project.projectHolder).to.equal(CREATE_1.projectHolder);
@@ -255,7 +255,7 @@ describe('ProjectManager contract tests', () => {
       const PROJECT_ID = 0;
       await expect(projectManagerContract.create(CREATE_2))
         .to.emit(projectManagerContract, Event.Created)
-        .withArgs(PROJECT_ID);
+        .withArgs(PROJECT_ID, CREATE_2.projectHolder);
       const project = await projectManagerContract.get(PROJECT_ID);
       expect(project.isRegistered).to.equal(true);
       expect(project.projectHolder).to.equal(CREATE_2.projectHolder);
