@@ -297,8 +297,8 @@ export function CreateProject() {
                 className="w-full"
                 disabled={isPending || !isConnected}
                 id="coordinates"
-                maxLength={20}
-                minLength={20}
+                maxLength={40}
+                minLength={5}
                 onChange={(event) => setCoordinates(event.currentTarget.value)}
                 placeholder="Example: 47.211444, -1.576306"
                 required={true}
