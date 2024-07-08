@@ -3,7 +3,7 @@
 import { Breadcrumbs } from '@/components/shared/breadcrumbs';
 import { EventsList } from '@/components/shared/events-list';
 import { DataContext } from '@/contexts/data-provider';
-import { useContext } from 'react';
+import { Suspense, useContext } from 'react';
 
 export default function Events() {
   const {
@@ -13,7 +13,9 @@ export default function Events() {
   return (
     <>
       <Breadcrumbs layers={['Home', 'Events']} />
-      <EventsList eventLogs={eventLogs} />
+      <Suspense>
+        <EventsList eventLogs={eventLogs} />
+      </Suspense>
     </>
   );
 }
