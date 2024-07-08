@@ -1,4 +1,4 @@
-import { CREATE_1, CREATE_2 } from '@/test/mocks/mocks';
+import { create_x } from '@/test/mocks/mocks';
 import { objectToTuple } from '@/utils/objectToTuple';
 import { buildModule } from '@nomicfoundation/hardhat-ignition/modules';
 
@@ -20,8 +20,12 @@ const ProjectManagerModule = buildModule('ProjectManagerModule', (module) => {
   ]);
   // Transfer TCO2 ownership to the ProjectManager contract.
   module.call(tco2, 'transferOwnership', [projectManager], { id: 'TransferTco2Ownership' });
-  module.call(projectManager, 'create', [objectToTuple(CREATE_1)], { id: 'create_1' });
-  module.call(projectManager, 'create', [objectToTuple(CREATE_2)], { id: 'create_2' });
+  // Generate randomized projects.
+  const NB_PROJECTS_TO_GENERATE = 85;
+  for (let i = 0; i < NB_PROJECTS_TO_GENERATE; i++) {
+    const mockProject = create_x(i);
+    module.call(projectManager, 'create', [objectToTuple(mockProject)], { id: `create_${i}` });
+  }
   return { tco2, projectManager };
 });
 

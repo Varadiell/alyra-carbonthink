@@ -1,7 +1,6 @@
 {
     "language": "en",
     "words": [
-      "atlantique",
       "carbonthink",
       "cardona",
       "cmdk",
@@ -10,14 +9,10 @@
       "embla",
       "eventstco",
       "fercolor",
-      "général",
-      "giuseppa",
-      "godrano",
       "ipfs",
       "leaderboard",
       "linecap",
       "linejoin",
-      "mellinet",
       "metadatas",
       "nomicfoundation",
       "reentrancy",
@@ -31,6 +26,7 @@
     ],
     "ignorePaths": [
       "**/lib/**",
+      "**/mocks/**",
       "*.config.*"
     ],
     "ignoreRegExpList": [
