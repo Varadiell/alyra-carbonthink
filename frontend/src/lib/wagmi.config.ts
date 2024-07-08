@@ -29,8 +29,9 @@ export const config = createConfig({
       injected(),
       safe(),
     ],
-    pollingInterval: 10000,
+    pollingInterval: 10_000,
     ssr: true,
+    syncConnectedChain: true,
     transports: {
       [hardhat.id]: http(),
       [base.id]: http(`${ALCHEMY_ENDPOINT_URL_BASE_MAINNET}${ALCHEMY_API_KEY}`),
