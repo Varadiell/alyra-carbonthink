@@ -51,6 +51,12 @@ export function useData(): DataType {
     functionName: 'owner',
   });
 
+  const { data: securityFund, refetch: refetchSecurityFund } = useReadContract({
+    ...projectManagerContract,
+    chainId: chainId,
+    functionName: 'securityFund',
+  });
+
   const { data: totalProjects, refetch: refetchTotalProjects } = useReadContract({
     ...projectManagerContract,
     chainId: chainId,
@@ -69,10 +75,12 @@ export function useData(): DataType {
     data: {
       eventLogs,
       projectManagerOwner,
+      securityFund,
       tco2EventLogs,
       totalProjects: totalProjects != null ? Number(totalProjects) : undefined,
     },
     refetchProjectManagerOwner,
+    refetchSecurityFund,
     refetchTotalProjects,
   };
 }
