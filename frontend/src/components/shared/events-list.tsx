@@ -19,7 +19,7 @@ export function EventsList({ eventLogs = undefined }: { eventLogs: EventLog[] | 
               <TableHead className="min-w-36">Block number</TableHead>
               <TableHead>Event name</TableHead>
               <TableHead>Arguments</TableHead>
-              <TableHead>Transaction hash</TableHead>
+              <TableHead>Transaction</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -64,7 +64,7 @@ export function EventsList({ eventLogs = undefined }: { eventLogs: EventLog[] | 
                     <TableCell>
                       <a href={`https://sepolia.basescan.org/tx/${event.transactionHash}`} target="_blank">
                         <Badge variant="outline">
-                          {event.transactionHash}
+                          Transaction
                           <ExternalLink className="h-3 w-3 ml-2" />
                         </Badge>
                       </a>
