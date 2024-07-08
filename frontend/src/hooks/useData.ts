@@ -29,7 +29,7 @@ export function useData(): DataType {
 
   useWatchContractEvent({
     ...projectManagerContract,
-    chainId: chainId,
+    chainId,
     eventName: 'logs' as any, // Hack eventName because typescript is incorrect.
     onLogs: (logs) => setEventLogs(logs.reverse() as EventLog[]),
     enabled: !!chainId,
@@ -38,7 +38,7 @@ export function useData(): DataType {
 
   useWatchContractEvent({
     ...tco2Contract,
-    chainId: chainId,
+    chainId,
     eventName: 'logs' as any, // Hack eventName because typescript is incorrect.
     onLogs: (logs) => setTco2EventLogs(logs.reverse() as EventLog[]),
     enabled: !!chainId,
@@ -53,13 +53,13 @@ export function useData(): DataType {
 
   const { data: securityFund, refetch: refetchSecurityFund } = useReadContract({
     ...projectManagerContract,
-    chainId: chainId,
+    chainId,
     functionName: 'securityFund',
   });
 
   const { data: totalProjects, refetch: refetchTotalProjects } = useReadContract({
     ...projectManagerContract,
-    chainId: chainId,
+    chainId,
     functionName: 'totalProjects',
     query: {
       refetchInterval: 10_000,
