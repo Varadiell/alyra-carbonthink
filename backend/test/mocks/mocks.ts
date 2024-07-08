@@ -50,7 +50,7 @@ export const CREATE_2: ProjectManager.CreateParamsStruct = {
 
 export const create_x = (index: number): ProjectManager.CreateParamsStruct => ({
   projectHolder: getRandomElement(addresses),
-  name: getRandomElement(names),
+  name: `${getRandomElement(names)} ${getRandomNumber(1, 100)}`,
   description: getRandomElement(descriptions),
   externalUrl: `https://alyra-carbonthink.vercel.app/project/${index}`,
   image: getRandomElement(images),

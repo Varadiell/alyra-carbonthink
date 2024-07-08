@@ -1,13 +1,14 @@
 'use client';
 
-import { useAccount, useConfig, useReadContract, useWatchContractEvent } from 'wagmi';
-import { DataType, EventLog } from '@/contexts/data-provider';
+import { useAccount, useConfig, useReadContract, useReadContracts, useWatchContractEvent } from 'wagmi';
+import { DataType, EventLog, Project } from '@/contexts/data-provider';
 import { tco2 } from '@/contracts/tco2.contract';
 import { projectManager } from '@/contracts/projectManager.contract';
 import { useEffect, useState } from 'react';
 import { baseSepolia } from 'viem/chains';
 
 export function useData(): DataType {
+  const [projects, setProjects] = useState<Project[]>([]);
   const [eventLogs, setEventLogs] = useState<EventLog[] | undefined>(undefined);
   const [tco2EventLogs, setTco2EventLogs] = useState<EventLog[] | undefined>(undefined);
 
@@ -47,7 +48,7 @@ export function useData(): DataType {
 
   const { data: projectManagerOwner, refetch: refetchProjectManagerOwner } = useReadContract({
     ...projectManagerContract,
-    chainId: chainId,
+    chainId,
     functionName: 'owner',
   });
 
@@ -66,6 +67,32 @@ export function useData(): DataType {
     },
   });
 
+  const contractCalls = Array.from({ length: Number(10) }).map((_, index) => ({
+    ...projectManagerContract,
+    args: [BigInt(Math.max(Number(totalProjects ?? 0) - index - 1, 0))],
+    chainId,
+    functionName: 'get',
+  }));
+
+  const { data: projectsBatch } = useReadContracts({
+    contracts: contractCalls,
+  });
+
+  console.log('projectsBatch', projectsBatch);
+
+  useEffect(() => {
+    // TODO: improve
+    const newProjects = [...projects];
+    projectsBatch?.forEach((p) => {
+      const project = p.result as unknown as Project;
+      if (project?.id != null) {
+        newProjects[project.id] = project;
+      }
+    });
+    setProjects(newProjects);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projectsBatch]);
+
   return {
     account: {
       address: accountAddress,
@@ -75,6 +102,7 @@ export function useData(): DataType {
     data: {
       eventLogs,
       projectManagerOwner,
+      projects, // TODO: adapt projects
       securityFund,
       tco2EventLogs,
       totalProjects: totalProjects != null ? Number(totalProjects) : undefined,

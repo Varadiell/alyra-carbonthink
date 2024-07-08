@@ -10,6 +10,35 @@ export type EventLog = Log & {
   eventName: string;
 };
 
+export type Project = {
+  data: {
+    ares: number;
+    calculationMethod: string;
+    city: string;
+    continent: string;
+    coordinates: string;
+    country: string;
+    duration: number;
+    expectedCo2Tons: number;
+    location: string;
+    plantedSpecies: string;
+    province: string;
+    region: string;
+    startDate: number;
+    unSDGs: number[];
+  };
+  description: string;
+  documentUrls: string[];
+  externalUrl: string;
+  id: number;
+  image: string;
+  isRegistered: boolean;
+  name: string;
+  photoUtils: string[];
+  projectHolder: `0x${string}`;
+  status: number;
+};
+
 export interface DataType {
   account: {
     address: `0x${string}` | undefined;
@@ -19,6 +48,7 @@ export interface DataType {
   data: {
     eventLogs: EventLog[] | undefined;
     projectManagerOwner: `0x${string}` | undefined;
+    projects: (Project | undefined)[];
     securityFund: `0x${string}` | undefined;
     tco2EventLogs: EventLog[] | undefined;
     totalProjects: number | undefined;
@@ -37,6 +67,7 @@ export const DataContext = createContext<DataType>({
   data: {
     eventLogs: undefined,
     projectManagerOwner: undefined,
+    projects: [],
     securityFund: undefined,
     tco2EventLogs: undefined,
     totalProjects: undefined,
