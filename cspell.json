@@ -26,6 +26,7 @@
     ],
     "ignorePaths": [
       "pnpm-lock.yaml",
+      ".github/**",
       "./.git/objects",
       "**/lib/**",
       "**/mocks/**",
