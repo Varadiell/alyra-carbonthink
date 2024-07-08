@@ -18,7 +18,7 @@ export const config = createConfig({
     appIcon: 'https://alyra-carbonthink.vercel.app/carbonthink.svg',
     appName: 'CarbonThink',
     appUrl: 'https://alyra-carbonthink.vercel.app/',
-    chains: NODE_ENV === 'production' ? [baseSepolia, base] : [hardhat, baseSepolia, base],
+    chains: NODE_ENV === 'production' ? [baseSepolia, base] : [baseSepolia, base, hardhat],
     connectors: [
       metaMask({
         dappMetadata: {
