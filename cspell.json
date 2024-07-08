@@ -25,6 +25,8 @@
       "wagmi"
     ],
     "ignorePaths": [
+      "pnpm-lock.yaml",
+      "./.git/objects",
       "**/lib/**",
       "**/mocks/**",
       "*.config.*"
