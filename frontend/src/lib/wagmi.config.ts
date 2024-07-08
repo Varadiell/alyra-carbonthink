@@ -33,9 +33,9 @@ export const config = createConfig({
     ssr: true,
     syncConnectedChain: true,
     transports: {
-      [hardhat.id]: http(),
-      [base.id]: http(`${ALCHEMY_ENDPOINT_URL_BASE_MAINNET}${ALCHEMY_API_KEY}`),
-      [baseSepolia.id]: http(`${ALCHEMY_ENDPOINT_URL_BASE_SEPOLIA}${ALCHEMY_API_KEY}`),
+      [hardhat.id]: http(undefined, { batch: true }),
+      [base.id]: http(`${ALCHEMY_ENDPOINT_URL_BASE_MAINNET}${ALCHEMY_API_KEY}`, { batch: true }),
+      [baseSepolia.id]: http(`${ALCHEMY_ENDPOINT_URL_BASE_SEPOLIA}${ALCHEMY_API_KEY}`, { batch: true }),
     },
     walletConnectProjectId: WALLET_CONNECT_PROJECT_ID,
   }),
