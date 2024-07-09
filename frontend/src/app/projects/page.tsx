@@ -15,8 +15,13 @@ export default function Projects() {
     <>
       <Breadcrumbs layers={['Home', 'Projects']} />
       <Suspense>
-        <ProjectsList />
-        <Paginate baseUrl="/projects" nbItems={totalProjects ?? 0} pageSize={10} />
+        {totalProjects != null && (
+          <>
+            <Paginate baseUrl="/projects" nbItems={totalProjects ?? 0} pageSize={10} />
+            <ProjectsList />
+            <Paginate baseUrl="/projects" nbItems={totalProjects ?? 0} pageSize={10} />
+          </>
+        )}
       </Suspense>
     </>
   );

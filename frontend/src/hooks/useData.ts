@@ -11,6 +11,7 @@ import { toProject } from '@/utils/adapters';
 
 export function useData(): DataType {
   const [projects, setProjects] = useState<Project[]>([]);
+  const [projectsPage, setProjectsPage] = useState<number | undefined>(undefined);
   const [eventLogs, setEventLogs] = useState<EventLog[] | undefined>(undefined);
   const [tco2EventLogs, setTco2EventLogs] = useState<EventLog[] | undefined>(undefined);
 
@@ -69,13 +70,17 @@ export function useData(): DataType {
     },
   });
 
-  const { data: projectsBatch } = useReadContracts({
-    contracts: Array.from({ length: Number(10) }).map((_, index) => ({
+  const PROJECTS_PAGE_SIZE = 10;
+  const { data: projectsBatch, refetch: refetchProjects } = useReadContracts({
+    contracts: Array.from({ length: PROJECTS_PAGE_SIZE }).map((_, index) => ({
       ...projectManagerContract,
-      args: [BigInt(Number(totalProjects ?? 0) - index - 1)],
+      args: [BigInt(Number(totalProjects ?? 0) - index - ((projectsPage ?? 1) - 1) * PROJECTS_PAGE_SIZE - 1)],
       chainId,
       functionName: 'get',
     })),
+    query: {
+      enabled: projectsPage != null,
+    },
   });
 
   console.log('projectsBatch', projectsBatch);
@@ -92,6 +97,11 @@ export function useData(): DataType {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectsBatch]);
 
+  function fetchProjectsPage(page: number) {
+    setProjectsPage(page);
+    refetchProjects();
+  }
+
   return {
     account: {
       address: accountAddress,
@@ -106,6 +116,7 @@ export function useData(): DataType {
       tco2EventLogs,
       totalProjects: totalProjects != null ? Number(totalProjects) : undefined,
     },
+    fetchProjectsPage,
     refetchProjectManagerOwner,
     refetchSecurityFund,
     refetchTotalProjects,

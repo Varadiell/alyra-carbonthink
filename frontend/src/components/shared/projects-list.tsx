@@ -4,7 +4,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { DataContext } from '@/contexts/data-provider';
 import { useSearchParams } from 'next/navigation';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { AspectRatio } from '../ui/aspect-ratio';
 
 const PAGE_SIZE = 10;
@@ -15,9 +15,14 @@ export function ProjectsList() {
 
   const {
     data: { projects, totalProjects = 0 },
+    fetchProjectsPage,
   } = useContext(DataContext);
 
-  // TODO: pagination
+  useEffect(() => {
+    fetchProjectsPage(pageIndex);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageIndex]);
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 justify-items-center items-start">
       {[...new Array(PAGE_SIZE)]
