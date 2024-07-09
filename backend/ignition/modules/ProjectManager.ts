@@ -1,4 +1,4 @@
-import { create_x } from '@/test/mocks/mocks';
+import { create_x, getRandomNumber } from '@/test/mocks/mocks';
 import { objectToTuple } from '@/utils/objectToTuple';
 import { buildModule } from '@nomicfoundation/hardhat-ignition/modules';
 
@@ -21,10 +21,18 @@ const ProjectManagerModule = buildModule('ProjectManagerModule', (module) => {
   // Transfer TCO2 ownership to the ProjectManager contract.
   module.call(tco2, 'transferOwnership', [projectManager], { id: 'TransferTco2Ownership' });
   // Generate randomized projects.
-  const NB_PROJECTS_TO_GENERATE = 85;
-  for (let i = 0; i < NB_PROJECTS_TO_GENERATE; i++) {
+  const NB_PROJECTS = 85;
+  for (let i = 0; i < NB_PROJECTS; i++) {
     const mockProject = create_x(i);
     module.call(projectManager, 'create', [objectToTuple(mockProject)], { id: `create_${i}` });
+  }
+  for (let i = 0; i < NB_PROJECTS; i++) {
+    let statusToSet = getRandomNumber(0, 99);
+    // 10% canceled - 20% pending - 50% live - 20% complete
+    statusToSet = statusToSet < 10 ? 0 : statusToSet < 30 ? 1 : statusToSet < 80 ? 2 : 3;
+    if (statusToSet !== 1) {
+      module.call(projectManager, 'setStatus', [BigInt(i), BigInt(statusToSet)], { id: `setStatus_${i}` });
+    }
   }
   return { tco2, projectManager };
 });

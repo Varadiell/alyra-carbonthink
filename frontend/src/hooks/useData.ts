@@ -83,8 +83,6 @@ export function useData(): DataType {
     },
   });
 
-  console.log('projectsBatch', projectsBatch);
-
   useEffect(() => {
     const newProjects = [...projects];
     projectsBatch?.forEach((row) => {
