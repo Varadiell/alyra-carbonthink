@@ -76,12 +76,6 @@ export function MainNavigation({ children }: { children: React.ReactNode }) {
       url: '/create',
     },
     {
-      count: null,
-      icon: Coins,
-      label: 'Mint',
-      url: '/mint',
-    },
-    {
       count: eventLogs?.length,
       icon: DatabaseZap,
       label: 'Events',
