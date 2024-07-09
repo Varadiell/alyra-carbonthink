@@ -5,7 +5,6 @@ import Image from 'next/image';
 import {
   CandlestickChart,
   CirclePlus,
-  Coins,
   DatabaseZap,
   Flame,
   LayoutDashboard,
@@ -24,6 +23,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import carbonThinkIcon from 'public/carbonthink.svg';
 import { DataContext } from '@/contexts/data-provider';
 import { useContext } from 'react';
+import { Separator } from '@/components/ui/separator';
 
 type PageType = {
   count: number | undefined | null;
@@ -136,6 +136,7 @@ export function MainNavigation({ children }: { children: React.ReactNode }) {
                   <Image alt="CarbonThink logo" className="h-6 w-6" src={carbonThinkIcon} />
                   <span>CarbonThink</span>
                 </Link>
+                <Separator className="mb-2" />
                 {pages.map((page, index) => (
                   <Link
                     key={index}
