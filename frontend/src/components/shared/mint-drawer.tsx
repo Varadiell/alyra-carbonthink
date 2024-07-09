@@ -37,10 +37,11 @@ export function MintDrawer({ projectId }: { projectId: number }) {
     if (!chainId || !projects[projectId]) {
       return;
     }
+    const project = projects[projectId];
     // TODO: no metadata when some tokens were already minted
     writeContract({
       ...projectManager(chainId),
-      args: [BigInt(projectId), BigInt(nbTokensToMint), projectToMetadataBase64(projects[projectId])],
+      args: [BigInt(projectId), BigInt(nbTokensToMint), projectToMetadataBase64(project)],
       chainId,
       functionName: 'mintTokens',
     });
@@ -53,7 +54,7 @@ export function MintDrawer({ projectId }: { projectId: number }) {
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button className="w-52">
+        <Button className="w-52" disabled={[0, 3].includes(projects[projectId]?.status ?? 0)}>
           <Coins className="w-6 h-6 mr-2" /> Mint TCO2 tokens
         </Button>
       </DrawerTrigger>
