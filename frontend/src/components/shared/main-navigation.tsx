@@ -114,9 +114,7 @@ export function MainNavigation({ children }: { children: React.ReactNode }) {
                   ) : page.count === null ? (
                     <></>
                   ) : (
-                    <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
-                      {page.count}
-                    </Badge>
+                    <Badge className="ml-auto flex h-6 items-center justify-center">{page.count}</Badge>
                   )}
                 </Link>
               ))}
@@ -151,9 +149,7 @@ export function MainNavigation({ children }: { children: React.ReactNode }) {
                     ) : page.count === null ? (
                       <></>
                     ) : (
-                      <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
-                        {page.count}
-                      </Badge>
+                      <Badge className="ml-auto flex h-6 items-center justify-center">{page.count}</Badge>
                     )}
                   </Link>
                 ))}
