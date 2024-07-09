@@ -43,7 +43,7 @@ export function ProjectsList() {
               href={`/project/${project.id}`}
               key={index}
             >
-              <Card className="hover:border-[green]">
+              <Card className="hover:border-[green] overflow-hidden">
                 <CardHeader className="bg-muted">
                   <CardTitle>{project.name}</CardTitle>
                   <CardDescription>{project.description}</CardDescription>
