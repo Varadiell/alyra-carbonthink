@@ -53,6 +53,8 @@ export function MintDrawer() {
                   className="text-7xl font-bold tracking-tighter border-none h-17 text-center mb-2 [&::-webkit-inner-spin-button]:appearance-none"
                   type="number"
                   value={goal}
+                  min={1}
+                  max={10000}
                   onChange={(event) => setGoal(Number(event.currentTarget.value))}
                 />
                 <div className="text-[0.70rem] uppercase text-muted-foreground">TCO2 TOKENS</div>
@@ -62,6 +64,7 @@ export function MintDrawer() {
                 size="icon"
                 className="h-8 w-8 shrink-0 rounded-full mb-2"
                 onClick={() => onClick(10)}
+                disabled={goal > 9990}
               >
                 <Plus className="h-4 w-4" />
                 <span className="sr-only">Increase</span>
