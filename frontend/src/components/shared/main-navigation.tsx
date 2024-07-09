@@ -110,7 +110,7 @@ export function MainNavigation({ children }: { children: React.ReactNode }) {
                   <page.icon className="h-4 w-4" />
                   {page.label}
                   {page.count === undefined ? (
-                    <Skeleton className="ml-auto h-6 w-6 rounded-full" />
+                    <Skeleton className="ml-auto h-6 w-7 rounded-full" />
                   ) : page.count === null ? (
                     <></>
                   ) : (
@@ -145,7 +145,7 @@ export function MainNavigation({ children }: { children: React.ReactNode }) {
                     <page.icon className="h-5 w-5" />
                     {page.label}
                     {page.count === undefined ? (
-                      <Skeleton className="ml-auto h-6 w-6 rounded-full" />
+                      <Skeleton className="ml-auto h-6 w-7 rounded-full" />
                     ) : page.count === null ? (
                       <></>
                     ) : (
