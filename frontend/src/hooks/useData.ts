@@ -1,11 +1,13 @@
 'use client';
 
 import { useAccount, useConfig, useReadContract, useReadContracts, useWatchContractEvent } from 'wagmi';
-import { DataType, EventLog, Project } from '@/contexts/data-provider';
+import { DataType, EventLog } from '@/contexts/data-provider';
 import { tco2 } from '@/contracts/tco2.contract';
 import { projectManager } from '@/contracts/projectManager.contract';
 import { useEffect, useState } from 'react';
 import { baseSepolia } from 'viem/chains';
+import { Project, ProjectRaw } from '@/types/Project';
+import { toProject } from '@/utils/adapters';
 
 export function useData(): DataType {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -67,25 +69,22 @@ export function useData(): DataType {
     },
   });
 
-  const contractCalls = Array.from({ length: Number(10) }).map((_, index) => ({
-    ...projectManagerContract,
-    args: [BigInt(Math.max(Number(totalProjects ?? 0) - index - 1, 0))],
-    chainId,
-    functionName: 'get',
-  }));
-
   const { data: projectsBatch } = useReadContracts({
-    contracts: contractCalls,
+    contracts: Array.from({ length: Number(10) }).map((_, index) => ({
+      ...projectManagerContract,
+      args: [BigInt(Number(totalProjects ?? 0) - index - 1)],
+      chainId,
+      functionName: 'get',
+    })),
   });
 
   console.log('projectsBatch', projectsBatch);
 
   useEffect(() => {
-    // TODO: improve
     const newProjects = [...projects];
-    projectsBatch?.forEach((p) => {
-      const project = p.result as unknown as Project;
-      if (project?.id != null) {
+    projectsBatch?.forEach((row) => {
+      if (row.result) {
+        const project = toProject(row.result as unknown as ProjectRaw);
         newProjects[project.id] = project;
       }
     });
@@ -102,7 +101,7 @@ export function useData(): DataType {
     data: {
       eventLogs,
       projectManagerOwner,
-      projects, // TODO: adapt projects
+      projects,
       securityFund,
       tco2EventLogs,
       totalProjects: totalProjects != null ? Number(totalProjects) : undefined,

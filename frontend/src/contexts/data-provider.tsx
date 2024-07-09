@@ -4,39 +4,11 @@ import { useData } from '@/hooks/useData';
 import { createContext } from 'react';
 import { Log } from 'viem';
 import { ReactNode } from 'react';
+import { Project } from '@/types/Project';
 
 export type EventLog = Log & {
   args: Record<string, unknown>;
   eventName: string;
-};
-
-export type Project = {
-  data: {
-    ares: number;
-    calculationMethod: string;
-    city: string;
-    continent: string;
-    coordinates: string;
-    country: string;
-    duration: number;
-    expectedCo2Tons: number;
-    location: string;
-    plantedSpecies: string;
-    province: string;
-    region: string;
-    startDate: number;
-    unSDGs: number[];
-  };
-  description: string;
-  documentUrls: string[];
-  externalUrl: string;
-  id: number;
-  image: string;
-  isRegistered: boolean;
-  name: string;
-  photoUtils: string[];
-  projectHolder: `0x${string}`;
-  status: number;
 };
 
 export interface DataType {

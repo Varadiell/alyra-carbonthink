@@ -21,9 +21,12 @@ export function ProjectsList() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 justify-items-center items-start">
       {[...new Array(PAGE_SIZE)]
-        .map((_, index) => projects[Math.max(totalProjects - index - Math.max(pageIndex - 1, 0) * PAGE_SIZE - 1, 0)])
+        .map((_, index) => projects[totalProjects - index - Math.max(pageIndex - 1, 0) * PAGE_SIZE - 1])
+        .filter((e) => !!e)
         .map((project, index) => {
-          if (!project) return;
+          if (!project) {
+            return;
+          }
           return (
             <Card key={index} className="w-full max-w-[490px]">
               <CardHeader className="bg-muted">
