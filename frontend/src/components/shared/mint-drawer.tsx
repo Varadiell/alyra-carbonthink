@@ -1,6 +1,7 @@
-import * as React from 'react';
-import { Coins, Minus, Plus } from 'lucide-react';
+'use client';
 
+import * as React from 'react';
+import { Coins, LoaderCircle, Minus, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Drawer,
@@ -13,14 +14,40 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer';
 import { Input } from '@/components/ui/input';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { projectManager } from '@/contracts/projectManager.contract';
+import { useContract } from '@/hooks/useContract';
+import { DataContext } from '@/contexts/data-provider';
+import { projectToMetadataBase64 } from '@/utils/adapters';
 
-// TODO: call mint function
-export function MintDrawer() {
-  const [goal, setGoal] = useState<number>(100);
+export function MintDrawer({ projectId }: { projectId: number }) {
+  const [nbTokensToMint, setNbTokensToMint] = useState<number>(100);
+
+  const {
+    chainId,
+    data: { projects },
+    fetchProjectId,
+  } = useContext(DataContext);
+
+  const { isConnected, isPending, writeContract } = useContract(() => {
+    fetchProjectId(projectId);
+  });
+
+  function mint() {
+    if (!chainId || !projects[projectId]) {
+      return;
+    }
+    // TODO: no metadata when some tokens were already minted
+    writeContract({
+      ...projectManager(chainId),
+      args: [BigInt(projectId), BigInt(nbTokensToMint), projectToMetadataBase64(projects[projectId])],
+      chainId,
+      functionName: 'mintTokens',
+    });
+  }
 
   function onClick(adjustment: number) {
-    setGoal(Math.max(0, Math.min(10000, goal + adjustment)));
+    setNbTokensToMint(Math.max(0, Math.min(10000, nbTokensToMint + adjustment)));
   }
 
   return (
@@ -43,7 +70,7 @@ export function MintDrawer() {
                 size="icon"
                 className="h-8 w-8 shrink-0 rounded-full mb-2"
                 onClick={() => onClick(-10)}
-                disabled={goal <= 9}
+                disabled={nbTokensToMint <= 9}
               >
                 <Minus className="h-4 w-4" />
                 <span className="sr-only">Decrease</span>
@@ -52,10 +79,10 @@ export function MintDrawer() {
                 <Input
                   className="text-7xl font-bold tracking-tighter border-none h-17 text-center mb-2 [&::-webkit-inner-spin-button]:appearance-none"
                   type="number"
-                  value={goal}
+                  value={nbTokensToMint}
                   min={1}
                   max={10000}
-                  onChange={(event) => setGoal(Number(event.currentTarget.value))}
+                  onChange={(event) => setNbTokensToMint(Number(event.currentTarget.value))}
                 />
                 <div className="text-[0.70rem] uppercase text-muted-foreground">TCO2 TOKENS</div>
               </div>
@@ -64,7 +91,7 @@ export function MintDrawer() {
                 size="icon"
                 className="h-8 w-8 shrink-0 rounded-full mb-2"
                 onClick={() => onClick(10)}
-                disabled={goal > 9990}
+                disabled={nbTokensToMint > 9990}
               >
                 <Plus className="h-4 w-4" />
                 <span className="sr-only">Increase</span>
@@ -72,7 +99,9 @@ export function MintDrawer() {
             </div>
           </div>
           <DrawerFooter>
-            <Button>Mint</Button>
+            <Button disabled={isPending || !isConnected} onClick={() => mint()}>
+              {isPending ? <LoaderCircle className="animate-spin" /> : <>Mint</>}
+            </Button>
             <DrawerClose asChild>
               <Button variant="outline">Cancel</Button>
             </DrawerClose>

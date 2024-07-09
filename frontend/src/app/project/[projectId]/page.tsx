@@ -24,7 +24,7 @@ export default function Project() {
   return (
     <>
       <Breadcrumbs layers={['Home', 'Projects', projects?.[projectId]?.name ?? '']} />
-      <MintDrawer />
+      <MintDrawer projectId={projectId} />
     </>
   );
 }
