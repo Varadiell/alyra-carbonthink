@@ -90,8 +90,8 @@ export function ProjectsList() {
                   <div className="flex flex-row gap-1">
                     <MapPin className="h-5 w-5" /> {project.data.continent}, {project.data.region}
                   </div>
-                  <div className="grid grid-cols-2 w-full">
-                    <div className="flex flex-row gap-1">
+                  <div className="flex flex-row w-full">
+                    <div className="flex-1 flex flex-row gap-1">
                       <LandPlot className="h-5 w-5" /> Surface:{' '}
                       <span className="text-green-700 dark:text-green-500">{project.data.ares / 100} ha.</span>
                     </div>
@@ -100,8 +100,8 @@ export function ProjectsList() {
                       <span className="text-green-700 dark:text-green-500">{project.data.expectedCo2Tons} tons</span>
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 w-full">
-                    <div className="flex flex-row gap-1">
+                  <div className="flex flex-row w-full">
+                    <div className="flex-1 flex flex-row gap-1">
                       <Calendar className="h-5 w-5" /> Start:{' '}
                       <span className="text-green-700 dark:text-green-500">{projectDateStart.toDateString()}</span>
                     </div>
