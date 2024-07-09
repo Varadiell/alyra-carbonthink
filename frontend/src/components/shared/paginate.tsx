@@ -13,7 +13,7 @@ import { useSearchParams } from 'next/navigation';
 
 export function Paginate({ baseUrl, nbItems, pageSize }: { baseUrl: string; nbItems: number; pageSize: number }) {
   const searchParams = useSearchParams();
-  const nbPages = Math.floor(nbItems / pageSize) + 1;
+  const nbPages = Math.ceil(nbItems / pageSize);
   const pageIndex = Number(searchParams.get('p') ?? 1);
 
   return (
