@@ -1,6 +1,6 @@
 'use client';
 
-import { useAccount, useConfig, useReadContract, useReadContracts, useWatchContractEvent } from 'wagmi';
+import { useAccount, useBlockNumber, useConfig, useReadContract, useReadContracts, useWatchContractEvent } from 'wagmi';
 import { DataType, EventLog } from '@/contexts/data-provider';
 import { tco2 } from '@/contracts/tco2.contract';
 import { projectManager } from '@/contracts/projectManager.contract';
@@ -23,6 +23,8 @@ export function useData(): DataType {
     ? accountChainId
     : baseSepolia.id;
 
+  const { data: blockNumber } = useBlockNumber({ chainId, query: { refetchInterval: 20_000 } });
+
   const tco2Contract = tco2(chainId);
   const projectManagerContract = projectManager(chainId);
 
@@ -35,18 +37,30 @@ export function useData(): DataType {
   useWatchContractEvent({
     ...projectManagerContract,
     chainId,
+    enabled: !!chainId && blockNumber != null,
     eventName: 'logs' as any, // Hack eventName because typescript is incorrect.
+    fromBlock: BigInt(Math.max(Number(blockNumber ?? 0) - 49_000, 0)), // Depth of 50_000 max on testnet RPC.
+    onError() {
+      if (eventLogs === undefined) {
+        setEventLogs([]);
+      }
+    },
     onLogs: (logs) => setEventLogs(logs.reverse() as EventLog[]),
-    enabled: !!chainId,
     syncConnectedChain: true,
   });
 
   useWatchContractEvent({
     ...tco2Contract,
     chainId,
+    enabled: !!chainId && blockNumber != null,
     eventName: 'logs' as any, // Hack eventName because typescript is incorrect.
+    fromBlock: BigInt(Math.max(Number(blockNumber ?? 0) - 49_000, 0)), // Depth of 50_000 max on testnet RPC.
+    onError() {
+      if (tco2EventLogs === undefined) {
+        setTco2EventLogs([]);
+      }
+    },
     onLogs: (logs) => setTco2EventLogs(logs.reverse() as EventLog[]),
-    enabled: !!chainId,
     syncConnectedChain: true,
   });
 
