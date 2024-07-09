@@ -34,10 +34,10 @@ export function MintDrawer({ projectId }: { projectId: number }) {
   });
 
   function mint() {
-    if (!chainId || !projects[projectId]) {
+    const project = projects[projectId];
+    if (!chainId || !project) {
       return;
     }
-    const project = projects[projectId];
     // TODO: no metadata when some tokens were already minted
     writeContract({
       ...projectManager(chainId),
