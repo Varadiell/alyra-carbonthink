@@ -25,6 +25,7 @@ export interface DataType {
     tco2EventLogs: EventLog[] | undefined;
     totalProjects: number | undefined;
   };
+  fetchProjectId: (projectId: number) => void;
   fetchProjectsPage: (page: number) => void;
   refetchProjectManagerOwner: () => void;
   refetchSecurityFund: () => void;
@@ -45,6 +46,7 @@ export const DataContext = createContext<DataType>({
     tco2EventLogs: undefined,
     totalProjects: undefined,
   },
+  fetchProjectId: () => undefined,
   fetchProjectsPage: () => undefined,
   refetchProjectManagerOwner: () => undefined,
   refetchSecurityFund: () => undefined,

@@ -12,6 +12,7 @@ import { toProject } from '@/utils/adapters';
 export function useData(): DataType {
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectsPage, setProjectsPage] = useState<number | undefined>(undefined);
+  const [projectIdToFetch, setProjectIdToFetch] = useState<number | undefined>(undefined);
   const [eventLogs, setEventLogs] = useState<EventLog[] | undefined>(undefined);
   const [tco2EventLogs, setTco2EventLogs] = useState<EventLog[] | undefined>(undefined);
 
@@ -70,6 +71,36 @@ export function useData(): DataType {
     },
   });
 
+  function fetchProjectId(projectId: number) {
+    setProjectIdToFetch(projectId);
+    refetchProject();
+  }
+
+  const { data: projectResult, refetch: refetchProject } = useReadContract({
+    ...projectManagerContract,
+    args: [BigInt(projectIdToFetch ?? 0)],
+    chainId,
+    functionName: 'get',
+    query: {
+      enabled: projectIdToFetch != null,
+    },
+  });
+
+  useEffect(() => {
+    const newProjects = [...projects];
+    if (projectResult) {
+      const project = toProject(projectResult as unknown as ProjectRaw);
+      newProjects[project.id] = project;
+    }
+    setProjects(newProjects);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projectResult]);
+
+  function fetchProjectsPage(page: number) {
+    setProjectsPage(page);
+    refetchProjects();
+  }
+
   const PROJECTS_PAGE_SIZE = 10;
   const { data: projectsBatch, refetch: refetchProjects } = useReadContracts({
     contracts: Array.from({ length: PROJECTS_PAGE_SIZE }).map((_, index) => ({
@@ -95,11 +126,6 @@ export function useData(): DataType {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectsBatch]);
 
-  function fetchProjectsPage(page: number) {
-    setProjectsPage(page);
-    refetchProjects();
-  }
-
   return {
     account: {
       address: accountAddress,
@@ -114,6 +140,7 @@ export function useData(): DataType {
       tco2EventLogs,
       totalProjects: totalProjects != null ? Number(totalProjects) : undefined,
     },
+    fetchProjectId,
     fetchProjectsPage,
     refetchProjectManagerOwner,
     refetchSecurityFund,
