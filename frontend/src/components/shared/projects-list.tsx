@@ -59,6 +59,11 @@ export function ProjectsList() {
                       <Activity className="w-3 h-3 mr-1" />
                       Live
                     </Badge>
+                  ) : project.status === 2 ? (
+                    <Badge className="relative top-[35px] right-[10px] z-20 float-end">
+                      <Clock className="w-3 h-3 mr-1" />
+                      Starting
+                    </Badge>
                   ) : project.status === 3 ? (
                     <Badge variant="secondary" className="relative top-[35px] right-[10px] z-20 float-end">
                       <Check className="w-3 h-3 mr-1" />
