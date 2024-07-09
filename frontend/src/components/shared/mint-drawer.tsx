@@ -1,6 +1,5 @@
 'use client';
 
-import * as React from 'react';
 import { Coins, LoaderCircle, Minus, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -14,34 +13,30 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer';
 import { Input } from '@/components/ui/input';
-import { useContext, useState } from 'react';
 import { projectManager } from '@/contracts/projectManager.contract';
 import { useContract } from '@/hooks/useContract';
 import { DataContext } from '@/contexts/data-provider';
 import { projectToMetadataBase64 } from '@/utils/adapters';
+import { Project } from '@/types/Project';
+import { useContext, useState } from 'react';
 
-export function MintDrawer({ projectId }: { projectId: number }) {
+export function MintDrawer({ project }: { project: Project }) {
   const [nbTokensToMint, setNbTokensToMint] = useState<number>(100);
 
-  const {
-    chainId,
-    data: { projects },
-    fetchProjectId,
-  } = useContext(DataContext);
+  const { chainId, fetchProjectId } = useContext(DataContext);
 
   const { isConnected, isPending, writeContract } = useContract(() => {
-    fetchProjectId(projectId);
+    fetchProjectId(project.id);
   });
 
   function mint() {
-    const project = projects[projectId];
     if (!chainId || !project) {
       return;
     }
     // TODO: no metadata when some tokens were already minted
     writeContract({
       ...projectManager(chainId),
-      args: [BigInt(projectId), BigInt(nbTokensToMint), projectToMetadataBase64(project)],
+      args: [BigInt(project.id), BigInt(nbTokensToMint), projectToMetadataBase64(project)],
       chainId,
       functionName: 'mintTokens',
     });
@@ -54,7 +49,7 @@ export function MintDrawer({ projectId }: { projectId: number }) {
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button className="w-52" disabled={[0, 3].includes(projects[projectId]?.status ?? 0)}>
+        <Button className="w-52" disabled={[0, 3].includes(project.status)}>
           <Coins className="w-6 h-6 mr-2" /> Mint TCO2 tokens
         </Button>
       </DrawerTrigger>

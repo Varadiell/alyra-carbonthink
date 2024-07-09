@@ -5,10 +5,10 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { DataContext } from '@/contexts/data-provider';
 import { useSearchParams } from 'next/navigation';
 import { useContext, useEffect } from 'react';
-import { AspectRatio } from '../ui/aspect-ratio';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Activity, Calendar, Check, Clock, LandPlot, Leaf, MapPin } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
-import { Badge } from '../ui/badge';
 
 const PAGE_SIZE = 10;
 

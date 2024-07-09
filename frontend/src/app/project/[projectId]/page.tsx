@@ -21,10 +21,16 @@ export default function Project() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projects]);
 
+  const project = projects[projectId];
+
+  if (!project) {
+    return null;
+  }
+
   return (
     <>
       <Breadcrumbs layers={['Home', 'Projects', projects?.[projectId]?.name ?? '']} />
-      <MintDrawer projectId={projectId} />
+      <MintDrawer project={project} />
     </>
   );
 }
