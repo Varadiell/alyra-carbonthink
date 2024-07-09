@@ -1,4 +1,4 @@
-import { http, createConfig } from 'wagmi';
+import { http, createConfig, fallback } from 'wagmi';
 import { hardhat, base, baseSepolia } from 'wagmi/chains';
 import { getDefaultConfig } from 'connectkit';
 import { metaMask, coinbaseWallet, injected, safe } from 'wagmi/connectors';
@@ -35,7 +35,10 @@ export const config = createConfig({
     transports: {
       [hardhat.id]: http(undefined, { batch: true }),
       [base.id]: http(`${ALCHEMY_ENDPOINT_URL_BASE_MAINNET}${ALCHEMY_API_KEY}`, { batch: true }),
-      [baseSepolia.id]: http(`${ALCHEMY_ENDPOINT_URL_BASE_SEPOLIA}${ALCHEMY_API_KEY}`, { batch: true }),
+      [baseSepolia.id]: fallback([
+        http(`${ALCHEMY_ENDPOINT_URL_BASE_SEPOLIA}${ALCHEMY_API_KEY}`, { batch: true, timeout: 60_000 }),
+        http(`https://base-sepolia-rpc.publicnode.com/`, { batch: true, timeout: 60_000 }),
+      ]),
     },
     walletConnectProjectId: WALLET_CONNECT_PROJECT_ID,
   }),
