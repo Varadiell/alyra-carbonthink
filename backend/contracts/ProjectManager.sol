@@ -14,10 +14,12 @@ contract ProjectManager is Ownable {
     error CannotChangeProjectState();
     /// @notice Emitted when attempting to mint zero tokens.
     error CannotMintZeroToken();
-    /// @notice Emitted when an action is attempted on an inactive project.
+    /// @notice Emitted when an action is attempted on an inactive project (status: "canceled", "completed").
     error InactiveProject();
     /// @notice Emitted when invalid metadata is provided.
     error InvalidMetadata();
+    /// @notice Emitted when a mint is attempted on a project with a non "active" status.
+    error MintOnActiveStatusOnly();
     /// @notice Emitted when a project does not exist.
     error ProjectDoesNotExist();
     /// @notice Emitted when attempting to set the same status to a project.
@@ -247,9 +249,13 @@ contract ProjectManager is Ownable {
         uint256 projectId,
         uint256 amount,
         string memory base64Metadata
-    ) external onlyOwner exists(projectId) notInactive(projectId) {
+    ) external onlyOwner exists(projectId) {
         if (amount == 0) {
             revert CannotMintZeroToken();
+        }
+        Status status = _projects[projectId].status;
+        if (status != Status.Active) {
+            revert MintOnActiveStatusOnly();
         }
         bool needsMetadata = !tco2Contract.exists(projectId);
         if (

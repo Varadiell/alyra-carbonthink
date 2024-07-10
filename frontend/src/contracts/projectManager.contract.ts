@@ -68,6 +68,11 @@ const abi = [
     type: 'error',
   },
   {
+    inputs: [],
+    name: 'MintOnActiveStatusOnly',
+    type: 'error',
+  },
+  {
     inputs: [
       {
         internalType: 'address',

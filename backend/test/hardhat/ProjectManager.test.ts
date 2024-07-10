@@ -28,6 +28,7 @@ enum CustomError {
   CannotMintZeroToken = 'CannotMintZeroToken',
   InactiveProject = 'InactiveProject',
   InvalidMetadata = 'InvalidMetadata',
+  MintOnActiveStatusOnly = 'MintOnActiveStatusOnly',
   OwnableInvalidOwner = 'OwnableInvalidOwner',
   OwnableUnauthorizedAccount = 'OwnableUnauthorizedAccount',
   ProjectDoesNotExist = 'ProjectDoesNotExist',
@@ -325,6 +326,7 @@ describe('ProjectManager contract tests', () => {
     it('should mint the first tokens of the first project and redistribute the correct amounts of tokens', async () => {
       const PROJECT_ID = 0;
       const AMOUNT = 101;
+      await projectManagerContract.setStatus(PROJECT_ID, Status.Active);
       await expect(projectManagerContract.mintTokens(PROJECT_ID, AMOUNT, project1_base64))
         .to.emit(projectManagerContract, Event.Minted)
         .withArgs(PROJECT_ID, addr1, 81) // addr1 is the address of the project holder for this project.
@@ -338,6 +340,7 @@ describe('ProjectManager contract tests', () => {
     it('should mint the first tokens of the second project and redistribute the correct amounts of tokens', async () => {
       const PROJECT_ID = 1;
       const AMOUNT = 100;
+      await projectManagerContract.setStatus(PROJECT_ID, Status.Active);
       await expect(projectManagerContract.mintTokens(PROJECT_ID, AMOUNT, project2_base64))
         .to.emit(projectManagerContract, Event.Minted)
         .withArgs(PROJECT_ID, addr2, 80) // addr2 is the address of the project holder for this project.
@@ -352,6 +355,7 @@ describe('ProjectManager contract tests', () => {
       const PROJECT_ID = 0;
       const FIRST_AMOUNT = 1;
       const SECOND_AMOUNT = 10;
+      await projectManagerContract.setStatus(PROJECT_ID, Status.Active);
       // Note: only one event for the first mint since there is no token to send to the security fund.
       await expect(projectManagerContract.mintTokens(PROJECT_ID, FIRST_AMOUNT, project1_base64))
         .to.emit(projectManagerContract, Event.Minted)
@@ -369,6 +373,7 @@ describe('ProjectManager contract tests', () => {
 
     it('should revert when the metadata is sent when not needed on a re-mint', async () => {
       const PROJECT_ID = 0;
+      await projectManagerContract.setStatus(PROJECT_ID, Status.Active);
       await projectManagerContract.mintTokens(PROJECT_ID, 1, project1_base64);
       await expect(projectManagerContract.mintTokens(PROJECT_ID, 1, project1_base64)).to.revertedWithCustomError(
         projectManagerContract,
@@ -377,14 +382,18 @@ describe('ProjectManager contract tests', () => {
     });
 
     it('should revert when the metadata is not sent when needed on a first mint', async () => {
-      await expect(projectManagerContract.mintTokens(0, 1, '')).to.revertedWithCustomError(
+      const PROJECT_ID = 0;
+      await projectManagerContract.setStatus(PROJECT_ID, Status.Active);
+      await expect(projectManagerContract.mintTokens(PROJECT_ID, 1, '')).to.revertedWithCustomError(
         projectManagerContract,
         CustomError.InvalidMetadata,
       );
     });
 
     it('should revert when the amount to mint is 0', async () => {
-      await expect(projectManagerContract.mintTokens(0, 0, project1_base64)).to.revertedWithCustomError(
+      const PROJECT_ID = 0;
+      await projectManagerContract.setStatus(PROJECT_ID, Status.Active);
+      await expect(projectManagerContract.mintTokens(PROJECT_ID, 0, project1_base64)).to.revertedWithCustomError(
         projectManagerContract,
         CustomError.CannotMintZeroToken,
       );
@@ -395,7 +404,7 @@ describe('ProjectManager contract tests', () => {
       await projectManagerContract.setStatus(PROJECT_ID, Status.Completed);
       await expect(projectManagerContract.mintTokens(PROJECT_ID, 1, project1_base64)).to.revertedWithCustomError(
         projectManagerContract,
-        CustomError.InactiveProject,
+        CustomError.MintOnActiveStatusOnly,
       );
     });
 
@@ -404,22 +413,34 @@ describe('ProjectManager contract tests', () => {
       await projectManagerContract.setStatus(PROJECT_ID, Status.Canceled);
       await expect(projectManagerContract.mintTokens(PROJECT_ID, 1, project1_base64)).to.revertedWithCustomError(
         projectManagerContract,
-        CustomError.InactiveProject,
+        CustomError.MintOnActiveStatusOnly,
+      );
+    });
+
+    it('should revert when the project to mint on is inactive (case: status pending)', async () => {
+      const PROJECT_ID = 0;
+      // Note: status is already "pending", no need to set it.
+      await expect(projectManagerContract.mintTokens(PROJECT_ID, 1, project1_base64)).to.revertedWithCustomError(
+        projectManagerContract,
+        CustomError.MintOnActiveStatusOnly,
       );
     });
 
     it('should revert when the project to mint does not exist', async () => {
-      await expect(projectManagerContract.mintTokens(2, 1, project1_base64)).to.revertedWithCustomError(
+      const PROJECT_ID = 2;
+      // Note: cannot change the status because the project does not exist.
+      await expect(projectManagerContract.mintTokens(PROJECT_ID, 1, project1_base64)).to.revertedWithCustomError(
         projectManagerContract,
         CustomError.ProjectDoesNotExist,
       );
     });
 
     it('should revert when the msg.sender has no rights', async () => {
-      await expect(projectManagerContract.connect(addr1).mintTokens(0, 1, project1_base64)).to.revertedWithCustomError(
-        projectManagerContract,
-        CustomError.OwnableUnauthorizedAccount,
-      );
+      const PROJECT_ID = 0;
+      await projectManagerContract.setStatus(PROJECT_ID, Status.Canceled);
+      await expect(
+        projectManagerContract.connect(addr1).mintTokens(PROJECT_ID, 1, project1_base64),
+      ).to.revertedWithCustomError(projectManagerContract, CustomError.OwnableUnauthorizedAccount);
     });
   });
 

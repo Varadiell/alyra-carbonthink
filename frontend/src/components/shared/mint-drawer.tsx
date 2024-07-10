@@ -49,7 +49,7 @@ export function MintDrawer({ project }: { project: Project }) {
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button className="w-52" disabled={[0, 3].includes(project.status)}>
+        <Button className="w-52" disabled={project.status !== 2}>
           <Coins className="w-6 h-6 mr-2" /> Mint TCO2 tokens
         </Button>
       </DrawerTrigger>

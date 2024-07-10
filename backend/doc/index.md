@@ -34,7 +34,7 @@ Emitted when attempting to mint zero tokens.
 error InactiveProject()
 ```
 
-Emitted when an action is attempted on an inactive project.
+Emitted when an action is attempted on an inactive project (status: "canceled", "completed").
 
 ### InvalidMetadata
 
@@ -43,6 +43,14 @@ error InvalidMetadata()
 ```
 
 Emitted when invalid metadata is provided.
+
+### MintOnActiveStatusOnly
+
+```solidity
+error MintOnActiveStatusOnly()
+```
+
+Emitted when a mint is attempted on a project with a non "active" status.
 
 ### ProjectDoesNotExist
 
