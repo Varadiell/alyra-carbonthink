@@ -769,6 +769,25 @@ const abi = [
         type: 'address',
       },
     ],
+    name: 'totalBalanceOf',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'account',
+        type: 'address',
+      },
+    ],
     name: 'totalBurnBalanceOf',
     outputs: [
       {

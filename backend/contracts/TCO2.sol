@@ -23,6 +23,7 @@ contract TCO2 is ERC1155, ERC1155Burnable, ERC1155Supply, ERC2981, Ownable {
     using Arrays for address[];
 
     uint256 internal _totalBurnSupplyAll;
+    mapping(address account => uint256) internal _totalBalances;
     mapping(address account => uint256) internal _totalBurnBalances;
     mapping(uint256 id => mapping(address account => uint256)) internal _burnBalances;
     mapping(uint256 id => uint256) internal _totalBurnSupply;
@@ -110,6 +111,13 @@ contract TCO2 is ERC1155, ERC1155Burnable, ERC1155Supply, ERC2981, Ownable {
         return super.supportsInterface(interfaceId);
     }
 
+    /// @notice Retrieves the total token balance of a specific account across all tokens.
+    /// @param account The address of the account.
+    /// @return uint256 The total token balance of the specified account across all tokens.
+    function totalBalanceOf(address account) external view returns (uint256) {
+        return _totalBalances[account];
+    }
+
     /// @notice Retrieves the total burned token balance of a specific account across all tokens.
     /// @param account The address of the account.
     /// @return uint256 The total burned token balance of the specified account across all tokens.
@@ -146,7 +154,7 @@ contract TCO2 is ERC1155, ERC1155Burnable, ERC1155Supply, ERC2981, Ownable {
             "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='500' height='500' viewBox='0 0 24 24' fill='green' stroke='#004000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z'></path><path d='M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12'></path></svg>";
     }
 
-    /// @notice Override required by Solidity for token transfer updates. Also implements tokens burn count.
+    /// @notice Override required by Solidity for token transfer updates. Also implements tokens burn count and total balance count.
     /// @dev This function overrides the required update function to handle token transfers.
     /// @param from The address to transfer tokens from.
     /// @param to The address to transfer tokens to.
@@ -158,9 +166,20 @@ contract TCO2 is ERC1155, ERC1155Burnable, ERC1155Supply, ERC2981, Ownable {
         uint256[] memory ids,
         uint256[] memory values
     ) internal override(ERC1155, ERC1155Supply) {
+        uint256 idsLength = ids.length;
+        uint256 totalTransferredValue = 0;
+        for (uint256 i = 0; i < idsLength; ++i) {
+            totalTransferredValue += values[i];
+        }
+        if (from != address(0)) {
+            _totalBalances[from] -= totalTransferredValue;
+        }
+        if (to != address(0)) {
+            _totalBalances[to] += totalTransferredValue;
+        }
         if (to == address(0)) {
             uint256 totalBurnValue = 0;
-            for (uint256 i = 0; i < ids.length; ++i) {
+            for (uint256 i = 0; i < idsLength; ++i) {
                 uint256 value = values[i];
                 _totalBurnSupply[ids[i]] += value;
                 _burnBalances[ids[i]][from] += value;

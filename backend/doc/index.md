@@ -486,6 +486,12 @@ Error thrown when trying to set metadata for an already existing token.
 uint256 _totalBurnSupplyAll
 ```
 
+### _totalBalances
+
+```solidity
+mapping(address => uint256) _totalBalances
+```
+
 ### _totalBurnBalances
 
 ```solidity
@@ -628,6 +634,26 @@ _This function overrides `supportsInterface` to handle the ERC2981 interface che
 | ---- | ---- | ----------- |
 | [0] | bool | bool True if the contract implements the requested interface, false otherwise. |
 
+### totalBalanceOf
+
+```solidity
+function totalBalanceOf(address account) external view returns (uint256)
+```
+
+Retrieves the total token balance of a specific account across all tokens.
+
+#### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| account | address | The address of the account. |
+
+#### Return Values
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| [0] | uint256 | uint256 The total token balance of the specified account across all tokens. |
+
 ### totalBurnBalanceOf
 
 ```solidity
@@ -726,7 +752,7 @@ _This function generates an SVG image with specific attributes and returns it as
 function _update(address from, address to, uint256[] ids, uint256[] values) internal
 ```
 
-Override required by Solidity for token transfer updates. Also implements tokens burn count.
+Override required by Solidity for token transfer updates. Also implements tokens burn count and total balance count.
 
 _This function overrides the required update function to handle token transfers._
 
