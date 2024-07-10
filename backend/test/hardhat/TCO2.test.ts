@@ -8,6 +8,7 @@ import { json as project1_json, base64 as project1_base64 } from '@/test/mocks/m
 import { json as project2_json, base64 as project2_base64 } from '@/test/mocks/metadata_project_2.data';
 
 enum CustomError {
+  ERC1155InvalidArrayLength = 'ERC1155InvalidArrayLength', // ERC1155InvalidArrayLength(uint256 idsLength, uint256 valuesLength)
   MintAmountZero = 'MintAmountZero',
   MintEmptyMetadata = 'MintEmptyMetadata',
   OwnableUnauthorizedAccount = 'OwnableUnauthorizedAccount', // OwnableUnauthorizedAccount(address account)
@@ -50,6 +51,54 @@ describe('TCO2 token contract tests', () => {
       const royaltyInfo = await tco2Contract.royaltyInfo(0, 10_000);
       testRoyalty({ address: royaltyInfo[0], amount: royaltyInfo[1] }, { address: addr2.address, amount: BigInt(500) });
       expect(await tco2Contract.owner()).to.equal(owner);
+    });
+  });
+
+  describe('burnBalanceOf', () => {
+    it('should give the correct burn balance amount for the given account and token id', async () => {
+      const ACCOUNT = addr1;
+      const TOKEN_ID = 0;
+      const BURN_AMOUNT = 10;
+      await tco2Contract.mint(ACCOUNT, TOKEN_ID, 123, 'mock_metadata');
+      await tco2Contract.connect(ACCOUNT).burn(ACCOUNT, TOKEN_ID, BURN_AMOUNT);
+      expect(await tco2Contract.burnBalanceOf(ACCOUNT, TOKEN_ID)).to.equal(BURN_AMOUNT);
+    });
+
+    it('should give a burn balance amount of 0 for an account that did not burn anything', async () => {
+      const ACCOUNT = addr1;
+      const TOKEN_ID = 0;
+      const BURN_AMOUNT = 10;
+      await tco2Contract.mint(ACCOUNT, TOKEN_ID, 123, 'mock_metadata');
+      await tco2Contract.connect(ACCOUNT).burn(ACCOUNT, TOKEN_ID, BURN_AMOUNT);
+      expect(await tco2Contract.burnBalanceOf(addr2, TOKEN_ID)).to.equal(0);
+    });
+
+    it('should give a burn balance amount of 0 for a token id that did have any burned token', async () => {
+      const ACCOUNT = addr1;
+      const TOKEN_ID = 0;
+      const BURN_AMOUNT = 10;
+      await tco2Contract.mint(ACCOUNT, TOKEN_ID, 123, 'mock_metadata');
+      await tco2Contract.connect(ACCOUNT).burn(ACCOUNT, TOKEN_ID, BURN_AMOUNT);
+      expect(await tco2Contract.burnBalanceOf(addr2, 1)).to.equal(0);
+    });
+  });
+
+  describe('burnBalanceOfBatch', () => {
+    it('should give the correct burn balances amounts for the given accounts and token ids', async () => {
+      const ACCOUNTS = [addr1, addr2];
+      const TOKEN_IDS = [0, 0];
+      const BURN_AMOUNT = 10;
+      await tco2Contract.mint(ACCOUNTS[0], TOKEN_IDS[0], 123, 'mock_metadata');
+      await tco2Contract.connect(ACCOUNTS[0]).burn(ACCOUNTS[0], TOKEN_IDS[0], BURN_AMOUNT);
+      expect(await tco2Contract.burnBalanceOfBatch(ACCOUNTS, TOKEN_IDS)).to.deep.equal([BURN_AMOUNT, 0]);
+    });
+
+    it('should reject with an error when the two arrays do not have the same length', async () => {
+      const ACCOUNTS = [addr1]; // length: 1
+      const TOKEN_IDS = [0, 0]; // length: 2
+      await expect(tco2Contract.burnBalanceOfBatch(ACCOUNTS, TOKEN_IDS))
+        .to.revertedWithCustomError(tco2Contract, CustomError.ERC1155InvalidArrayLength)
+        .withArgs(2, 1);
     });
   });
 
@@ -138,6 +187,37 @@ describe('TCO2 token contract tests', () => {
 
     it('should not support a random interface hash', async () => {
       expect(await tco2Contract.supportsInterface('0x00000000')).to.equal(false);
+    });
+  });
+
+  describe('totalBurnSupply(uint256)', () => {
+    it('should return the correct amount of tokens burnt for the given token id', async () => {
+      const ACCOUNT = addr1;
+      const TOKEN_ID = 0;
+      const BURN_AMOUNT = 10;
+      await tco2Contract.mint(ACCOUNT, TOKEN_ID, 123, 'mock_metadata');
+      await tco2Contract.connect(ACCOUNT).burn(ACCOUNT, TOKEN_ID, BURN_AMOUNT);
+      expect(await tco2Contract['totalBurnSupply(uint256)'](TOKEN_ID)).to.equal(BURN_AMOUNT);
+    });
+
+    it('should return 0 for a token id that has not been burn', async () => {
+      expect(await tco2Contract['totalBurnSupply(uint256)'](0)).to.equal(0);
+    });
+  });
+
+  describe('totalBurnSupply()', () => {
+    it('should return the correct amount of tokens burnt for all token ids', async () => {
+      const ACCOUNT = addr1;
+      const BURN_AMOUNT = 10;
+      await tco2Contract.mint(ACCOUNT, 0, 123, 'mock_metadata');
+      await tco2Contract.mint(ACCOUNT, 1, 123, 'mock_metadata');
+      await tco2Contract.connect(ACCOUNT).burn(ACCOUNT, 0, BURN_AMOUNT);
+      await tco2Contract.connect(ACCOUNT).burn(ACCOUNT, 1, BURN_AMOUNT);
+      expect(await tco2Contract['totalBurnSupply()']()).to.equal(BURN_AMOUNT * 2);
+    });
+
+    it('should return 0 when no burn has been done', async () => {
+      expect(await tco2Contract['totalBurnSupply()']()).to.equal(0);
     });
   });
 
