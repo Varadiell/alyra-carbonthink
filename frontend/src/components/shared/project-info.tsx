@@ -6,6 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Camera, Coins, MapPin, ScrollText, Sprout } from 'lucide-react';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { ProjectActivityBadge } from '@/components/shared/project-activity-badge';
+import { Badge } from '@/components/ui/badge';
+import { addrToShortAddr } from '@/utils/addrToShortAddr';
 
 export function ProjectInfo({ project, totalSupply }: { project: Project; totalSupply: number }) {
   return (
@@ -15,8 +17,11 @@ export function ProjectInfo({ project, totalSupply }: { project: Project; totalS
           <CardTitle>{project.name}</CardTitle>
           <CardDescription>{project.description}</CardDescription>
         </CardHeader>
-        <CardContent className="flex flex-col gap-5 text-sm p-6">
-          <div>Project Holder: {project.projectHolder}</div>
+        <CardContent className="flex flex-col gap-5 p-6">
+          <div className="self-center">Project Holder</div>
+          <Badge className="w-fit self-center text-sm" variant="outline">
+            {addrToShortAddr(project.projectHolder)}
+          </Badge>
         </CardContent>
       </Card>
       <div>
