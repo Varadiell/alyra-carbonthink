@@ -1,6 +1,6 @@
 'use client';
 
-import { Coins, LoaderCircle, Minus, Plus } from 'lucide-react';
+import { LoaderCircle, Minus, Plus, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Drawer,
@@ -61,7 +61,7 @@ export function MintDrawer({ project }: { project: Project }) {
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
       <DrawerTrigger asChild>
         <Button className="w-52" disabled={project.status !== 2}>
-          <Coins className="w-6 h-6 mr-2" /> Mint TCO2 tokens
+          <Sparkles className="w-6 h-6 mr-2" /> Mint TCO2 tokens
         </Button>
       </DrawerTrigger>
       <DrawerContent>

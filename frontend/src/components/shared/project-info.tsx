@@ -4,7 +4,6 @@
 import { Project } from '@/types/Project';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import {
-  AreaChart,
   Calendar,
   CalendarClock,
   Camera,
@@ -15,6 +14,7 @@ import {
   HandCoins,
   LandPlot,
   Leaf,
+  LineChart,
   MapPin,
   ScrollText,
   Sparkles,
@@ -37,6 +37,7 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/charts';
 import { Label, Pie, PieChart } from 'recharts';
+import { ChangeStatus } from '@/components/shared/change-status';
 
 const chartConfig = {
   tokens: {
@@ -93,7 +94,7 @@ export function ProjectInfo({
           </div>
         </CardContent>
         <CardFooter>
-          <Button disabled={true}>Change status</Button>
+          <ChangeStatus project={project} />
         </CardFooter>
       </Card>
       <AspectRatio ratio={16 / 9} className="rounded-md overflow-hidden">
@@ -249,7 +250,7 @@ export function ProjectInfo({
           </div>
           <div>
             <CardTitle className="flex gap-2 p-6">
-              <AreaChart className="w-6 h-6" /> Distribution
+              <LineChart className="w-6 h-6" /> Distribution
             </CardTitle>
             <CardDescription className="flex justify-center">TCO2 tokens.</CardDescription>
             <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[250px]">
