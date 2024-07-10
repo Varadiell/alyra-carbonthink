@@ -27,12 +27,7 @@ export default function Project() {
       ) : (
         <Breadcrumbs layers={['Home', 'Projects', project.name]} />
       )}
-      {project && projectTotalSupply != null && (
-        <>
-          <MintDrawer project={project} />
-          <ProjectInfo project={project} totalSupply={projectTotalSupply} />
-        </>
-      )}
+      {project && projectTotalSupply != null && <ProjectInfo project={project} totalSupply={projectTotalSupply} />}
     </>
   );
 }

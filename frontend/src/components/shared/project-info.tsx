@@ -2,7 +2,7 @@
 'use client';
 
 import { Project } from '@/types/Project';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Calendar,
   Camera,
@@ -21,7 +21,11 @@ import { ProjectActivityBadge } from '@/components/shared/project-activity-badge
 import { Badge } from '@/components/ui/badge';
 import { addrToShortAddr } from '@/utils/addrToShortAddr';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { MintDrawer } from '@/components/shared/mint-drawer';
 
+// TODO: add document
+// TODO: add photo
 export function ProjectInfo({ project, totalSupply }: { project: Project; totalSupply: number }) {
   return (
     <div className="grid gap-3 sm:grid-cols-2">
@@ -38,6 +42,9 @@ export function ProjectInfo({ project, totalSupply }: { project: Project; totalS
             </Badge>
           </div>
         </CardContent>
+        <CardFooter>
+          <Button disabled={true}>Change status</Button>
+        </CardFooter>
       </Card>
       <AspectRatio ratio={16 / 9} className="rounded-md overflow-hidden">
         <div className="absolute top-[15px] right-[15px] z-20 float-end">
@@ -91,7 +98,7 @@ export function ProjectInfo({ project, totalSupply }: { project: Project; totalS
           </TableBody>
         </Table>
       </Card>
-      <Card className="h-fit">
+      <Card>
         <CardContent className="flex flex-col gap-2 text-sm p-6">
           <CardTitle className="flex flex-row gap-2">
             <Sprout className="h-6 w-6" />
@@ -157,6 +164,9 @@ export function ProjectInfo({ project, totalSupply }: { project: Project; totalS
           <div>Insert graphs</div>
           <div>Minted: {totalSupply} TCO2 tokens</div>
         </CardContent>
+        <CardFooter>
+          <MintDrawer project={project} />
+        </CardFooter>
       </Card>
       <Card>
         <CardContent className="flex flex-col gap-2 text-sm p-6">
@@ -170,6 +180,9 @@ export function ProjectInfo({ project, totalSupply }: { project: Project; totalS
           <div>4</div>
           <div>5</div>
         </CardContent>
+        <CardFooter>
+          <Button disabled={true}>Add document</Button>
+        </CardFooter>
       </Card>
       <Card>
         <CardContent className="flex flex-col gap-2 text-sm p-6">
@@ -183,6 +196,9 @@ export function ProjectInfo({ project, totalSupply }: { project: Project; totalS
           <div>3</div>
           <div>4</div>
         </CardContent>
+        <CardFooter>
+          <Button disabled={true}>Add photo</Button>
+        </CardFooter>
       </Card>
     </div>
   );
