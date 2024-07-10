@@ -25,8 +25,6 @@ export default function Project() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projects]);
 
-  console.log(projectTotalSupply);
-
   return (
     <>
       {!project ? (

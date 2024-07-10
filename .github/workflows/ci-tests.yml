@@ -132,4 +132,4 @@ jobs:
           check_hidden: true
           check_filenames: true
           ignore_words_list: mappin
-          skip: pnpm-lock.yaml,./.git/objects,**/mocks/**,
+          skip: pnpm-lock.yaml,./.git/objects,**/mocks/**,./backend/ignition/deployments/**
