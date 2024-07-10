@@ -21,6 +21,7 @@ import { Project } from '@/types/Project';
 import { useContext, useState } from 'react';
 
 export function MintDrawer({ project }: { project: Project }) {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [nbTokensToMint, setNbTokensToMint] = useState<number>(100);
 
   const {
@@ -32,6 +33,7 @@ export function MintDrawer({ project }: { project: Project }) {
 
   const { isConnected, isPending, writeContract } = useContract(() => {
     fetchAllProjectData(project.id);
+    setIsOpen(false);
   });
 
   function mint() {
@@ -56,7 +58,7 @@ export function MintDrawer({ project }: { project: Project }) {
   }
 
   return (
-    <Drawer>
+    <Drawer open={isOpen} onOpenChange={setIsOpen}>
       <DrawerTrigger asChild>
         <Button className="w-52" disabled={project.status !== 2}>
           <Coins className="w-6 h-6 mr-2" /> Mint TCO2 tokens
