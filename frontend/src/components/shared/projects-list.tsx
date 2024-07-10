@@ -79,8 +79,8 @@ export function ProjectsList() {
                   </div>
                   <div className="flex flex-row w-full">
                     <div className="flex-1 flex flex-row gap-1">
-                      <Calendar className="h-5 w-5" /> Start:{' '}
-                      <span className="text-green-700 dark:text-green-500">{projectDateStart.toDateString()}</span>
+                      <Calendar className="h-5 w-5" />
+                      {projectDateStart.toDateString()}
                     </div>
                     <div className="flex flex-row gap-1 justify-end">
                       <Clock className="h-5 w-5" /> Duration:{' '}
