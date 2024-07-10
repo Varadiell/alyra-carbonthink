@@ -23,20 +23,29 @@ import { useContext, useState } from 'react';
 export function MintDrawer({ project }: { project: Project }) {
   const [nbTokensToMint, setNbTokensToMint] = useState<number>(100);
 
-  const { chainId, fetchProjectId } = useContext(DataContext);
+  const {
+    account,
+    chainId,
+    data: { projectTotalSupply },
+    fetchAllProjectData,
+  } = useContext(DataContext);
 
   const { isConnected, isPending, writeContract } = useContract(() => {
-    fetchProjectId(project.id);
+    fetchAllProjectData(project.id);
   });
 
   function mint() {
-    if (!chainId || !project) {
+    if (!chainId || !project || !account.address || projectTotalSupply == null) {
       return;
     }
-    // TODO: no metadata when some tokens were already minted
     writeContract({
       ...projectManager(chainId),
-      args: [BigInt(project.id), BigInt(nbTokensToMint), projectToMetadataBase64(project)],
+      account: account.address,
+      args: [
+        BigInt(project.id),
+        BigInt(nbTokensToMint),
+        projectTotalSupply === 0 ? projectToMetadataBase64(project) : '',
+      ],
       chainId,
       functionName: 'mintTokens',
     });
