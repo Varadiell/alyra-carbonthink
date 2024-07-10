@@ -10,29 +10,36 @@ import { useContext, useEffect } from 'react';
 export default function Project() {
   const params = useParams<{ projectId: string }>();
   const {
-    data: { projects },
+    data: { projects, projectTotalSupply },
     fetchProjectId,
+    fetchProjectTotalSupply,
   } = useContext(DataContext);
   const projectId = Number(params.projectId);
+  const project = projects[projectId];
 
   useEffect(() => {
-    if (!projects[projectId]) {
+    fetchProjectTotalSupply(projectId);
+    if (!project) {
       fetchProjectId(projectId);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projects]);
 
-  const project = projects[projectId];
-
-  if (!project) {
-    return null;
-  }
+  console.log(projectTotalSupply);
 
   return (
     <>
-      <Breadcrumbs layers={['Home', 'Projects', projects?.[projectId]?.name ?? '']} />
-      <MintDrawer project={project} />
-      <ProjectInfo project={project} />
+      {!project ? (
+        <Breadcrumbs layers={['Home', 'Projects', '...']} />
+      ) : (
+        <Breadcrumbs layers={['Home', 'Projects', project.name]} />
+      )}
+      {project && projectTotalSupply != null && (
+        <>
+          <MintDrawer project={project} />
+          <ProjectInfo project={project} totalSupply={projectTotalSupply} />
+        </>
+      )}
     </>
   );
 }

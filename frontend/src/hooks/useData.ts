@@ -13,6 +13,7 @@ export function useData(): DataType {
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectsPage, setProjectsPage] = useState<number | undefined>(undefined);
   const [projectIdToFetch, setProjectIdToFetch] = useState<number | undefined>(undefined);
+  const [totalSupplyProjectId, setTotalSupplyProjectId] = useState<number | undefined>(undefined);
   const [eventLogs, setEventLogs] = useState<EventLog[] | undefined>(undefined);
   const [tco2EventLogs, setTco2EventLogs] = useState<EventLog[] | undefined>(undefined);
 
@@ -82,6 +83,24 @@ export function useData(): DataType {
     functionName: 'totalProjects',
     query: {
       refetchInterval: 10_000,
+      select: (totalProjects: bigint) => (totalProjects != null ? Number(totalProjects) : undefined),
+    },
+  });
+
+  function fetchProjectTotalSupply(projectId: number) {
+    setTotalSupplyProjectId(projectId);
+    refetchProjectTotalSupply();
+  }
+
+  const { data: projectTotalSupply, refetch: refetchProjectTotalSupply } = useReadContract({
+    ...tco2Contract,
+    args: [BigInt(totalSupplyProjectId ?? 0)],
+    chainId,
+    functionName: 'totalSupply',
+    query: {
+      enabled: totalSupplyProjectId != null,
+      refetchInterval: 10_000,
+      select: (totalSupply: bigint) => (totalSupply != null ? Number(totalSupply) : undefined),
     },
   });
 
@@ -97,6 +116,7 @@ export function useData(): DataType {
     functionName: 'get',
     query: {
       enabled: projectIdToFetch != null,
+      // TODO: select transform data here
     },
   });
 
@@ -125,6 +145,7 @@ export function useData(): DataType {
     })),
     query: {
       enabled: projectsPage != null,
+      // TODO: select transform data here
     },
   });
 
@@ -146,16 +167,22 @@ export function useData(): DataType {
       isConnected,
     },
     chainId,
+    contracts: {
+      projectManagerContract,
+      tco2Contract,
+    },
     data: {
       eventLogs,
       projectManagerOwner,
       projects,
+      projectTotalSupply,
       securityFund,
       tco2EventLogs,
-      totalProjects: totalProjects != null ? Number(totalProjects) : undefined,
+      totalProjects,
     },
     fetchProjectId,
     fetchProjectsPage,
+    fetchProjectTotalSupply,
     refetchProjectManagerOwner,
     refetchSecurityFund,
     refetchTotalProjects,

@@ -11,22 +11,34 @@ export type EventLog = Log & {
   eventName: string;
 };
 
+export type Contract = {
+  abi: readonly any[];
+  address: `0x${string}`;
+  fromBlock: bigint;
+};
+
 export interface DataType {
   account: {
     address: `0x${string}` | undefined;
     isConnected: boolean;
   };
   chainId: number | undefined;
+  contracts: {
+    projectManagerContract: Contract | undefined;
+    tco2Contract: Contract | undefined;
+  };
   data: {
     eventLogs: EventLog[] | undefined;
     projectManagerOwner: `0x${string}` | undefined;
     projects: (Project | undefined)[];
+    projectTotalSupply: number | undefined;
     securityFund: `0x${string}` | undefined;
     tco2EventLogs: EventLog[] | undefined;
     totalProjects: number | undefined;
   };
   fetchProjectId: (projectId: number) => void;
   fetchProjectsPage: (page: number) => void;
+  fetchProjectTotalSupply: (projectId: number) => void;
   refetchProjectManagerOwner: () => void;
   refetchSecurityFund: () => void;
   refetchTotalProjects: () => void;
@@ -38,16 +50,22 @@ export const DataContext = createContext<DataType>({
     isConnected: false,
   },
   chainId: undefined,
+  contracts: {
+    projectManagerContract: undefined,
+    tco2Contract: undefined,
+  },
   data: {
     eventLogs: undefined,
     projectManagerOwner: undefined,
     projects: [],
+    projectTotalSupply: undefined,
     securityFund: undefined,
     tco2EventLogs: undefined,
     totalProjects: undefined,
   },
   fetchProjectId: () => undefined,
   fetchProjectsPage: () => undefined,
+  fetchProjectTotalSupply: () => undefined,
   refetchProjectManagerOwner: () => undefined,
   refetchSecurityFund: () => undefined,
   refetchTotalProjects: () => undefined,

@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Camera, Coins, MapPin, ScrollText, Sprout } from 'lucide-react';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 
-export function ProjectInfo({ project }: { project: Project }) {
+export function ProjectInfo({ project, totalSupply }: { project: Project; totalSupply: number }) {
   return (
     <div className="grid gap-3 sm:grid-cols-2">
       <Card>
@@ -65,6 +65,7 @@ export function ProjectInfo({ project }: { project: Project }) {
             TCO2 Tokens
           </CardTitle>
           <div>Insert graphs</div>
+          <div>Minted: {totalSupply} TCO2 tokens</div>
         </CardContent>
       </Card>
       <Card>
