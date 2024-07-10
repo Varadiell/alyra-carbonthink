@@ -27,7 +27,7 @@ export default function Marketplace() {
           target="_blank"
         >
           <img
-            src="/opensea.webp"
+            src="/images/opensea.webp"
             alt="Link 1"
             width={600}
             height={400}
@@ -50,7 +50,7 @@ export default function Marketplace() {
           target="_blank"
         >
           <img
-            src="/rarible.webp"
+            src="/images/rarible.webp"
             alt="Link 2"
             width={600}
             height={400}

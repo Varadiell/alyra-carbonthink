@@ -59,7 +59,7 @@ export function ProjectsList() {
                       style={{ transform: 'translate(-50%, -50%)', top: '50%', left: '50%', position: 'absolute' }}
                       src={`https://ipfs.io/ipfs/${project.image.replace('ipfs://', '')}`}
                       alt={`image project ${project.id}`}
-                      onError={(e: any) => (e.target.src = '/image-placeholder.webp')}
+                      onError={(e: any) => (e.target.src = '/images/image-placeholder.webp')}
                     />
                   </AspectRatio>
                 </CardContent>

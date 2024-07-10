@@ -20,7 +20,7 @@ import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { usePathname } from 'next/navigation';
 import { ConnectKitButton } from 'connectkit';
 import { Skeleton } from '@/components/ui/skeleton';
-import carbonThinkIcon from 'public/carbonthink.svg';
+import carbonThinkIcon from 'public/images/carbonthink.svg';
 import { DataContext } from '@/contexts/data-provider';
 import { useContext } from 'react';
 import { Separator } from '@/components/ui/separator';

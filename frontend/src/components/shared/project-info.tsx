@@ -106,7 +106,7 @@ export function ProjectInfo({
           className="min-h-full min-w-full object-center object-cover z-10"
           src={`https://ipfs.io/ipfs/${project.image.replace('ipfs://', '')}`}
           alt={`image project ${project.id}`}
-          onError={(e: any) => (e.target.src = '/image-placeholder.webp')}
+          onError={(e: any) => (e.target.src = '/images/image-placeholder.webp')}
         />
       </AspectRatio>
       <Card>

@@ -7,7 +7,7 @@ import 'dotenv/config';
 export const config = createConfig({
   ...getDefaultConfig({
     appDescription: 'CarbonThink',
-    appIcon: 'https://alyra-carbonthink.vercel.app/carbonthink.svg',
+    appIcon: 'https://alyra-carbonthink.vercel.app/images/carbonthink.svg',
     appName: 'CarbonThink',
     appUrl: 'https://alyra-carbonthink.vercel.app/',
     chains: process.env.NODE_ENV === 'production' ? [baseSepolia] : [baseSepolia, base, hardhat],
