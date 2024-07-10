@@ -4,15 +4,20 @@
 import { Project } from '@/types/Project';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import {
+  AreaChart,
   Calendar,
+  CalendarClock,
   Camera,
   Clock,
   Coins,
+  Flame,
   Flower2,
+  HandCoins,
   LandPlot,
   Leaf,
   MapPin,
   ScrollText,
+  Sparkles,
   Sprout,
   SquareSigma,
 } from 'lucide-react';
@@ -23,6 +28,33 @@ import { addrToShortAddr } from '@/utils/addrToShortAddr';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { MintDrawer } from '@/components/shared/mint-drawer';
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
+} from '@/components/ui/charts';
+import { Label, Pie, PieChart } from 'recharts';
+
+const chartConfig = {
+  tokens: {
+    label: 'Tokens',
+  },
+  circulating: {
+    label: 'Circulating',
+    color: 'hsl(var(--chart-2))',
+  },
+  burnt: {
+    label: 'Burnt',
+    color: 'hsl(var(--chart-5))',
+  },
+  expected: {
+    label: 'Expected',
+    color: 'hsl(var(--chart-1))',
+  },
+} satisfies ChartConfig;
 
 // TODO: add document
 // TODO: add photo
@@ -35,6 +67,16 @@ export function ProjectInfo({
   totalSupply: number;
   totalBurnSupply: number;
 }) {
+  const chartData = [
+    { status: 'circulating', tokens: totalSupply, fill: 'var(--color-circulating)' },
+    { status: 'burnt', tokens: totalBurnSupply, fill: 'var(--color-burnt)' },
+    {
+      status: 'expected',
+      tokens: Math.max(project.data.expectedCo2Tons - totalSupply - totalBurnSupply, 0),
+      fill: 'var(--color-expected)',
+    },
+  ];
+
   return (
     <div className="grid gap-3 sm:grid-cols-2">
       <Card>
@@ -164,15 +206,89 @@ export function ProjectInfo({
         </Table>
       </Card>
       <Card className="sm:col-span-2">
-        <CardContent className="flex flex-col gap-2 text-sm p-6">
-          <CardTitle className="flex flex-row gap-2 pb-4">
-            <Coins className="h-6 w-6" />
-            TCO2 Tokens
-          </CardTitle>
-          <div>Insert graphs</div>
-          <div>Minted: {totalSupply} TCO2 tokens</div>
-          <div>Burnt: {totalSupply} TCO2 tokens</div>
-        </CardContent>
+        <div className="grid sm:grid-cols-2 gap-6">
+          <div className="text-sm">
+            <CardTitle className="flex flex-row gap-2 p-6 pb-10">
+              <Coins className="h-6 w-6" />
+              TCO2 Tokens
+            </CardTitle>
+            <Table>
+              <TableBody>
+                <TableRow>
+                  <TableCell className="flex flex-row items-center">
+                    <Sparkles className="h-4 w-4 mr-2" />
+                    Total Minted
+                  </TableCell>
+                  <TableCell className="text-end">{totalSupply + totalBurnSupply}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell className="flex flex-row items-center">
+                    <HandCoins className="h-4 w-4 mr-2" />
+                    Total Circulating
+                  </TableCell>
+                  <TableCell className="text-end">{totalSupply}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell className="flex flex-row items-center">
+                    <Flame className="h-4 w-4 mr-2" />
+                    Total Burnt
+                  </TableCell>
+                  <TableCell className="text-end">{totalBurnSupply}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell className="flex flex-row items-center">
+                    <CalendarClock className="h-4 w-4 mr-2" />
+                    Total Expected
+                  </TableCell>
+                  <TableCell className="text-end">
+                    {Math.max(project.data.expectedCo2Tons - totalSupply - totalBurnSupply, 0)}
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </div>
+          <div>
+            <CardTitle className="flex gap-2 p-6">
+              <AreaChart className="w-6 h-6" /> Distribution
+            </CardTitle>
+            <CardDescription className="flex justify-center">TCO2 tokens.</CardDescription>
+            <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[250px]">
+              <PieChart>
+                <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+                <Pie
+                  data={chartData}
+                  dataKey="tokens"
+                  nameKey="status"
+                  innerRadius={50}
+                  strokeWidth={10}
+                  startAngle={450}
+                  endAngle={90}
+                >
+                  <Label
+                    content={({ viewBox }) => {
+                      if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
+                        return (
+                          <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle" dominantBaseline="middle">
+                            <tspan x={viewBox.cx} y={viewBox.cy} className="fill-foreground text-3xl font-bold">
+                              {Math.max(project.data.expectedCo2Tons, totalSupply + totalBurnSupply).toLocaleString()}
+                            </tspan>
+                            <tspan x={viewBox.cx} y={(viewBox.cy || 0) + 24} className="fill-muted-foreground">
+                              TOKENS
+                            </tspan>
+                          </text>
+                        );
+                      }
+                    }}
+                  />
+                </Pie>
+                <ChartLegend
+                  content={<ChartLegendContent nameKey="status" />}
+                  className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center"
+                />
+              </PieChart>
+            </ChartContainer>
+          </div>
+        </div>
         <CardFooter>
           <MintDrawer project={project} />
         </CardFooter>
