@@ -98,6 +98,18 @@ export function useData(): DataType {
     },
   });
 
+  const { data: projectTotalBurnSupply } = useReadContract({
+    ...tco2Contract,
+    args: [BigInt(projectIdToFetch ?? 0)],
+    chainId,
+    functionName: 'totalBurnSupply',
+    query: {
+      enabled: projectIdToFetch != null,
+      refetchInterval: 10_000,
+      select: (totalBurnSupply: bigint) => (totalBurnSupply != null ? Number(totalBurnSupply) : undefined),
+    },
+  });
+
   function fetchAllProjectData(projectId: number) {
     setProjectIdToFetch(projectId);
   }
@@ -168,6 +180,7 @@ export function useData(): DataType {
       eventLogs,
       projectManagerOwner,
       projects,
+      projectTotalBurnSupply,
       projectTotalSupply,
       securityFund,
       tco2EventLogs,

@@ -31,6 +31,7 @@ export interface DataType {
     eventLogs: EventLog[] | undefined;
     projectManagerOwner: `0x${string}` | undefined;
     projects: (Project | undefined)[];
+    projectTotalBurnSupply: number | undefined;
     projectTotalSupply: number | undefined;
     securityFund: `0x${string}` | undefined;
     tco2EventLogs: EventLog[] | undefined;
@@ -55,6 +56,7 @@ export const DataContext = createContext<DataType>({
     eventLogs: undefined,
     projectManagerOwner: undefined,
     projects: [],
+    projectTotalBurnSupply: undefined,
     projectTotalSupply: undefined,
     securityFund: undefined,
     tco2EventLogs: undefined,

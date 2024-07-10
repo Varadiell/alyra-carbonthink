@@ -26,7 +26,15 @@ import { MintDrawer } from '@/components/shared/mint-drawer';
 
 // TODO: add document
 // TODO: add photo
-export function ProjectInfo({ project, totalSupply }: { project: Project; totalSupply: number }) {
+export function ProjectInfo({
+  project,
+  totalSupply,
+  totalBurnSupply,
+}: {
+  project: Project;
+  totalSupply: number;
+  totalBurnSupply: number;
+}) {
   return (
     <div className="grid gap-3 sm:grid-cols-2">
       <Card>
@@ -163,6 +171,7 @@ export function ProjectInfo({ project, totalSupply }: { project: Project; totalS
           </CardTitle>
           <div>Insert graphs</div>
           <div>Minted: {totalSupply} TCO2 tokens</div>
+          <div>Burnt: {totalSupply} TCO2 tokens</div>
         </CardContent>
         <CardFooter>
           <MintDrawer project={project} />
