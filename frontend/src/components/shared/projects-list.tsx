@@ -6,8 +6,8 @@ import { DataContext } from '@/contexts/data-provider';
 import { useSearchParams } from 'next/navigation';
 import { useContext, useEffect } from 'react';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { Activity, Calendar, Check, Clock, LandPlot, Leaf, MapPin } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { Calendar, Clock, LandPlot, Leaf, MapPin } from 'lucide-react';
+import { ProjectActivityBadge } from '@/components/shared/project-activity-badge';
 import Link from 'next/link';
 
 const PAGE_SIZE = 10;
@@ -49,32 +49,9 @@ export function ProjectsList() {
                   <CardDescription>{project.description}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  {project.status === 0 ? (
-                    <Badge variant="destructive" className="relative top-[35px] right-[10px] z-20 float-end">
-                      <Check className="w-3 h-3 mr-1" />
-                      Canceled
-                    </Badge>
-                  ) : project.status === 2 && projectDateStart.getTime() < dateNow.getTime() ? (
-                    <Badge className="relative top-[35px] right-[10px] z-20 float-end">
-                      <Activity className="w-3 h-3 mr-1" />
-                      Live
-                    </Badge>
-                  ) : project.status === 2 ? (
-                    <Badge className="relative top-[35px] right-[10px] z-20 float-end">
-                      <Clock className="w-3 h-3 mr-1" />
-                      Starting
-                    </Badge>
-                  ) : project.status === 3 ? (
-                    <Badge variant="secondary" className="relative top-[35px] right-[10px] z-20 float-end">
-                      <Check className="w-3 h-3 mr-1" />
-                      Complete
-                    </Badge>
-                  ) : (
-                    <Badge variant="secondary" className="relative top-[35px] right-[10px] z-20 float-end">
-                      <Clock className="w-3 h-3 mr-1" />
-                      Pending
-                    </Badge>
-                  )}
+                  <div className="relative top-[35px] right-[10px] z-20 float-end">
+                    <ProjectActivityBadge project={project} />
+                  </div>
                   <AspectRatio ratio={16 / 9} className="rounded-md overflow-hidden mt-6">
                     <div className="animate-pulse dark:bg-gray-600 bg-gray-300 h-full w-full absolute -z-10"></div>
                     <img

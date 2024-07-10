@@ -5,6 +5,7 @@ import { Project } from '@/types/Project';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Camera, Coins, MapPin, ScrollText, Sprout } from 'lucide-react';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { ProjectActivityBadge } from '@/components/shared/project-activity-badge';
 
 export function ProjectInfo({ project, totalSupply }: { project: Project; totalSupply: number }) {
   return (
@@ -16,18 +17,22 @@ export function ProjectInfo({ project, totalSupply }: { project: Project; totalS
         </CardHeader>
         <CardContent className="flex flex-col gap-5 text-sm p-6">
           <div>Project Holder: {project.projectHolder}</div>
-          <div>Status: {project.status}</div>
         </CardContent>
       </Card>
-      <AspectRatio ratio={16 / 9} className="rounded-md overflow-hidden">
-        <div className="animate-pulse dark:bg-gray-600 bg-gray-300 h-full w-full absolute -z-10"></div>
-        <img
-          className="min-h-full min-w-full object-center object-cover z-10"
-          src={`https://ipfs.io/ipfs/${project.image.replace('ipfs://', '')}`}
-          alt={`image project ${project.id}`}
-          onError={(e: any) => (e.target.src = '/image-placeholder.webp')}
-        />
-      </AspectRatio>
+      <div>
+        <div className="relative top-[15px] right-[15px] z-20 float-end">
+          <ProjectActivityBadge project={project} />
+        </div>
+        <AspectRatio ratio={16 / 9} className="rounded-md overflow-hidden">
+          <div className="animate-pulse dark:bg-gray-600 bg-gray-300 h-full w-full absolute -z-10"></div>
+          <img
+            className="min-h-full min-w-full object-center object-cover z-10"
+            src={`https://ipfs.io/ipfs/${project.image.replace('ipfs://', '')}`}
+            alt={`image project ${project.id}`}
+            onError={(e: any) => (e.target.src = '/image-placeholder.webp')}
+          />
+        </AspectRatio>
+      </div>
       <Card>
         <CardContent className="flex flex-col gap-2 text-sm p-6">
           <CardTitle className="flex flex-row gap-2 pb-4">
