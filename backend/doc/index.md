@@ -480,6 +480,24 @@ Error thrown when trying to set metadata for an already existing token.
 
 ## TCO2
 
+### _totalBurnSupplyAll
+
+```solidity
+uint256 _totalBurnSupplyAll
+```
+
+### _burnBalances
+
+```solidity
+mapping(uint256 => mapping(address => uint256)) _burnBalances
+```
+
+### _totalBurnSupply
+
+```solidity
+mapping(uint256 => uint256) _totalBurnSupply
+```
+
 ### _metadatas
 
 ```solidity
@@ -502,6 +520,50 @@ _No ERC1155 uri is set because we override the uri function for on-chain metadat
 | ---- | ---- | ----------- |
 | initialOwner | address | The address of the initial owner of the contract. |
 | royaltiesAddress | address |  |
+
+### burnBalanceOf
+
+```solidity
+function burnBalanceOf(address account, uint256 id) public view returns (uint256)
+```
+
+Retrieves the burned token balance of a specific account for a given project ID.
+
+#### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| account | address | The address of the account. |
+| id | uint256 | The ID of the project. |
+
+#### Return Values
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| [0] | uint256 | uint256 The burned token balance of the specified account for the given project ID. |
+
+### burnBalanceOfBatch
+
+```solidity
+function burnBalanceOfBatch(address[] accounts, uint256[] ids) external view returns (uint256[])
+```
+
+Retrieves the burned token balances for multiple accounts and project IDs.
+
+_The length of the accounts and ids arrays must be equal._
+
+#### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| accounts | address[] | An array of account addresses. |
+| ids | uint256[] | An array of project IDs. |
+
+#### Return Values
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| [0] | uint256[] | uint256[] A batch of burned token balances corresponding to the provided accounts and project IDs. |
 
 ### mint
 
@@ -560,6 +622,40 @@ _This function overrides `supportsInterface` to handle the ERC2981 interface che
 | ---- | ---- | ----------- |
 | [0] | bool | bool True if the contract implements the requested interface, false otherwise. |
 
+### totalBurnSupply
+
+```solidity
+function totalBurnSupply(uint256 id) external view returns (uint256)
+```
+
+Retrieves the total amount of tokens burned for a specific project ID.
+
+#### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| id | uint256 | The ID of the project. |
+
+#### Return Values
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| [0] | uint256 | The total amount of tokens burned for the specified project ID. |
+
+### totalBurnSupply
+
+```solidity
+function totalBurnSupply() external view returns (uint256)
+```
+
+Retrieves the total amount of tokens burned across all projects.
+
+#### Return Values
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| [0] | uint256 | uint256 The total amount of tokens burned across all projects. |
+
 ### uri
 
 ```solidity
@@ -604,7 +700,7 @@ _This function generates an SVG image with specific attributes and returns it as
 function _update(address from, address to, uint256[] ids, uint256[] values) internal
 ```
 
-Override required by Solidity for token transfer updates.
+Override required by Solidity for token transfer updates. Also implements tokens burn count.
 
 _This function overrides the required update function to handle token transfers._
 

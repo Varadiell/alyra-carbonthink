@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
+import {Arrays} from "@openzeppelin/contracts/utils/Arrays.sol";
 import {ERC1155} from "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import {ERC1155Burnable} from "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
 import {ERC1155Supply} from "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
@@ -18,6 +19,12 @@ error TokenMetadataExists(uint256 tokenId);
 
 /// @custom:security-contact security@carbonthink.xyz
 contract TCO2 is ERC1155, ERC1155Burnable, ERC1155Supply, ERC2981, Ownable {
+    using Arrays for uint256[];
+    using Arrays for address[];
+
+    uint256 internal _totalBurnSupplyAll;
+    mapping(uint256 id => mapping(address account => uint256)) internal _burnBalances;
+    mapping(uint256 id => uint256) internal _totalBurnSupply;
     mapping(uint256 => string) internal _metadatas;
 
     /// @notice Constructor to initialize the contract with an initial owner.
@@ -25,6 +32,33 @@ contract TCO2 is ERC1155, ERC1155Burnable, ERC1155Supply, ERC2981, Ownable {
     /// @param initialOwner The address of the initial owner of the contract.
     constructor(address initialOwner, address royaltiesAddress) ERC1155("") Ownable(initialOwner) {
         _setDefaultRoyalty(royaltiesAddress, 500); // Set royalties to 5%.
+    }
+
+    /// @notice Retrieves the burned token balance of a specific account for a given project ID.
+    /// @param account The address of the account.
+    /// @param id The ID of the project.
+    /// @return uint256 The burned token balance of the specified account for the given project ID.
+    function burnBalanceOf(address account, uint256 id) public view returns (uint256) {
+        return _burnBalances[id][account];
+    }
+
+    /// @notice Retrieves the burned token balances for multiple accounts and project IDs.
+    /// @param accounts An array of account addresses.
+    /// @param ids An array of project IDs.
+    /// @return uint256[] A batch of burned token balances corresponding to the provided accounts and project IDs.
+    /// @dev The length of the accounts and ids arrays must be equal.
+    function burnBalanceOfBatch(
+        address[] memory accounts,
+        uint256[] memory ids
+    ) external view returns (uint256[] memory) {
+        if (accounts.length != ids.length) {
+            revert ERC1155InvalidArrayLength(ids.length, accounts.length);
+        }
+        uint256[] memory batchBurnBalances = new uint256[](accounts.length);
+        for (uint256 i = 0; i < accounts.length; ++i) {
+            batchBurnBalances[i] = burnBalanceOf(accounts.unsafeMemoryAccess(i), ids.unsafeMemoryAccess(i));
+        }
+        return batchBurnBalances;
     }
 
     /// @notice Mint a new token with the specified metadata.
@@ -75,6 +109,19 @@ contract TCO2 is ERC1155, ERC1155Burnable, ERC1155Supply, ERC2981, Ownable {
         return super.supportsInterface(interfaceId);
     }
 
+    /// @notice Retrieves the total amount of tokens burned for a specific project ID.
+    /// @param id The ID of the project.
+    /// @return The total amount of tokens burned for the specified project ID.
+    function totalBurnSupply(uint256 id) external view returns (uint256) {
+        return _totalBurnSupply[id];
+    }
+
+    /// @notice Retrieves the total amount of tokens burned across all projects.
+    /// @return uint256 The total amount of tokens burned across all projects.
+    function totalBurnSupply() external view returns (uint256) {
+        return _totalBurnSupplyAll;
+    }
+
     /// @notice Overrides the URI function to provide on-chain token-specific metadata.
     /// @dev This function returns the metadata URI for a given token id.
     /// @param tokenId The token id to get the metadata URI for.
@@ -91,7 +138,7 @@ contract TCO2 is ERC1155, ERC1155Burnable, ERC1155Supply, ERC2981, Ownable {
             "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='500' height='500' viewBox='0 0 24 24' fill='green' stroke='#004000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z'></path><path d='M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12'></path></svg>";
     }
 
-    /// @notice Override required by Solidity for token transfer updates.
+    /// @notice Override required by Solidity for token transfer updates. Also implements tokens burn count.
     /// @dev This function overrides the required update function to handle token transfers.
     /// @param from The address to transfer tokens from.
     /// @param to The address to transfer tokens to.
@@ -103,6 +150,16 @@ contract TCO2 is ERC1155, ERC1155Burnable, ERC1155Supply, ERC2981, Ownable {
         uint256[] memory ids,
         uint256[] memory values
     ) internal override(ERC1155, ERC1155Supply) {
+        if (to == address(0)) {
+            uint256 totalBurnValue = 0;
+            for (uint256 i = 0; i < ids.length; ++i) {
+                uint256 value = values[i];
+                _totalBurnSupply[ids[i]] += value;
+                _burnBalances[ids[i]][from] += value;
+                totalBurnValue += value;
+            }
+            _totalBurnSupplyAll += totalBurnValue;
+        }
         super._update(from, to, ids, values);
     }
 }
