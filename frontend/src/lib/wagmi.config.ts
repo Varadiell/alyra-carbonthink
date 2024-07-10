@@ -4,21 +4,13 @@ import { getDefaultConfig } from 'connectkit';
 import { metaMask, coinbaseWallet, injected, safe } from 'wagmi/connectors';
 import 'dotenv/config';
 
-const {
-  ALCHEMY_API_KEY = '',
-  ALCHEMY_ENDPOINT_URL_BASE_MAINNET = '',
-  ALCHEMY_ENDPOINT_URL_BASE_SEPOLIA = '',
-  NODE_ENV = 'development',
-  WALLET_CONNECT_PROJECT_ID = '',
-} = process.env;
-
 export const config = createConfig({
   ...getDefaultConfig({
     appDescription: 'CarbonThink',
     appIcon: 'https://alyra-carbonthink.vercel.app/carbonthink.svg',
     appName: 'CarbonThink',
     appUrl: 'https://alyra-carbonthink.vercel.app/',
-    chains: NODE_ENV === 'production' ? [baseSepolia, base] : [baseSepolia, base, hardhat],
+    chains: process.env.NODE_ENV === 'production' ? [baseSepolia, base] : [baseSepolia, base, hardhat],
     connectors: [
       metaMask({
         dappMetadata: {
@@ -33,13 +25,19 @@ export const config = createConfig({
     ssr: true,
     syncConnectedChain: true,
     transports: {
-      [hardhat.id]: http(undefined, { batch: true }),
-      [base.id]: http(`${ALCHEMY_ENDPOINT_URL_BASE_MAINNET}${ALCHEMY_API_KEY}`, { batch: true }),
+      [hardhat.id]: http(undefined, { batch: true, timeout: 60_000 }),
+      [base.id]: http(`${process.env.ALCHEMY_ENDPOINT_URL_BASE_MAINNET}${process.env.ALCHEMY_API_KEY}`, {
+        batch: true,
+        timeout: 60_000,
+      }),
       [baseSepolia.id]: fallback([
-        http(`${ALCHEMY_ENDPOINT_URL_BASE_SEPOLIA}${ALCHEMY_API_KEY}`, { batch: true, timeout: 60_000 }),
+        http(`${process.env.ALCHEMY_ENDPOINT_URL_BASE_SEPOLIA}${process.env.ALCHEMY_API_KEY}`, {
+          batch: true,
+          timeout: 60_000,
+        }),
         http(`https://base-sepolia-rpc.publicnode.com/`, { batch: true, timeout: 60_000 }),
       ]),
     },
-    walletConnectProjectId: WALLET_CONNECT_PROJECT_ID,
+    walletConnectProjectId: process.env.WALLET_CONNECT_PROJECT_ID ?? '',
   }),
 });
