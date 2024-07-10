@@ -11,19 +11,14 @@ export default function Project() {
   const params = useParams<{ projectId: string }>();
   const {
     data: { projects, projectTotalSupply },
-    fetchProjectId,
-    fetchProjectTotalSupply,
+    fetchAllProjectData,
   } = useContext(DataContext);
   const projectId = Number(params.projectId);
   const project = projects[projectId];
 
   useEffect(() => {
-    fetchProjectTotalSupply(projectId);
-    if (!project) {
-      fetchProjectId(projectId);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [projects]);
+    fetchAllProjectData(projectId);
+  }, [projectId]);
 
   return (
     <>

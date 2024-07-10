@@ -13,7 +13,6 @@ export function useData(): DataType {
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectsPage, setProjectsPage] = useState<number | undefined>(undefined);
   const [projectIdToFetch, setProjectIdToFetch] = useState<number | undefined>(undefined);
-  const [totalSupplyProjectId, setTotalSupplyProjectId] = useState<number | undefined>(undefined);
   const [eventLogs, setEventLogs] = useState<EventLog[] | undefined>(undefined);
   const [tco2EventLogs, setTco2EventLogs] = useState<EventLog[] | undefined>(undefined);
 
@@ -65,13 +64,13 @@ export function useData(): DataType {
     syncConnectedChain: true,
   });
 
-  const { data: projectManagerOwner, refetch: refetchProjectManagerOwner } = useReadContract({
+  const { data: projectManagerOwner } = useReadContract({
     ...projectManagerContract,
     chainId,
     functionName: 'owner',
   });
 
-  const { data: securityFund, refetch: refetchSecurityFund } = useReadContract({
+  const { data: securityFund } = useReadContract({
     ...projectManagerContract,
     chainId,
     functionName: 'securityFund',
@@ -87,29 +86,23 @@ export function useData(): DataType {
     },
   });
 
-  function fetchProjectTotalSupply(projectId: number) {
-    setTotalSupplyProjectId(projectId);
-    refetchProjectTotalSupply();
-  }
-
-  const { data: projectTotalSupply, refetch: refetchProjectTotalSupply } = useReadContract({
+  const { data: projectTotalSupply } = useReadContract({
     ...tco2Contract,
-    args: [BigInt(totalSupplyProjectId ?? 0)],
+    args: [BigInt(projectIdToFetch ?? 0)],
     chainId,
     functionName: 'totalSupply',
     query: {
-      enabled: totalSupplyProjectId != null,
+      enabled: projectIdToFetch != null,
       refetchInterval: 10_000,
       select: (totalSupply: bigint) => (totalSupply != null ? Number(totalSupply) : undefined),
     },
   });
 
-  function fetchProjectId(projectId: number) {
+  function fetchAllProjectData(projectId: number) {
     setProjectIdToFetch(projectId);
-    refetchProject();
   }
 
-  const { data: projectResult, refetch: refetchProject } = useReadContract({
+  const { data: projectResult } = useReadContract({
     ...projectManagerContract,
     args: [BigInt(projectIdToFetch ?? 0)],
     chainId,
@@ -180,11 +173,8 @@ export function useData(): DataType {
       tco2EventLogs,
       totalProjects,
     },
-    fetchProjectId,
+    fetchAllProjectData,
     fetchProjectsPage,
-    fetchProjectTotalSupply,
-    refetchProjectManagerOwner,
-    refetchSecurityFund,
     refetchTotalProjects,
   };
 }
