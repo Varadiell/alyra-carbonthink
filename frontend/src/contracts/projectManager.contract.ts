@@ -3,7 +3,7 @@ import { base, baseSepolia, hardhat } from 'viem/chains';
 export const projectManager = (chainId: number) => {
   const address: Record<string, `0x${string}`> = {
     [hardhat.id]: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
-    [baseSepolia.id]: '0x0D42AFa93B91b83e07f7FceD0EBFCE5AD7fB7a60',
+    [baseSepolia.id]: '0x652Bc061a197a6D43467D62C525D6E9Ca96FB6cE',
     [base.id]: '0x', // TODO: put base mainnet address here
   };
 
