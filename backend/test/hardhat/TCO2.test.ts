@@ -190,6 +190,23 @@ describe('TCO2 token contract tests', () => {
     });
   });
 
+  describe('totalBurnBalanceOf', () => {
+    it('should return the correct amount of tokens burnt for the given account address', async () => {
+      const ACCOUNT = addr1;
+      const TOKEN_IDS = [0, 1];
+      const BURN_AMOUNT = 10;
+      await tco2Contract.mint(ACCOUNT, TOKEN_IDS[0], 123, 'mock_metadata');
+      await tco2Contract.mint(ACCOUNT, TOKEN_IDS[1], 123, 'mock_metadata');
+      await tco2Contract.connect(ACCOUNT).burn(ACCOUNT, TOKEN_IDS[0], BURN_AMOUNT);
+      await tco2Contract.connect(ACCOUNT).burn(ACCOUNT, TOKEN_IDS[1], BURN_AMOUNT);
+      expect(await tco2Contract.totalBurnBalanceOf(ACCOUNT)).to.equal(BURN_AMOUNT * 2);
+    });
+
+    it('should return 0 for an account that did not burn anything', async () => {
+      expect(await tco2Contract.totalBurnBalanceOf(addr1)).to.equal(0);
+    });
+  });
+
   describe('totalBurnSupply(uint256)', () => {
     it('should return the correct amount of tokens burnt for the given token id', async () => {
       const ACCOUNT = addr1;

@@ -486,6 +486,12 @@ Error thrown when trying to set metadata for an already existing token.
 uint256 _totalBurnSupplyAll
 ```
 
+### _totalBurnBalances
+
+```solidity
+mapping(address => uint256) _totalBurnBalances
+```
+
 ### _burnBalances
 
 ```solidity
@@ -621,6 +627,26 @@ _This function overrides `supportsInterface` to handle the ERC2981 interface che
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | [0] | bool | bool True if the contract implements the requested interface, false otherwise. |
+
+### totalBurnBalanceOf
+
+```solidity
+function totalBurnBalanceOf(address account) external view returns (uint256)
+```
+
+Retrieves the total burned token balance of a specific account across all tokens.
+
+#### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| account | address | The address of the account. |
+
+#### Return Values
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| [0] | uint256 | uint256 The total burned token balance of the specified account across all tokens. |
 
 ### totalBurnSupply
 

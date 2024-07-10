@@ -23,6 +23,7 @@ contract TCO2 is ERC1155, ERC1155Burnable, ERC1155Supply, ERC2981, Ownable {
     using Arrays for address[];
 
     uint256 internal _totalBurnSupplyAll;
+    mapping(address account => uint256) internal _totalBurnBalances;
     mapping(uint256 id => mapping(address account => uint256)) internal _burnBalances;
     mapping(uint256 id => uint256) internal _totalBurnSupply;
     mapping(uint256 => string) internal _metadatas;
@@ -109,6 +110,13 @@ contract TCO2 is ERC1155, ERC1155Burnable, ERC1155Supply, ERC2981, Ownable {
         return super.supportsInterface(interfaceId);
     }
 
+    /// @notice Retrieves the total burned token balance of a specific account across all tokens.
+    /// @param account The address of the account.
+    /// @return uint256 The total burned token balance of the specified account across all tokens.
+    function totalBurnBalanceOf(address account) external view returns (uint256) {
+        return _totalBurnBalances[account];
+    }
+
     /// @notice Retrieves the total amount of tokens burned for a specific project ID.
     /// @param id The ID of the project.
     /// @return The total amount of tokens burned for the specified project ID.
@@ -158,6 +166,7 @@ contract TCO2 is ERC1155, ERC1155Burnable, ERC1155Supply, ERC2981, Ownable {
                 _burnBalances[ids[i]][from] += value;
                 totalBurnValue += value;
             }
+            _totalBurnBalances[from] += totalBurnValue;
             _totalBurnSupplyAll += totalBurnValue;
         }
         super._update(from, to, ids, values);
