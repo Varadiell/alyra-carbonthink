@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation';
 import { Breadcrumbs } from '@/components/shared/breadcrumbs';
 import { MintDrawer } from '@/components/shared/mint-drawer';
 import { DataContext } from '@/contexts/data-provider';
+import { ProjectInfo } from '@/components/shared/project-info';
 import { useContext, useEffect } from 'react';
 
 export default function Project() {
@@ -31,6 +32,7 @@ export default function Project() {
     <>
       <Breadcrumbs layers={['Home', 'Projects', projects?.[projectId]?.name ?? '']} />
       <MintDrawer project={project} />
+      <ProjectInfo project={project} />
     </>
   );
 }
