@@ -1,2 +1,28 @@
+# Instructs Git not to modify PDF files
+*.pdf binary
+
+# Instructs Git not to modify image files
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.gif binary
+*.bmp binary
+*.tiff binary
+*.ico binary
+*.svg binary
+*.webp binary
+
+# Prevents Git from converting line endings for all binary files
+*.pdf -text
+*.jpg -text
+*.jpeg -text
+*.png -text
+*.gif -text
+*.bmp -text
+*.tiff -text
+*.ico -text
+*.svg -text
+*.webp -text
+
 # Auto detect text files and perform LF normalization
 * text eol=lf
