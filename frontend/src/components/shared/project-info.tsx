@@ -17,27 +17,25 @@ export function ProjectInfo({ project, totalSupply }: { project: Project; totalS
           <CardTitle>{project.name}</CardTitle>
           <CardDescription>{project.description}</CardDescription>
         </CardHeader>
-        <CardContent className="flex flex-col gap-5 p-6">
-          <div className="self-center">Project Holder</div>
-          <Badge className="w-fit self-center text-sm" variant="outline">
-            {addrToShortAddr(project.projectHolder)}
-          </Badge>
+        <CardContent className="p-6">
+          <div className="flex flex-col gap-2">
+            <div>Project Holder:</div>
+            <Badge className="w-fit">{addrToShortAddr(project.projectHolder)}</Badge>
+          </div>
         </CardContent>
       </Card>
-      <div>
-        <div className="relative top-[15px] right-[15px] z-20 float-end">
+      <AspectRatio ratio={16 / 9} className="rounded-md overflow-hidden">
+        <div className="absolute top-[15px] right-[15px] z-20 float-end">
           <ProjectActivityBadge project={project} />
         </div>
-        <AspectRatio ratio={16 / 9} className="rounded-md overflow-hidden">
-          <div className="animate-pulse dark:bg-gray-600 bg-gray-300 h-full w-full absolute -z-10"></div>
-          <img
-            className="min-h-full min-w-full object-center object-cover z-10"
-            src={`https://ipfs.io/ipfs/${project.image.replace('ipfs://', '')}`}
-            alt={`image project ${project.id}`}
-            onError={(e: any) => (e.target.src = '/image-placeholder.webp')}
-          />
-        </AspectRatio>
-      </div>
+        <div className="animate-pulse dark:bg-gray-600 bg-gray-300 h-full w-full absolute -z-10"></div>
+        <img
+          className="min-h-full min-w-full object-center object-cover z-10"
+          src={`https://ipfs.io/ipfs/${project.image.replace('ipfs://', '')}`}
+          alt={`image project ${project.id}`}
+          onError={(e: any) => (e.target.src = '/image-placeholder.webp')}
+        />
+      </AspectRatio>
       <Card>
         <CardContent className="flex flex-col gap-2 text-sm p-6">
           <CardTitle className="flex flex-row gap-2 pb-4">
