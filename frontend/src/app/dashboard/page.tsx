@@ -20,7 +20,7 @@ export default function Dashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Minted</CardTitle>
-            <Sparkles className="h-6 w-6 text-muted-foreground text-green-500" />
+            <Sparkles className="h-6 w-6 text-green-500" />
           </CardHeader>
           <CardContent>
             <div className="flex flex-row text-2xl font-bold items-center gap-2">
@@ -32,7 +32,7 @@ export default function Dashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Circulating</CardTitle>
-            <HandCoins className="h-6 w-6 text-muted-foreground text-purple-500" />
+            <HandCoins className="h-6 w-6 text-purple-500" />
           </CardHeader>
           <CardContent>
             <div className="flex flex-row text-2xl font-bold items-center gap-2">
@@ -44,7 +44,7 @@ export default function Dashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Burnt</CardTitle>
-            <Flame className="h-6 w-6 text-muted-foreground text-red-500" />
+            <Flame className="h-6 w-6 text-red-500" />
           </CardHeader>
           <CardContent>
             <div className="flex flex-row text-2xl font-bold items-center gap-2">
@@ -56,7 +56,7 @@ export default function Dashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Security Fund</CardTitle>
-            <ShieldCheck className="h-6 w-6 text-muted-foreground text-blue-500" />
+            <ShieldCheck className="h-6 w-6 text-blue-500" />
           </CardHeader>
           <CardContent>
             <div className="flex flex-row text-2xl font-bold items-center gap-2">
@@ -73,7 +73,7 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent className="flex flex-col gap-2">
             <div className="flex flex-row text-4xl font-bold items-center gap-2 justify-center">
-              <Wallet className="h-14 w-14 text-muted-foreground text-green-500" />
+              <Wallet className="h-14 w-14 text-green-500" />
               {totalBalance} <Coins className="h-8 w-8" />
             </div>
             <p className="text-xs text-muted-foreground text-center">Currently in your wallet, across all projects.</p>
@@ -85,7 +85,7 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent className="flex flex-col gap-2">
             <div className="flex flex-row text-4xl font-bold items-center gap-2 justify-center">
-              <Flame className="h-14 w-14 text-muted-foreground text-red-500" />
+              <Flame className="h-14 w-14 text-red-500" />
               {totalBurnBalance} <Coins className="h-8 w-8" />
             </div>
             <p className="text-xs text-muted-foreground text-center">Burnt by you, across all projects.</p>
