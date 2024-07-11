@@ -8,7 +8,7 @@ export default function Home() {
         <div className="container">
           <Leaf className="hidden lg:block float-right h-60 w-60 text-green-300 -z-20" />
           <div className="flex flex-col justify-center space-y-4">
-            <div className="space-y-2">
+            <div className="space-y-2 text-center lg:text-left">
               <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
                 The complete platform for your Carbon Credits.
               </h1>
@@ -18,7 +18,7 @@ export default function Home() {
             </div>
             <Link
               href="/projects"
-              className="max-w-[500px] inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+              className="lg:max-w-[500px] inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
             >
               Browse projects
             </Link>
