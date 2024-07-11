@@ -53,12 +53,6 @@ export function MainNavigation({ children }: { children: React.ReactNode }) {
       url: '/projects',
     },
     {
-      count: null,
-      icon: CandlestickChart,
-      label: 'Marketplace',
-      url: '/marketplace',
-    },
-    {
       count: totalBalance || null,
       icon: Flame,
       label: 'Burn',
@@ -66,10 +60,17 @@ export function MainNavigation({ children }: { children: React.ReactNode }) {
     },
     {
       count: null,
-      icon: Trophy,
-      label: 'Leaderboard',
-      url: '/leaderboard',
+      icon: CandlestickChart,
+      label: 'Marketplace',
+      url: '/marketplace',
     },
+    // TODO: removed from scope
+    // {
+    //   count: null,
+    //   icon: Trophy,
+    //   label: 'Leaderboard',
+    //   url: '/leaderboard',
+    // },
     {
       count: null,
       icon: SquarePlus,
