@@ -148,7 +148,7 @@ export function CreateProject() {
                 disabled={isPending || !isConnected}
                 id="image"
                 maxLength={100}
-                minLength={1}
+                minLength={8}
                 onChange={(event) => setImage(event.currentTarget.value)}
                 placeholder="ipfs://..."
                 required={true}

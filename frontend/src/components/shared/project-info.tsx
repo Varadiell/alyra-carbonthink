@@ -9,6 +9,8 @@ import {
   Camera,
   Clock,
   Coins,
+  ExternalLink,
+  Files,
   Flame,
   Flower2,
   HandCoins,
@@ -16,7 +18,6 @@ import {
   Leaf,
   LineChart,
   MapPin,
-  ScrollText,
   Sparkles,
   Sprout,
   SquareSigma,
@@ -38,6 +39,9 @@ import {
 } from '@/components/ui/charts';
 import { Label, Pie, PieChart } from 'recharts';
 import { ChangeStatus } from '@/components/shared/change-status';
+import { AddDocument } from './add-document';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import Link from 'next/link';
 
 const chartConfig = {
   tokens: {
@@ -297,17 +301,35 @@ export function ProjectInfo({
       <Card>
         <CardContent className="flex flex-col gap-2 text-sm p-6">
           <CardTitle className="flex flex-row gap-2 pb-4">
-            <ScrollText className="h-6 w-6" />
+            <Files className="h-6 w-6" />
             Documents
           </CardTitle>
-          <div>1</div>
-          <div>2</div>
-          <div>3</div>
-          <div>4</div>
-          <div>5</div>
+          {project.documentUrls.length === 0 && <div>No document provided.</div>}
         </CardContent>
-        <CardFooter>
-          <Button disabled={true}>Add document</Button>
+        {project.documentUrls.length > 0 && (
+          <ScrollArea className={project.documentUrls.length >= 6 ? 'h-[295px]' : ''}>
+            <Table>
+              <TableBody>
+                {project.documentUrls.map((documentUrl, index) => (
+                  <TableRow key={index}>
+                    <TableCell className="p-0">
+                      <Link
+                        className="flex flex-row h-full w-full gap-2 p-4 text-blue-800 hover:text-blue-300 dark:text-blue-600 dark:hover:text-blue-200 transition-colors"
+                        href={documentUrl}
+                        target="_blank"
+                      >
+                        Document #{index + 1}
+                        <ExternalLink className="h-4 w-4" />
+                      </Link>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </ScrollArea>
+        )}
+        <CardFooter className="p-6">
+          <AddDocument project={project} />
         </CardFooter>
       </Card>
       <Card>

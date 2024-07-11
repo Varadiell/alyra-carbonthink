@@ -34,6 +34,7 @@ export function MintDrawer({ project }: { project: Project }) {
   const { isConnected, isPending, writeContract } = useContract(() => {
     fetchAllProjectData(project.id);
     setIsOpen(false);
+    setNbTokensToMint(100);
   });
 
   function mint() {
@@ -106,7 +107,7 @@ export function MintDrawer({ project }: { project: Project }) {
             </div>
           </div>
           <DrawerFooter>
-            <Button disabled={isPending || !isConnected} onClick={() => mint()}>
+            <Button disabled={nbTokensToMint === 0 || isPending || !isConnected} onClick={() => mint()}>
               {isPending ? <LoaderCircle className="animate-spin" /> : <>Mint</>}
             </Button>
             <DrawerClose asChild>

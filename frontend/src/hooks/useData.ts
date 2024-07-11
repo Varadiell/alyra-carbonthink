@@ -112,9 +112,10 @@ export function useData(): DataType {
 
   function fetchAllProjectData(projectId: number) {
     setProjectIdToFetch(projectId);
+    refetchProject();
   }
 
-  const { data: projectResult } = useReadContract({
+  const { data: projectResult, refetch: refetchProject } = useReadContract({
     ...projectManagerContract,
     args: [BigInt(projectIdToFetch ?? 0)],
     chainId,
@@ -137,11 +138,11 @@ export function useData(): DataType {
 
   function fetchProjectsPage(page: number) {
     setProjectsPage(page);
-    refetchProjects();
+    refetchProjectsBatch();
   }
 
   const PROJECTS_PAGE_SIZE = 10;
-  const { data: projectsBatch, refetch: refetchProjects } = useReadContracts({
+  const { data: projectsBatch, refetch: refetchProjectsBatch } = useReadContracts({
     contracts: Array.from({ length: PROJECTS_PAGE_SIZE }).map((_, index) => ({
       ...projectManagerContract,
       args: [BigInt(Number(totalProjects ?? 0) - index - ((projectsPage ?? 1) - 1) * PROJECTS_PAGE_SIZE - 1)],

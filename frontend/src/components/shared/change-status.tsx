@@ -87,7 +87,11 @@ export function ChangeStatus({ project }: { project: Project }) {
           </div>
         </div>
         <DialogFooter>
-          <Button className="w-full" disabled={isPending || !isConnected} onClick={() => changeStatus()}>
+          <Button
+            className="w-full"
+            disabled={newStatus == null || isPending || !isConnected}
+            onClick={() => changeStatus()}
+          >
             {isPending ? <LoaderCircle className="animate-spin" /> : <>Save changes</>}
           </Button>
         </DialogFooter>
