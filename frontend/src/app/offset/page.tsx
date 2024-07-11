@@ -12,7 +12,6 @@ import { useReadContract } from 'wagmi';
 import JSConfetti from 'js-confetti';
 
 export default function Offset() {
-  const jsConfetti = new JSConfetti();
   const [targetProjectId, setTargetProjectId] = useState<number>(0);
   const [tokenAmountToBurn, setTokenAmountToBurn] = useState<number>(0);
   const {
@@ -24,6 +23,7 @@ export default function Offset() {
   } = useContext(DataContext);
   const { isConnected, isPending, writeContract } = useContract(() => {
     if (document) {
+      const jsConfetti = new JSConfetti();
       jsConfetti.addConfetti({
         emojis: ['🔥'],
         emojiSize: 30,
