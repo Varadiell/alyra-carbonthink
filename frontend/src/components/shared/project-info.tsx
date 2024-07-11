@@ -72,8 +72,8 @@ export function ProjectInfo({
   totalBurnSupply: number;
 }) {
   const chartData = [
-    { status: 'circulating', tokens: totalSupply, fill: 'var(--color-circulating)' },
     { status: 'burnt', tokens: totalBurnSupply, fill: 'var(--color-burnt)' },
+    { status: 'circulating', tokens: totalSupply, fill: 'var(--color-circulating)' },
     {
       status: 'expected',
       tokens: Math.max(project.data.expectedCo2Tons - totalSupply - totalBurnSupply, 0),
