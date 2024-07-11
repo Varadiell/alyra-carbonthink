@@ -194,9 +194,10 @@ export function CreateProject() {
                 max={100}
                 min={1}
                 onChange={(event) => setDuration(Number(event.currentTarget.value))}
+                placeholder="10"
                 required={true}
                 type="number"
-                value={duration}
+                value={duration || ''}
               />
             </div>
             <Separator className="sm:col-span-2" />
@@ -317,9 +318,10 @@ export function CreateProject() {
                 max={100_000_000}
                 min={1}
                 onChange={(event) => setAres(Number(event.currentTarget.value))}
+                placeholder="10000"
                 required={true}
                 type="number"
-                value={ares}
+                value={ares || ''}
               />
             </div>
             <div className="grid gap-3">
@@ -346,9 +348,10 @@ export function CreateProject() {
                 max={100_000_000}
                 min={1}
                 onChange={(event) => setExpectedCo2Tons(Number(event.currentTarget.value))}
+                placeholder="500"
                 required={true}
                 type="number"
-                value={expectedCo2Tons}
+                value={expectedCo2Tons || ''}
               />
             </div>
             <div className="grid gap-3">

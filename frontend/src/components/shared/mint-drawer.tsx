@@ -87,7 +87,7 @@ export function MintDrawer({ project }: { project: Project }) {
                 <Input
                   className="text-7xl font-bold tracking-tighter border-none h-17 text-center mb-2 [&::-webkit-inner-spin-button]:appearance-none"
                   type="number"
-                  value={nbTokensToMint}
+                  value={nbTokensToMint || ''}
                   min={1}
                   max={10000}
                   onChange={(event) => setNbTokensToMint(Number(event.currentTarget.value))}
