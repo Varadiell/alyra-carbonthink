@@ -146,7 +146,7 @@ export function useData(): DataType {
     },
   });
 
-  const { data: projectTotalSupply } = useReadContract({
+  const { data: projectTotalSupply, refetch: refetchProjectTotalSupply } = useReadContract({
     ...tco2Contract,
     args: [BigInt(projectIdToFetch ?? 0)],
     chainId,
@@ -158,7 +158,7 @@ export function useData(): DataType {
     },
   });
 
-  const { data: projectTotalBurnSupply } = useReadContract({
+  const { data: projectTotalBurnSupply, refetch: refetchProjectTotalBurnSupply } = useReadContract({
     ...tco2Contract,
     args: [BigInt(projectIdToFetch ?? 0)],
     chainId,
@@ -172,6 +172,8 @@ export function useData(): DataType {
 
   function fetchAllProjectData(projectId: number) {
     setProjectIdToFetch(projectId);
+    refetchProjectTotalBurnSupply();
+    refetchProjectTotalSupply();
     refetchProject();
   }
 

@@ -9,8 +9,10 @@ import { useContract } from '@/hooks/useContract';
 import { Coins, Flame, LoaderCircle, Minus, Plus, Wallet } from 'lucide-react';
 import { useContext, useState } from 'react';
 import { useReadContract } from 'wagmi';
+import JSConfetti from 'js-confetti';
 
 export default function Offset() {
+  const jsConfetti = new JSConfetti();
   const [targetProjectId, setTargetProjectId] = useState<number>(0);
   const [tokenAmountToBurn, setTokenAmountToBurn] = useState<number>(0);
   const {
@@ -20,6 +22,11 @@ export default function Offset() {
     fetchUserData,
   } = useContext(DataContext);
   const { isConnected, isPending, writeContract } = useContract(() => {
+    jsConfetti.addConfetti({
+      emojis: ['🔥'],
+      emojiSize: 30,
+      confettiNumber: Math.min(tokenAmountToBurn, 500), // 500 confettis maximum.
+    });
     setTokenAmountToBurn(0);
     refetchBalanceOfUserForProject();
     fetchUserData();
