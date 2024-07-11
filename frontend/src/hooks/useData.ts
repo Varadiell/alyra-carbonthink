@@ -76,6 +76,37 @@ export function useData(): DataType {
     functionName: 'securityFund',
   });
 
+  const { data: totalSecurityFund } = useReadContract({
+    ...tco2Contract,
+    args: [securityFund ?? '0x'],
+    chainId,
+    functionName: 'totalBalanceOf',
+    query: {
+      enabled: !!securityFund,
+      select: (totalSecurityFund: bigint) => (totalSecurityFund != null ? Number(totalSecurityFund) : undefined),
+    },
+  });
+
+  const { data: totalSupply } = useReadContract({
+    ...tco2Contract,
+    chainId,
+    functionName: 'totalSupply',
+    query: {
+      refetchInterval: 20_000,
+      select: (totalSupply: bigint) => (totalSupply != null ? Number(totalSupply) : undefined),
+    },
+  });
+
+  const { data: totalBurnSupply } = useReadContract({
+    ...tco2Contract,
+    chainId,
+    functionName: 'totalBurnSupply',
+    query: {
+      refetchInterval: 20_000,
+      select: (totalBurnSupply: bigint) => (totalBurnSupply != null ? Number(totalBurnSupply) : undefined),
+    },
+  });
+
   const { data: totalProjects, refetch: refetchTotalProjects } = useReadContract({
     ...projectManagerContract,
     chainId,
@@ -185,7 +216,10 @@ export function useData(): DataType {
       projectTotalSupply,
       securityFund,
       tco2EventLogs,
+      totalBurnSupply,
       totalProjects,
+      totalSecurityFund,
+      totalSupply,
     },
     fetchAllProjectData,
     fetchProjectsPage,

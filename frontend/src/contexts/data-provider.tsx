@@ -35,7 +35,10 @@ export interface DataType {
     projectTotalSupply: number | undefined;
     securityFund: `0x${string}` | undefined;
     tco2EventLogs: EventLog[] | undefined;
+    totalBurnSupply: number | undefined;
     totalProjects: number | undefined;
+    totalSecurityFund: number | undefined;
+    totalSupply: number | undefined;
   };
   fetchAllProjectData: (projectId: number) => void;
   fetchProjectsPage: (page: number) => void;
@@ -60,7 +63,10 @@ export const DataContext = createContext<DataType>({
     projectTotalSupply: undefined,
     securityFund: undefined,
     tco2EventLogs: undefined,
+    totalBurnSupply: undefined,
     totalProjects: undefined,
+    totalSecurityFund: undefined,
+    totalSupply: undefined,
   },
   fetchAllProjectData: () => undefined,
   fetchProjectsPage: () => undefined,

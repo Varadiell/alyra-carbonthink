@@ -3,8 +3,15 @@
 import { Breadcrumbs } from '@/components/shared/breadcrumbs';
 import { Coins, Flame, HandCoins, ShieldCheck, Sparkles } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { DataContext } from '@/contexts/data-provider';
+import { useContext } from 'react';
 
+// TODO: skeleton loading data
 export default function Dashboard() {
+  const {
+    data: { totalBurnSupply, totalSupply, totalSecurityFund },
+  } = useContext(DataContext);
+
   return (
     <>
       <Breadcrumbs layers={['Home', 'Dashboard']} />
@@ -16,7 +23,7 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="flex flex-row text-2xl font-bold items-center gap-2">
-              1230 <Coins className="h-6 w-h" />
+              {(totalSupply ?? 0) + (totalBurnSupply ?? 0)} <Coins className="h-6 w-h" />
             </div>
             <p className="text-xs text-muted-foreground">Across all project.</p>
           </CardContent>
@@ -28,7 +35,7 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="flex flex-row text-2xl font-bold items-center gap-2">
-              1230 <Coins className="h-6 w-h" />
+              {totalSupply} <Coins className="h-6 w-h" />
             </div>
             <p className="text-xs text-muted-foreground">Across all project.</p>
           </CardContent>
@@ -40,7 +47,7 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="flex flex-row text-2xl font-bold items-center gap-2">
-              1230 <Coins className="h-6 w-h" />
+              {totalBurnSupply} <Coins className="h-6 w-h" />
             </div>
             <p className="text-xs text-muted-foreground">Across all project.</p>
           </CardContent>
@@ -52,7 +59,7 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="flex flex-row text-2xl font-bold items-center gap-2">
-              1230 <Coins className="h-6 w-h" />
+              {totalSecurityFund} <Coins className="h-6 w-h" />
             </div>
             <p className="text-xs text-muted-foreground">For projects insurance.</p>
           </CardContent>
