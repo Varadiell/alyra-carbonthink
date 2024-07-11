@@ -22,7 +22,7 @@ export type Project = {
   image: string;
   isRegistered: boolean;
   name: string;
-  photoUtils: string[];
+  photoUrls: string[];
   projectHolder: `0x${string}`;
   status: number;
 };
@@ -51,7 +51,7 @@ export type ProjectRaw = {
   image: string;
   isRegistered: boolean;
   name: string;
-  photoUtils: string[];
+  photoUrls: string[];
   projectHolder: `0x${string}`;
   status: bigint;
 };

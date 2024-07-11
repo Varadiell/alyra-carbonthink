@@ -27,7 +27,6 @@ import { ProjectActivityBadge } from '@/components/shared/project-activity-badge
 import { Badge } from '@/components/ui/badge';
 import { addrToShortAddr } from '@/utils/addrToShortAddr';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
 import { MintDrawer } from '@/components/shared/mint-drawer';
 import {
   ChartConfig,
@@ -39,8 +38,10 @@ import {
 } from '@/components/ui/charts';
 import { Label, Pie, PieChart } from 'recharts';
 import { ChangeStatus } from '@/components/shared/change-status';
-import { AddDocument } from './add-document';
+import { AddDocument } from '@/components/shared/add-document';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { AddPhoto } from '@/components/shared/add-photo';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Link from 'next/link';
 
 const chartConfig = {
@@ -61,8 +62,6 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-// TODO: add document
-// TODO: add photo
 export function ProjectInfo({
   project,
   totalSupply,
@@ -338,14 +337,30 @@ export function ProjectInfo({
             <Camera className="h-6 w-6" />
             Photos
           </CardTitle>
-          <div>Carousel</div>
-          <div>1</div>
-          <div>2</div>
-          <div>3</div>
-          <div>4</div>
+          {project.photoUrls.length === 0 && <div>No photo provided.</div>}
         </CardContent>
-        <CardFooter>
-          <Button disabled={true}>Add photo</Button>
+        <Carousel className="ml-4 mr-4">
+          <CarouselContent>
+            {project.photoUrls.map((photoUrl, index) => (
+              <CarouselItem key={index}>
+                <AspectRatio ratio={16 / 9} className="rounded-md overflow-hidden mt-1">
+                  <div className="animate-pulse dark:bg-gray-600 bg-gray-300 h-full w-full absolute -z-10"></div>
+                  <img
+                    className="w-full z-10"
+                    style={{ transform: 'translate(-50%, -50%)', top: '50%', left: '50%', position: 'absolute' }}
+                    src={`https://ipfs.io/ipfs/${photoUrl.replace('ipfs://', '')}`}
+                    alt={`project photo ${index}`}
+                    onError={(e: any) => (e.target.src = '/images/image-placeholder.webp')}
+                  />
+                </AspectRatio>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="absolute left-2 top-[28px]" />
+          <CarouselNext className="absolute right-2 top-[28px]" />
+        </Carousel>
+        <CardFooter className="p-6">
+          <AddPhoto project={project} />
         </CardFooter>
       </Card>
     </div>
