@@ -4,13 +4,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import {
   CandlestickChart,
-  CirclePlus,
   DatabaseZap,
   Flame,
   LayoutDashboard,
   LucideProps,
   Menu,
-  TreePine,
+  SquarePlus,
+  Trees,
   Trophy,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -47,7 +47,7 @@ export function MainNavigation({ children }: { children: React.ReactNode }) {
     },
     {
       count: totalProjects,
-      icon: TreePine,
+      icon: Trees,
       label: 'Projects',
       url: '/projects',
     },
@@ -71,8 +71,8 @@ export function MainNavigation({ children }: { children: React.ReactNode }) {
     },
     {
       count: null,
-      icon: CirclePlus,
-      label: 'Create',
+      icon: SquarePlus,
+      label: 'New Project',
       url: '/create',
     },
     {

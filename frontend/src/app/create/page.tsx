@@ -4,7 +4,7 @@ import { CreateProject } from '@/components/shared/create-project';
 export default function Create() {
   return (
     <>
-      <Breadcrumbs layers={['Home', 'Create']} />
+      <Breadcrumbs layers={['Home', 'New Project']} />
       <CreateProject />
     </>
   );
