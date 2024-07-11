@@ -18,7 +18,7 @@ const LAYERS: PageLayer[] = [
   { label: 'Dashboard', url: '/dashboard' },
   { label: 'Projects', url: '/projects' },
   { label: 'Marketplace', url: '/marketplace' },
-  { label: 'Offset', url: '/offset' },
+  { label: 'Burn', url: '/offset' },
   { label: 'Leaderboard', url: '/leaderboard' },
   { label: 'Create', url: '/create' },
   { label: 'Mint', url: '/mint' },

@@ -60,7 +60,7 @@ export function MainNavigation({ children }: { children: React.ReactNode }) {
     {
       count: null,
       icon: Flame,
-      label: 'Offset',
+      label: 'Burn',
       url: '/offset',
     },
     {
