@@ -339,26 +339,28 @@ export function ProjectInfo({
           </CardTitle>
           {project.photoUrls.length === 0 && <div>No photo provided.</div>}
         </CardContent>
-        <Carousel className="ml-4 mr-4">
-          <CarouselContent>
-            {project.photoUrls.map((photoUrl, index) => (
-              <CarouselItem key={index}>
-                <AspectRatio ratio={16 / 9} className="rounded-md overflow-hidden mt-1">
-                  <div className="animate-pulse dark:bg-gray-600 bg-gray-300 h-full w-full absolute -z-10"></div>
-                  <img
-                    className="w-full z-10"
-                    style={{ transform: 'translate(-50%, -50%)', top: '50%', left: '50%', position: 'absolute' }}
-                    src={`https://ipfs.io/ipfs/${photoUrl.replace('ipfs://', '')}`}
-                    alt={`project photo ${index}`}
-                    onError={(e: any) => (e.target.src = '/images/image-placeholder.webp')}
-                  />
-                </AspectRatio>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="absolute left-2 top-[28px]" />
-          <CarouselNext className="absolute right-2 top-[28px]" />
-        </Carousel>
+        {project.photoUrls.length > 0 && (
+          <Carousel className="ml-4 mr-4">
+            <CarouselContent>
+              {project.photoUrls.map((photoUrl, index) => (
+                <CarouselItem key={index}>
+                  <AspectRatio ratio={16 / 9} className="rounded-md overflow-hidden mt-1">
+                    <div className="animate-pulse dark:bg-gray-600 bg-gray-300 h-full w-full absolute -z-10"></div>
+                    <img
+                      className="w-full z-10"
+                      style={{ transform: 'translate(-50%, -50%)', top: '50%', left: '50%', position: 'absolute' }}
+                      src={`https://ipfs.io/ipfs/${photoUrl.replace('ipfs://', '')}`}
+                      alt={`project photo ${index}`}
+                      onError={(e: any) => (e.target.src = '/images/image-placeholder.webp')}
+                    />
+                  </AspectRatio>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="absolute left-2 top-[28px]" />
+            <CarouselNext className="absolute right-2 top-[28px]" />
+          </Carousel>
+        )}
         <CardFooter className="p-6">
           <AddPhoto project={project} />
         </CardFooter>
