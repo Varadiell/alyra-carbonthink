@@ -1,8 +1,8 @@
 {
   "ProjectManagerModule": {
     "tco2_owner_address": "0x9de68f12bdf4c31b0507CfDFb80cDBF365952544",
-    "tco2_royalties_address": "0x9de68f12bdf4c31b0507CfDFb80cDBF365952544",
+    "tco2_royalties_address": "0xe2ab0172FD4214e10E1E50375D97b71a6Bd134f3",
     "project_manager_owner_address": "0x9de68f12bdf4c31b0507CfDFb80cDBF365952544",
-    "project_manager_security_fund_address": "0x9de68f12bdf4c31b0507CfDFb80cDBF365952544"
+    "project_manager_security_fund_address": "0xefE6551Ce162a19B538C72923266Eb168230b349"
   }
 }
