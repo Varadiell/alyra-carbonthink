@@ -4,9 +4,10 @@ import Link from 'next/link';
 export default function Home() {
   return (
     <>
-      <section className="w-full py-12 md:py-24">
+      <img className="block lg:hidden h-80 w-80 self-center" src="/images/carbonthink_main_logo.png" />
+      <section className="w-full p-0 mt-0 md:py-12 lg:py-24">
         <div className="container">
-          <Leaf className="hidden lg:block float-right h-60 w-60 text-green-300 -z-20" />
+          <img className="hidden lg:block float-right h-60 w-60" src="/images/carbonthink_main_logo.png" />
           <div className="flex flex-col justify-center space-y-4">
             <div className="space-y-2 text-center lg:text-left">
               <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
