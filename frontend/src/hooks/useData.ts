@@ -117,7 +117,12 @@ export function useData(): DataType {
     },
   });
 
-  const { data: accountTotalBalance } = useReadContract({
+  function fetchUserData() {
+    refetchAccountTotalBalance();
+    refetchAccountTotalBurnBalance();
+  }
+
+  const { data: accountTotalBalance, refetch: refetchAccountTotalBalance } = useReadContract({
     ...tco2Contract,
     args: [accountAddress ?? '0x'],
     chainId,
@@ -129,7 +134,7 @@ export function useData(): DataType {
     },
   });
 
-  const { data: accountTotalBurnBalance } = useReadContract({
+  const { data: accountTotalBurnBalance, refetch: refetchAccountTotalBurnBalance } = useReadContract({
     ...tco2Contract,
     args: [accountAddress ?? '0x'],
     chainId,
@@ -248,6 +253,7 @@ export function useData(): DataType {
       totalSupply,
     },
     fetchAllProjectData,
+    fetchUserData,
     fetchProjectsPage,
     refetchTotalProjects,
   };

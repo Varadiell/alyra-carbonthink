@@ -35,6 +35,7 @@ type PageType = {
 export function MainNavigation({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const {
+    account: { totalBalance },
     data: { eventLogs, tco2EventLogs, totalProjects },
   } = useContext(DataContext);
 
@@ -58,7 +59,7 @@ export function MainNavigation({ children }: { children: React.ReactNode }) {
       url: '/marketplace',
     },
     {
-      count: null,
+      count: totalBalance || null,
       icon: Flame,
       label: 'Burn',
       url: '/offset',

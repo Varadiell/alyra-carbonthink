@@ -43,6 +43,7 @@ export interface DataType {
     totalSupply: number | undefined;
   };
   fetchAllProjectData: (projectId: number) => void;
+  fetchUserData: () => void;
   fetchProjectsPage: (page: number) => void;
   refetchTotalProjects: () => void;
 }
@@ -73,6 +74,7 @@ export const DataContext = createContext<DataType>({
     totalSupply: undefined,
   },
   fetchAllProjectData: () => undefined,
+  fetchUserData: () => undefined,
   fetchProjectsPage: () => undefined,
   refetchTotalProjects: () => undefined,
 });
