@@ -117,6 +117,30 @@ export function useData(): DataType {
     },
   });
 
+  const { data: accountTotalBalance } = useReadContract({
+    ...tco2Contract,
+    args: [accountAddress ?? '0x'],
+    chainId,
+    functionName: 'totalBalanceOf',
+    query: {
+      enabled: !!accountAddress,
+      refetchInterval: 20_000,
+      select: (totalBalanceOf: bigint) => (totalBalanceOf != null ? Number(totalBalanceOf) : undefined),
+    },
+  });
+
+  const { data: accountTotalBurnBalance } = useReadContract({
+    ...tco2Contract,
+    args: [accountAddress ?? '0x'],
+    chainId,
+    functionName: 'totalBurnBalanceOf',
+    query: {
+      enabled: !!accountAddress,
+      refetchInterval: 20_000,
+      select: (totalBurnBalanceOf: bigint) => (totalBurnBalanceOf != null ? Number(totalBurnBalanceOf) : undefined),
+    },
+  });
+
   const { data: projectTotalSupply } = useReadContract({
     ...tco2Contract,
     args: [BigInt(projectIdToFetch ?? 0)],
@@ -202,6 +226,8 @@ export function useData(): DataType {
     account: {
       address: accountAddress,
       isConnected,
+      totalBalance: accountTotalBalance,
+      totalBurnBalance: accountTotalBurnBalance,
     },
     chainId,
     contracts: {
