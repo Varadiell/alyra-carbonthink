@@ -107,7 +107,7 @@ export function ProjectInfo({
         <div className="animate-pulse dark:bg-gray-600 bg-gray-300 h-full w-full absolute -z-10"></div>
         <img
           className="min-h-full min-w-full object-center object-cover z-10"
-          src={`https://ipfs.io/ipfs/${project.image.replace('ipfs://', '')}`}
+          src={`https://ipfs.io/ipfs/${project.image.replace('https://ipfs.io/ipfs/', '').replace('ipfs://', '')}`}
           alt={`image project ${project.id}`}
           onError={(e: any) => (e.target.src = '/images/image-placeholder.webp')}
         />
@@ -349,7 +349,7 @@ export function ProjectInfo({
                     <img
                       className="w-full z-10"
                       style={{ transform: 'translate(-50%, -50%)', top: '50%', left: '50%', position: 'absolute' }}
-                      src={`https://ipfs.io/ipfs/${photoUrl.replace('ipfs://', '')}`}
+                      src={`https://ipfs.io/ipfs/${photoUrl.replace('https://ipfs.io/ipfs/', '').replace('ipfs://', '')}`}
                       alt={`project photo ${index}`}
                       onError={(e: any) => (e.target.src = '/images/image-placeholder.webp')}
                     />

@@ -77,7 +77,7 @@ export function AddPhoto({ project }: { project: Project }) {
         <DialogFooter>
           <Button
             className="w-full"
-            disabled={!photoToAdd.includes('ipfs://') || isPending || !isConnected}
+            disabled={photoToAdd.length === 0 || isPending || !isConnected}
             onClick={() => addPhoto()}
           >
             {isPending ? <LoaderCircle className="animate-spin" /> : <>Save changes</>}

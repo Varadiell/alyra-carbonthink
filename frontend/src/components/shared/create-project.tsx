@@ -150,7 +150,7 @@ export function CreateProject() {
                 maxLength={100}
                 minLength={8}
                 onChange={(event) => setImage(event.currentTarget.value)}
-                placeholder="ipfs://..."
+                placeholder="https://ipfs.io/ipfs/..."
                 required={true}
                 type="text"
                 value={image}

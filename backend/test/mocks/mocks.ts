@@ -229,17 +229,17 @@ const descriptions = [
 ];
 
 const images = [
-  'QmZpq4777YFLQkZpxnckC7a6pvhN7YdfxDHmTkkSPPLp4y',
-  'QmdMWCCcJr9oZpw8LCSLcUyGgjJqvjmTpNC1eHYerPh6Yp',
-  'QmamoYQYNQsXQJtazUm8Xgc1ev5hvidhXmD43zfBE55WL3',
-  'QmNiYNw5wQKT1qCn44FcmnTXY9xcpdHUbJzLhUtoH3Acyj',
-  'QmXwQx49gcCaZWjz759vpbRmvvxPZRVD24qAdi9qRS3tSM',
-  'QmPk9LtmafgD8xhN2JMLeTeY5N4pVTmAfQEYi5rGLTfFgL',
-  'QmQVMSUD4KJZbHu1AbesZwzVdqsRzguhs9BioorFZNyZb2',
-  'QmWnz2BWFxQbQCXy29VCxoBDXvcERYzucjG1zScYFUPpHK',
-  'QmbWH3nCnFGgemx7bHDdgtF83rGB8WrXcHKLuZaNPTLhwu',
-  'QmQQQr6HrwmBdWcJ1dTzH4prU8uas38bQwE8auMvMhQz2B',
-].map((image) => `ipfs://${image}`);
+  'QmZpq4777YFLQkZpxnckC7a6pvhN7YdfxDHmTkkSPPLp4y?filename=bamboo.webp',
+  'QmdMWCCcJr9oZpw8LCSLcUyGgjJqvjmTpNC1eHYerPh6Yp?filename=butterfly.webp',
+  'QmamoYQYNQsXQJtazUm8Xgc1ev5hvidhXmD43zfBE55WL3?filename=green-forest.webp',
+  'QmNiYNw5wQKT1qCn44FcmnTXY9xcpdHUbJzLhUtoH3Acyj?filename=lake.webp',
+  'QmXwQx49gcCaZWjz759vpbRmvvxPZRVD24qAdi9qRS3tSM?filename=land.webp',
+  'QmPk9LtmafgD8xhN2JMLeTeY5N4pVTmAfQEYi5rGLTfFgL?filename=leaves.webp',
+  'QmQVMSUD4KJZbHu1AbesZwzVdqsRzguhs9BioorFZNyZb2?filename=plant.webp',
+  'QmWnz2BWFxQbQCXy29VCxoBDXvcERYzucjG1zScYFUPpHK?filename=plants.webp',
+  'QmbWH3nCnFGgemx7bHDdgtF83rGB8WrXcHKLuZaNPTLhwu?filename=preserve.webp',
+  'QmQQQr6HrwmBdWcJ1dTzH4prU8uas38bQwE8auMvMhQz2B?filename=trefle.webp',
+].map((image) => `https://ipfs.io/ipfs/${image}`);
 
 const continents = ['Africa', 'Antarctica', 'Asia', 'Europe', 'North America', 'Oceania', 'South America'];
 

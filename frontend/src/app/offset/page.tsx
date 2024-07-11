@@ -19,6 +19,7 @@ export default function Offset() {
     account: { address, totalBalance, totalBurnBalance },
     chainId,
     contracts: { tco2Contract },
+    data: { totalProjects },
     fetchUserData,
   } = useContext(DataContext);
   const { isConnected, isPending, writeContract } = useContract(() => {
@@ -57,7 +58,7 @@ export default function Offset() {
   }
 
   function onClickProjectId(adjustment: number) {
-    setTargetProjectId(Math.max(0, targetProjectId + adjustment));
+    setTargetProjectId(Math.max(0, Math.min(targetProjectId + adjustment, (totalProjects ?? 0) - 1)));
     setTokenAmountToBurn(0);
   }
 
@@ -121,6 +122,8 @@ export default function Offset() {
                   <Input
                     className="text-5xl font-bold tracking-tighter border-none h-14 text-center mb-2 [&::-webkit-inner-spin-button]:appearance-none"
                     type="number"
+                    max={(totalProjects ?? 0) - 1}
+                    min={0}
                     value={targetProjectId}
                     onChange={(event) => setTargetProjectId(Number(event.currentTarget.value))}
                   />
@@ -131,6 +134,7 @@ export default function Offset() {
                   size="icon"
                   className="h-8 w-8 shrink-0 rounded-full mb-5"
                   onClick={() => onClickProjectId(1)}
+                  disabled={targetProjectId >= (totalProjects ?? 0) - 1}
                 >
                   <Plus className="h-4 w-4" />
                   <span className="sr-only">Increase</span>

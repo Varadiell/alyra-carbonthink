@@ -77,7 +77,7 @@ export function AddDocument({ project }: { project: Project }) {
         <DialogFooter>
           <Button
             className="w-full"
-            disabled={!documentToAdd.includes('ipfs://') || isPending || !isConnected}
+            disabled={documentToAdd.length === 0 || isPending || !isConnected}
             onClick={() => addDocument()}
           >
             {isPending ? <LoaderCircle className="animate-spin" /> : <>Save changes</>}

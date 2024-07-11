@@ -2,7 +2,7 @@ export const json = JSON.stringify({
   name: 'Bamboo Project 1',
   description: 'Best bamboo project from CarbonThink.',
   external_url: 'https://alyra-carbonthink.vercel.app/project/1',
-  image: 'ipfs://bafybeifkvccastjvmile7ovjnuhdahy3gsv2omoppr5zqzlimchwpz4vli/',
+  image: 'ipfs://bafybeifkvccastjvmile7ovjnuhdahy3gsv2omoppr5zqzlimchwpz4vli/', // Outdated, please use "https://ipfs.io/ipfs/" instead.
   attributes: [
     {
       display_type: 'string',

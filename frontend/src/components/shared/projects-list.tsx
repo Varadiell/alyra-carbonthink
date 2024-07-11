@@ -57,7 +57,7 @@ export function ProjectsList() {
                     <img
                       className="w-full z-10"
                       style={{ transform: 'translate(-50%, -50%)', top: '50%', left: '50%', position: 'absolute' }}
-                      src={`https://ipfs.io/ipfs/${project.image.replace('ipfs://', '')}`}
+                      src={`https://ipfs.io/ipfs/${project.image.replace('https://ipfs.io/ipfs/', '').replace('ipfs://', '')}`}
                       alt={`image project ${project.id}`}
                       onError={(e: any) => (e.target.src = '/images/image-placeholder.webp')}
                     />
