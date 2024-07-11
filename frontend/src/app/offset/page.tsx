@@ -23,11 +23,13 @@ export default function Offset() {
     fetchUserData,
   } = useContext(DataContext);
   const { isConnected, isPending, writeContract } = useContract(() => {
-    jsConfetti.addConfetti({
-      emojis: ['🔥'],
-      emojiSize: 30,
-      confettiNumber: Math.min(tokenAmountToBurn, 500), // 500 confettis maximum.
-    });
+    if (document) {
+      jsConfetti.addConfetti({
+        emojis: ['🔥'],
+        emojiSize: 30,
+        confettiNumber: Math.min(tokenAmountToBurn, 500), // 500 confettis maximum.
+      });
+    }
     setTokenAmountToBurn(0);
     refetchBalanceOfUserForProject();
     fetchUserData();
