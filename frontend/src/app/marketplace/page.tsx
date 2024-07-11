@@ -5,7 +5,6 @@ import { DataContext } from '@/contexts/data-provider';
 import Link from 'next/link';
 import { useContext } from 'react';
 
-// TODO: change opensea collection link before the end!
 export default function Marketplace() {
   const {
     contracts: { tco2Contract },
@@ -21,7 +20,7 @@ export default function Marketplace() {
       <div className="text-2xl font-semibold leading-none tracking-tight">Get your TCO2 tokens!</div>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <Link
-          href={`https://testnets.opensea.io/fr/collection/carbonthink-tco2-8`}
+          href={`https://testnets.opensea.io/fr/assets/base-sepolia/${tco2Contract?.address}/`}
           className="group relative overflow-hidden rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl"
           prefetch={false}
           target="_blank"
