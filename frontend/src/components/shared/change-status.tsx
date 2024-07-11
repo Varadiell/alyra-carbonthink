@@ -69,14 +69,24 @@ export function ChangeStatus({ project }: { project: Project }) {
         </DialogHeader>
         <div className="grid gap-4">
           <div className="grid grid-rows-2 items-center mb-5">
-            <Label htmlFor="status">Status</Label>
+            <Label htmlFor="status">
+              Status (current:{' '}
+              {project.status === 0
+                ? 'Canceled'
+                : project.status === 1
+                  ? 'Pending'
+                  : project.status === 2
+                    ? 'Active'
+                    : 'Completed'}
+              )
+            </Label>
             <Select required={true} value={newStatus} onValueChange={(value) => setNewStatus(value)}>
               <SelectTrigger id="status" className="w-full">
                 <SelectValue placeholder="Select new status" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectLabel>Status</SelectLabel>
+                  <SelectLabel>New status</SelectLabel>
                   <SelectItem value="0">Canceled</SelectItem>
                   {project.status !== 1 && <SelectItem value="1">Pending</SelectItem>}
                   {project.status !== 2 && <SelectItem value="2">Active</SelectItem>}
