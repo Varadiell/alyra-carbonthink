@@ -242,7 +242,7 @@ export function ProjectInfo({
                 <TableRow>
                   <TableCell className="flex flex-row items-center">
                     <CalendarClock className="h-4 w-4 mr-2" />
-                    Total Expected
+                    Remaining Expected
                   </TableCell>
                   <TableCell className="text-end">
                     {Math.max(project.data.expectedCo2Tons - totalSupply - totalBurnSupply, 0)}
