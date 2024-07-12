@@ -10,7 +10,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 export default function Project() {
   const params = useParams<{ projectId: string }>();
   const {
-    data: { projects, projectTotalBurnSupply, projectTotalSupply },
+    data: { projects, projectTotalBurnSupply, projectTotalSupply, totalProjects },
     fetchAllProjectData,
   } = useContext(DataContext);
   const projectId = Number(params.projectId);
@@ -25,7 +25,7 @@ export default function Project() {
       {!project ? (
         <Breadcrumbs layers={['Home', 'Projects', '...']} />
       ) : (
-        <Breadcrumbs layers={['Home', 'Projects', project.name]} />
+        <Breadcrumbs layers={['Home', 'Projects', project.name]} projectId={project.id} totalProjects={totalProjects} />
       )}
       {project && projectTotalSupply != null && projectTotalBurnSupply != null ? (
         <ProjectInfo project={project} totalSupply={projectTotalSupply} totalBurnSupply={projectTotalBurnSupply} />

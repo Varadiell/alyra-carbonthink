@@ -30,7 +30,20 @@ function getPageLayers(labels: string[]): PageLayer[] {
   return labels.map((label) => LAYERS.find((layer) => layer.label === label) ?? { label, url: '' });
 }
 
-export function Breadcrumbs({ layers = [] }: { layers: string[] }) {
+function calculatePage(totalProjects = 0, projectId = 0) {
+  const PAGE_SIZE = 10;
+  return Math.floor((totalProjects - projectId - 1) / PAGE_SIZE) + 1;
+}
+
+export function Breadcrumbs({
+  layers = [],
+  projectId,
+  totalProjects,
+}: {
+  layers: string[];
+  projectId?: number;
+  totalProjects?: number;
+}) {
   return (
     <Breadcrumb>
       <BreadcrumbList>
@@ -41,7 +54,13 @@ export function Breadcrumbs({ layers = [] }: { layers: string[] }) {
               <BreadcrumbPage>{layer.label}</BreadcrumbPage>
             ) : (
               <BreadcrumbItem>
-                <Link href={layer.url}>{layer.label}</Link>
+                <Link
+                  href={
+                    layer.url === '/projects' ? `/projects?p=${calculatePage(totalProjects, projectId)}` : layer.url
+                  }
+                >
+                  {layer.label}
+                </Link>
               </BreadcrumbItem>
             )}
           </Fragment>
