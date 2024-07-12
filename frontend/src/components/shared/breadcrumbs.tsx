@@ -32,7 +32,7 @@ function getPageLayers(labels: string[]): PageLayer[] {
 
 function calculatePage(totalProjects = 0, projectId = 0) {
   const PAGE_SIZE = 10;
-  return Math.min(Math.floor((totalProjects - projectId - 1) / PAGE_SIZE) + 1), 1;
+  return Math.max(Math.floor((totalProjects - projectId - 1) / PAGE_SIZE) + 1, 1);
 }
 
 export function Breadcrumbs({
