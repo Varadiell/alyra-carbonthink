@@ -194,7 +194,13 @@ export default function Offset() {
                 </div>
                 <div className="flex flex-col justify-center align-middle items-center gap-3">
                   <div className="flex flex-row items-center gap-2 text-4xl">
-                    {balanceOfUserForProject} <Coins className="h-7 w-7" />
+                    {balanceOfUserForProject != null ? (
+                      <>
+                        {balanceOfUserForProject} <Coins className="h-7 w-7" />
+                      </>
+                    ) : (
+                      <Skeleton className="w-[100px] h-[40px]" />
+                    )}
                   </div>
                   <div className="text-center">Available to burn, on this project.</div>
                 </div>
