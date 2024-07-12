@@ -27,11 +27,12 @@ const ProjectManagerModule = buildModule('ProjectManagerModule', (module) => {
   // --- PROJECTS RANDOMIZATION ---
   const NB_PROJECTS = 80;
   for (let i = 0; i < NB_PROJECTS; i++) {
+    const ID = String(i).padStart(5, '0');
     // === Generate randomized project.
     const mockProject = create_x(i);
     const callCreate = module.call(projectManager, 'create', [objectToTuple(mockProject)], {
       after: [callTransferOwner],
-      id: `a_create_${i}`,
+      id: `deploy_${ID}_1`,
     });
     // === Set status.
     let callSetStatus: any;
@@ -41,7 +42,7 @@ const ProjectManagerModule = buildModule('ProjectManagerModule', (module) => {
     if (statusToSet !== 1) {
       callSetStatus = module.call(projectManager, 'setStatus', [BigInt(i), BigInt(statusToSet)], {
         after: [callCreate],
-        id: `b_setStatus_${i}`,
+        id: `deploy_${ID}_2`,
       });
     }
     // === First token mint for active projects.
@@ -56,7 +57,7 @@ const ProjectManagerModule = buildModule('ProjectManagerModule', (module) => {
           [BigInt(i), BigInt(nbTokensToMint), generateMetadataBase64(mockProject)],
           {
             after: [callSetStatus],
-            id: `c_firstMint_${i}`,
+            id: `deploy_${ID}_3`,
           },
         );
       }
@@ -68,7 +69,7 @@ const ProjectManagerModule = buildModule('ProjectManagerModule', (module) => {
         const nbTokensToMint = getRandomNumber(1, Number(mockProject.data.expectedCo2Tons));
         module.call(projectManager, 'mintTokens', [BigInt(i), BigInt(nbTokensToMint), ''], {
           after: [callMintTokens],
-          id: `d_secondMint_${i}`,
+          id: `deploy_${ID}_4`,
         });
       }
     }
