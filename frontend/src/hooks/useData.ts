@@ -204,7 +204,11 @@ export function useData(): DataType {
   }
 
   const PROJECTS_PAGE_SIZE = 10;
-  const { data: projectsBatch, refetch: refetchProjectsBatch } = useReadContracts({
+  const {
+    data: projectsBatch,
+    refetch: refetchProjectsBatch,
+    isLoading: projectsBatchIsLoading,
+  } = useReadContracts({
     contracts: Array.from({ length: PROJECTS_PAGE_SIZE }).map((_, index) => ({
       ...projectManagerContract,
       args: [BigInt(Number(totalProjects ?? 0) - index - ((projectsPage ?? 1) - 1) * PROJECTS_PAGE_SIZE - 1)],
@@ -233,7 +237,7 @@ export function useData(): DataType {
     account: {
       address: accountAddress,
       isConnected,
-      isOwner: accountAddress === projectManagerOwner,
+      isOwner: accountAddress === projectManagerOwner && accountAddress != null,
       totalBalance: accountTotalBalance,
       totalBurnBalance: accountTotalBurnBalance,
     },
@@ -254,6 +258,9 @@ export function useData(): DataType {
       totalProjects,
       totalSecurityFund,
       totalSupply,
+    },
+    queries: {
+      projectsBatchIsLoading,
     },
     fetchAllProjectData,
     fetchUserData,

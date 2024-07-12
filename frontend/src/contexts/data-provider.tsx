@@ -43,6 +43,9 @@ export interface DataType {
     totalSecurityFund: number | undefined;
     totalSupply: number | undefined;
   };
+  queries: {
+    projectsBatchIsLoading: boolean;
+  };
   fetchAllProjectData: (projectId: number) => void;
   fetchUserData: () => void;
   fetchProjectsPage: (page: number) => void;
@@ -74,6 +77,9 @@ export const DataContext = createContext<DataType>({
     totalProjects: undefined,
     totalSecurityFund: undefined,
     totalSupply: undefined,
+  },
+  queries: {
+    projectsBatchIsLoading: false,
   },
   fetchAllProjectData: () => undefined,
   fetchUserData: () => undefined,
