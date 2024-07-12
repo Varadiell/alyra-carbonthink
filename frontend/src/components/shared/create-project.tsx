@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { projectManager } from '@/contracts/projectManager.contract';
 import { useContract } from '@/hooks/useContract';
 import { useData } from '@/hooks/useData';
-import { LoaderCircle } from 'lucide-react';
+import { LoaderCircle, SquarePlus } from 'lucide-react';
 import { useState } from 'react';
 import { Separator } from '@/components/ui/separator';
 
@@ -103,7 +103,9 @@ export function CreateProject() {
     <form className="flex-row gap-6" onSubmit={submitAddProposal}>
       <Card>
         <CardHeader className="bg-muted">
-          <CardTitle>Create a new project</CardTitle>
+          <CardTitle className="flex flex-row gap-2">
+            <SquarePlus /> Create a new project
+          </CardTitle>
           <CardDescription>As the admin, you can create new projects.</CardDescription>
         </CardHeader>
         <CardContent className="pt-6">
@@ -124,7 +126,11 @@ export function CreateProject() {
                 value={projectHolder}
               />
             </div>
-            <Separator className="sm:col-span-2" />
+          </div>
+        </CardContent>
+        <Separator className="sm:col-span-2" />
+        <CardContent className="pt-6">
+          <div className="grid gap-5 sm:grid-cols-2">
             <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight sm:col-span-2">Description</h3>
             <div className="grid gap-3 sm:col-start-1">
               <Label htmlFor="name">Name</Label>
@@ -200,7 +206,11 @@ export function CreateProject() {
                 value={duration || ''}
               />
             </div>
-            <Separator className="sm:col-span-2" />
+          </div>
+        </CardContent>
+        <Separator className="sm:col-span-2" />
+        <CardContent className="pt-6">
+          <div className="grid gap-5 sm:grid-cols-2">
             <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight sm:col-span-2">Location</h3>
             <div className="grid gap-3">
               <Label htmlFor="continent">Continent</Label>
@@ -307,7 +317,11 @@ export function CreateProject() {
                 value={coordinates}
               />
             </div>
-            <Separator className="sm:col-span-2" />
+          </div>
+        </CardContent>
+        <Separator className="sm:col-span-2" />
+        <CardContent className="pt-6">
+          <div className="grid gap-5 sm:grid-cols-2">
             <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight sm:col-span-2">Impact</h3>
             <div className="grid gap-3 sm:col-start-1">
               <Label htmlFor="ares">Ares {!!ares && <>({ares / 100} hectares)</>} </Label>
