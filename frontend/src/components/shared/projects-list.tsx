@@ -8,6 +8,7 @@ import { useContext, useEffect } from 'react';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Calendar, Clock, LandPlot, Leaf, MapPin } from 'lucide-react';
 import { ProjectActivityBadge } from '@/components/shared/project-activity-badge';
+import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 
 const PAGE_SIZE = 10;
@@ -49,6 +50,9 @@ export function ProjectsList() {
                   <CardDescription>{project.description}</CardDescription>
                 </CardHeader>
                 <CardContent>
+                  <div className="relative top-[35px] left-[15px] z-20 float-start">
+                    <Badge variant="secondary">#{project.id}</Badge>
+                  </div>
                   <div className="relative top-[35px] right-[10px] z-20 float-end">
                     <ProjectActivityBadge project={project} />
                   </div>

@@ -101,6 +101,9 @@ export function ProjectInfo({
         </CardFooter>
       </Card>
       <AspectRatio ratio={16 / 9} className="rounded-md overflow-hidden">
+        <div className="absolute top-[15px] left-[15px] z-20 float-start">
+          <Badge variant="secondary">#{project.id}</Badge>
+        </div>
         <div className="absolute top-[15px] right-[15px] z-20 float-end">
           <ProjectActivityBadge project={project} />
         </div>
