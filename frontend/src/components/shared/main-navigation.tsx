@@ -81,18 +81,6 @@ export function MainNavigation({ children }: { children: React.ReactNode }) {
           },
         ]
       : []),
-    {
-      count: eventLogs?.length,
-      icon: DatabaseZap,
-      label: 'Events',
-      url: '/events',
-    },
-    {
-      count: tco2EventLogs?.length,
-      icon: DatabaseZap,
-      label: 'Events TCO2',
-      url: '/eventstco2',
-    },
   ];
 
   return (

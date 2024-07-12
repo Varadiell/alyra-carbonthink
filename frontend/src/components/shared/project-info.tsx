@@ -45,6 +45,8 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import Link from 'next/link';
 import { DataContext } from '@/contexts/data-provider';
 import { useContext } from 'react';
+import { EventsList } from './events-list';
+import { zeroAddress } from 'viem';
 
 const chartConfig = {
   tokens: {
@@ -75,6 +77,7 @@ export function ProjectInfo({
 }) {
   const {
     account: { isOwner },
+    data: { tco2EventLogs },
   } = useContext(DataContext);
 
   const chartData = [
@@ -355,7 +358,7 @@ export function ProjectInfo({
           {project.photoUrls.length === 0 && <div>No photo provided.</div>}
         </CardContent>
         {project.photoUrls.length > 0 && (
-          <Carousel className="ml-4 mr-4">
+          <Carousel className="ml-4 mr-4 mb-4">
             <CarouselContent>
               {project.photoUrls.map((photoUrl, index) => (
                 <CarouselItem key={index}>
@@ -382,6 +385,16 @@ export function ProjectInfo({
           </CardFooter>
         )}
       </Card>
+      <div className="sm:col-span-2">
+        <EventsList
+          eventLogs={tco2EventLogs
+            ?.filter(
+              (event) =>
+                event.eventName === 'TransferSingle' && event.args.from === zeroAddress && event.args.id === project.id,
+            )
+            .slice(0, 5)}
+        />
+      </div>
     </div>
   );
 }

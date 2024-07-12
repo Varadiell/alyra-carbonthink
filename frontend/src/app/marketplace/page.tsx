@@ -1,13 +1,16 @@
 'use client';
 
 import { Breadcrumbs } from '@/components/shared/breadcrumbs';
+import { EventsList } from '@/components/shared/events-list';
 import { DataContext } from '@/contexts/data-provider';
-import Link from 'next/link';
 import { useContext } from 'react';
+import { zeroAddress } from 'viem';
+import Link from 'next/link';
 
 export default function Marketplace() {
   const {
     contracts: { tco2Contract },
+    data: { tco2EventLogs },
   } = useContext(DataContext);
 
   if (!tco2Contract?.address) {
@@ -66,6 +69,14 @@ export default function Marketplace() {
           </div>
         </Link>
       </div>
+      <EventsList
+        eventLogs={tco2EventLogs
+          ?.filter(
+            (event) =>
+              event.eventName === 'TransferSingle' && event.args.from !== zeroAddress && event.args.to !== zeroAddress,
+          )
+          .slice(0, 5)}
+      />
     </>
   );
 }

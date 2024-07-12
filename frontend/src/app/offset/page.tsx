@@ -11,6 +11,8 @@ import { useContext, useState } from 'react';
 import { useReadContract } from 'wagmi';
 import { Skeleton } from '@/components/ui/skeleton';
 import JSConfetti from 'js-confetti';
+import { EventsList } from '@/components/shared/events-list';
+import { zeroAddress } from 'viem';
 
 export default function Offset() {
   const [targetProjectId, setTargetProjectId] = useState<number>(0);
@@ -19,7 +21,7 @@ export default function Offset() {
     account: { address, isConnected, totalBalance, totalBurnBalance },
     chainId,
     contracts: { tco2Contract },
-    data: { totalProjects },
+    data: { tco2EventLogs, totalProjects },
     fetchUserData,
   } = useContext(DataContext);
   const { isPending, writeContract } = useContract(() => {
@@ -231,6 +233,11 @@ export default function Offset() {
             </CardContent>
           )}
         </Card>
+        <EventsList
+          eventLogs={tco2EventLogs
+            ?.filter((event) => event.eventName === 'TransferSingle' && event.args.to === zeroAddress)
+            .slice(0, 5)}
+        />
       </div>
     </>
   );
