@@ -19,55 +19,57 @@ const ProjectManagerModule = buildModule('ProjectManagerModule', (module) => {
     tco2,
   ]);
   // Transfer TCO2 ownership to the ProjectManager contract.
-  module.call(tco2, 'transferOwnership', [projectManager], { id: 'TransferTco2Ownership' });
+  const callTransferOwner = module.call(tco2, 'transferOwnership', [projectManager], {
+    after: [projectManager],
+    id: 'TransferTco2Ownership',
+  });
 
   // --- PROJECTS RANDOMIZATION ---
-  const projects = [];
-  const NB_PROJECTS = 100;
-  // Generate randomized projects.
+  const NB_PROJECTS = 80;
   for (let i = 0; i < NB_PROJECTS; i++) {
+    // === Generate randomized project.
     const mockProject = create_x(i);
-    projects[i] = mockProject;
-    module.call(projectManager, 'create', [objectToTuple(mockProject)], { id: `a_create_${i}` });
-  }
-  // Set statuses.
-  for (let i = 0; i < NB_PROJECTS; i++) {
+    const callCreate = module.call(projectManager, 'create', [objectToTuple(mockProject)], {
+      after: [callTransferOwner],
+      id: `a_create_${i}`,
+    });
+    // === Set status.
+    let callSetStatus: any;
     let statusToSet = getRandomNumber(0, 99);
     // 10% canceled - 20% pending - 60% live - 10% complete
     statusToSet = statusToSet < 10 ? 0 : statusToSet < 30 ? 1 : statusToSet < 90 ? 2 : 3;
     if (statusToSet !== 1) {
-      module.call(projectManager, 'setStatus', [BigInt(i), BigInt(statusToSet)], { id: `b_setStatus_${i}` });
-      if ([0, 3].includes(statusToSet)) {
-        projects[i] = null; // Set to null to prevent minting on next step.
-      }
+      callSetStatus = module.call(projectManager, 'setStatus', [BigInt(i), BigInt(statusToSet)], {
+        after: [callCreate],
+        id: `b_setStatus_${i}`,
+      });
     }
-  }
-  // First token mint for active projects.
-  for (let i = 0; i < NB_PROJECTS; i++) {
-    const project = projects[i];
-    if (project != null) {
+    // === First token mint for active projects.
+    let callMintTokens: any;
+    if (!!callSetStatus && statusToSet === 2) {
       const canFirstMint = getRandomNumber(0, 3) !== 0; // 1/4 not minted
       if (canFirstMint) {
-        const nbTokensToMint = getRandomNumber(50, 1000);
-        module.call(
+        const nbTokensToMint = getRandomNumber(1, Number(mockProject.data.expectedCo2Tons));
+        callMintTokens = module.call(
           projectManager,
           'mintTokens',
-          [BigInt(i), BigInt(nbTokensToMint), generateMetadataBase64(project)],
+          [BigInt(i), BigInt(nbTokensToMint), generateMetadataBase64(mockProject)],
           {
+            after: [callSetStatus],
             id: `c_firstMint_${i}`,
           },
         );
       }
     }
-  }
-  // Second token mint for active projects that were first minted.
-  for (let i = 0; i < NB_PROJECTS; i++) {
-    const project = projects[i];
-    if (project != null) {
+    // === Second token mint for active projects that were first minted.
+    if (callMintTokens) {
       const canMintAgain = Boolean(getRandomNumber(0, 1)); // 1/2 not re-minted
       if (canMintAgain) {
-        const nbTokensToMint = getRandomNumber(50, 1000);
-        module.call(projectManager, 'mintTokens', [BigInt(i), BigInt(nbTokensToMint), ''], { id: `d_secondMint_${i}` });
+        const nbTokensToMint = getRandomNumber(1, Number(mockProject.data.expectedCo2Tons));
+        module.call(projectManager, 'mintTokens', [BigInt(i), BigInt(nbTokensToMint), ''], {
+          after: [callMintTokens],
+          id: `d_secondMint_${i}`,
+        });
       }
     }
   }
