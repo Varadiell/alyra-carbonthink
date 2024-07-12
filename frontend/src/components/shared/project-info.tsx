@@ -387,7 +387,7 @@ export function ProjectInfo({
       </Card>
       <div className="sm:col-span-2">
         <EventsList
-          title="Latests Mints"
+          title="Latest Mints"
           eventLogs={tco2EventLogs
             ?.filter(
               (event) =>

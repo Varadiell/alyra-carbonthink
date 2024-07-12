@@ -9,8 +9,8 @@ export function EventsList({ title, eventLogs = undefined }: { title?: string; e
   return (
     <Card>
       <CardHeader className="bg-muted">
-        <CardTitle>{title || 'Latests Events'}</CardTitle>
-        <CardDescription>List of the latests events that occurred.</CardDescription>
+        <CardTitle>{title || 'Latest Events'}</CardTitle>
+        <CardDescription>List of the latest events that occurred.</CardDescription>
       </CardHeader>
       <CardContent className="p-0 lg:w-[min(calc(100vw-330px-var(--scrollbarwpx)),974px)] md:w-[calc(100vw-254px-var(--scrollbarwpx))] w-[max(calc(100vw-34px-var(--scrollbarwpx)),393px)]">
         <Table>
