@@ -1,6 +1,6 @@
 'use client';
 
-import { LoaderCircle, Minus, Plus, Sparkles } from 'lucide-react';
+import { LoaderCircle, Minus, Plus, Sparkles, TriangleAlert } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Drawer,
@@ -27,7 +27,7 @@ export function MintDrawer({ project }: { project: Project }) {
   const {
     account,
     chainId,
-    data: { projectTotalSupply },
+    data: { projectTotalSupply, projectTotalBurnSupply },
     fetchAllProjectData,
   } = useContext(DataContext);
 
@@ -58,6 +58,11 @@ export function MintDrawer({ project }: { project: Project }) {
     setNbTokensToMint(Math.max(0, Math.min(10000, nbTokensToMint + adjustment)));
   }
 
+  const remainingExpected = Math.max(
+    project.data.expectedCo2Tons - (projectTotalSupply ?? 0) - (projectTotalBurnSupply ?? 0),
+    0,
+  );
+
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
       <DrawerTrigger asChild>
@@ -70,8 +75,13 @@ export function MintDrawer({ project }: { project: Project }) {
           <DrawerHeader>
             <DrawerTitle>TCO2 Mint</DrawerTitle>
             <DrawerDescription>Mint new tokens for the project.</DrawerDescription>
+            {remainingExpected < nbTokensToMint && (
+              <DrawerDescription className="flex flex-row gap-2 text-orange-600 dark:text-orange-400">
+                <TriangleAlert /> You are minting more tokens than the remaining expected number of tokens.
+              </DrawerDescription>
+            )}
           </DrawerHeader>
-          <div className="p-4 pb-0">
+          <div className="p-1 pb-0">
             <div className="flex items-center justify-center space-x-2">
               <Button
                 variant="outline"
