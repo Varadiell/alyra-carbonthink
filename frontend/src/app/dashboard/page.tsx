@@ -132,7 +132,7 @@ export default function Dashboard() {
       {!projectsBatchIsLoading && projects.length > 1 && (
         <>
           <div className="text-2xl font-bold">Latest Projects</div>
-          <Carousel className="md:grid-cols-1 lg:grid-cols-2 rounded-lg overflow-hidden">
+          <Carousel className="md:grid-cols-1 lg:grid-cols-2 rounded-lg overflow-hidden lg:w-[min(calc(100vw-330px-var(--scrollbarwpx)),974px)] md:w-[calc(100vw-254px-var(--scrollbarwpx))] w-[max(calc(100vw-34px-var(--scrollbarwpx)),393px)] self-center">
             <CarouselContent>
               {[...projects]
                 .reverse()
