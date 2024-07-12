@@ -10,7 +10,7 @@ import { Calendar, Clock, LandPlot, Leaf, MapPin } from 'lucide-react';
 import { ProjectActivityBadge } from '@/components/shared/project-activity-badge';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
-import { Skeleton } from '../ui/skeleton';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const PAGE_SIZE = 10;
 
