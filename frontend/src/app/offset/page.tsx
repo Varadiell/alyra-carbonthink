@@ -234,6 +234,7 @@ export default function Offset() {
           )}
         </Card>
         <EventsList
+          title="Latests Burns"
           eventLogs={tco2EventLogs
             ?.filter((event) => event.eventName === 'TransferSingle' && event.args.to === zeroAddress)
             .slice(0, 5)}

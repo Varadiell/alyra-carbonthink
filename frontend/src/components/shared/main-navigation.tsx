@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import {
   CandlestickChart,
+  Coins,
   DatabaseZap,
   Flame,
   LayoutDashboard,
@@ -108,7 +109,10 @@ export function MainNavigation({ children }: { children: React.ReactNode }) {
                   ) : page.count === null ? (
                     <></>
                   ) : (
-                    <Badge className="ml-auto flex h-6 items-center justify-center">{page.count}</Badge>
+                    <Badge className="ml-auto flex h-6 items-center justify-center">
+                      {page.count}
+                      {page.url === '/offset' && <Coins className="h-3 w-3 ml-1" />}
+                    </Badge>
                   )}
                 </Link>
               ))}

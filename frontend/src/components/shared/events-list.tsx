@@ -5,12 +5,12 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { ExternalLink } from 'lucide-react';
 
-export function EventsList({ eventLogs = undefined }: { title?: string; eventLogs: EventLog[] | undefined }) {
+export function EventsList({ title, eventLogs = undefined }: { title?: string; eventLogs: EventLog[] | undefined }) {
   return (
     <Card>
       <CardHeader className="bg-muted">
-        <CardTitle>Latest Events</CardTitle>
-        <CardDescription>List of the latest events that occurred.</CardDescription>
+        <CardTitle>{title || 'Latests Events'}</CardTitle>
+        <CardDescription>List of the latests events that occurred.</CardDescription>
       </CardHeader>
       <CardContent className="p-0 lg:w-[min(calc(100vw-330px),974px)] md:w-[calc(100vw-254px)] w-[max(calc(100vw-34px),393px)]">
         <Table>

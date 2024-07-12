@@ -387,10 +387,13 @@ export function ProjectInfo({
       </Card>
       <div className="sm:col-span-2">
         <EventsList
+          title="Latests Mints"
           eventLogs={tco2EventLogs
             ?.filter(
               (event) =>
-                event.eventName === 'TransferSingle' && event.args.from === zeroAddress && event.args.id === project.id,
+                event.eventName === 'TransferSingle' &&
+                event.args.from === zeroAddress &&
+                Number(event.args.id) === project.id,
             )
             .slice(0, 5)}
         />

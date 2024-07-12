@@ -70,6 +70,7 @@ export default function Marketplace() {
         </Link>
       </div>
       <EventsList
+        title="Latests exchanges"
         eventLogs={tco2EventLogs
           ?.filter(
             (event) =>
