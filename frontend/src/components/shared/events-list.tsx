@@ -12,7 +12,7 @@ export function EventsList({ title, eventLogs = undefined }: { title?: string; e
         <CardTitle>{title || 'Latests Events'}</CardTitle>
         <CardDescription>List of the latests events that occurred.</CardDescription>
       </CardHeader>
-      <CardContent className="p-0 lg:w-[min(calc(100vw-330px),974px)] md:w-[calc(100vw-254px)] w-[max(calc(100vw-34px),393px)]">
+      <CardContent className="p-0 lg:w-[min(calc(100vw-330px-var(--scrollbarwpx)),974px)] md:w-[calc(100vw-254px-var(--scrollbarwpx))] w-[max(calc(100vw-34px-var(--scrollbarwpx)),393px)]">
         <Table>
           <TableHeader>
             <TableRow>
