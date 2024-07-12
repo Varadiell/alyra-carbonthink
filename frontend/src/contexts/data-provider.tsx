@@ -21,6 +21,7 @@ export interface DataType {
   account: {
     address: `0x${string}` | undefined;
     isConnected: boolean;
+    isOwner: boolean;
     totalBalance: number | undefined;
     totalBurnBalance: number | undefined;
   };
@@ -52,6 +53,7 @@ export const DataContext = createContext<DataType>({
   account: {
     address: undefined,
     isConnected: false,
+    isOwner: false,
     totalBalance: undefined,
     totalBurnBalance: undefined,
   },

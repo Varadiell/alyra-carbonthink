@@ -35,7 +35,7 @@ type PageType = {
 export function MainNavigation({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const {
-    account: { totalBalance },
+    account: { isOwner, totalBalance },
     data: { eventLogs, tco2EventLogs, totalProjects },
   } = useContext(DataContext);
 
@@ -71,12 +71,16 @@ export function MainNavigation({ children }: { children: React.ReactNode }) {
     //   label: 'Leaderboard',
     //   url: '/leaderboard',
     // },
-    {
-      count: null,
-      icon: SquarePlus,
-      label: 'New Project',
-      url: '/create',
-    },
+    ...(isOwner
+      ? [
+          {
+            count: null,
+            icon: SquarePlus,
+            label: 'New Project',
+            url: '/create',
+          },
+        ]
+      : []),
     {
       count: eventLogs?.length,
       icon: DatabaseZap,

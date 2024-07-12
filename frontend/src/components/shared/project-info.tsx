@@ -43,6 +43,8 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { AddPhoto } from '@/components/shared/add-photo';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Link from 'next/link';
+import { DataContext } from '@/contexts/data-provider';
+import { useContext } from 'react';
 
 const chartConfig = {
   tokens: {
@@ -71,6 +73,10 @@ export function ProjectInfo({
   totalSupply: number;
   totalBurnSupply: number;
 }) {
+  const {
+    account: { isOwner },
+  } = useContext(DataContext);
+
   const chartData = [
     { status: 'burnt', tokens: totalBurnSupply, fill: 'var(--color-burnt)' },
     { status: 'circulating', tokens: totalSupply, fill: 'var(--color-circulating)' },
@@ -89,16 +95,18 @@ export function ProjectInfo({
           <CardDescription>{project.description}</CardDescription>
         </CardHeader>
         <CardContent className="p-6">
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 items-center">
             <div>Project Holder:</div>
             <Badge className="w-fit text-sm" variant="outline">
               {addrToShortAddr(project.projectHolder)}
             </Badge>
           </div>
         </CardContent>
-        <CardFooter>
-          <ChangeStatus project={project} />
-        </CardFooter>
+        {isOwner && (
+          <CardFooter>
+            <ChangeStatus project={project} />
+          </CardFooter>
+        )}
       </Card>
       <AspectRatio ratio={16 / 9} className="rounded-md overflow-hidden">
         <div className="absolute top-[15px] left-[15px] z-20 float-start">
@@ -296,9 +304,11 @@ export function ProjectInfo({
             </ChartContainer>
           </div>
         </div>
-        <CardFooter>
-          <MintDrawer project={project} />
-        </CardFooter>
+        {isOwner && (
+          <CardFooter>
+            <MintDrawer project={project} />
+          </CardFooter>
+        )}
       </Card>
       <Card>
         <CardContent className="flex flex-col gap-2 text-sm p-6">
@@ -330,9 +340,11 @@ export function ProjectInfo({
             </Table>
           </ScrollArea>
         )}
-        <CardFooter className="p-6">
-          <AddDocument project={project} />
-        </CardFooter>
+        {isOwner && (
+          <CardFooter className="p-6">
+            <AddDocument project={project} />
+          </CardFooter>
+        )}
       </Card>
       <Card>
         <CardContent className="flex flex-col gap-2 text-sm p-6">
@@ -364,9 +376,11 @@ export function ProjectInfo({
             <CarouselNext className="absolute right-2 top-[28px]" />
           </Carousel>
         )}
-        <CardFooter className="p-6">
-          <AddPhoto project={project} />
-        </CardFooter>
+        {isOwner && (
+          <CardFooter className="p-6">
+            <AddPhoto project={project} />
+          </CardFooter>
+        )}
       </Card>
     </div>
   );

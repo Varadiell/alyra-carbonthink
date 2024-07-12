@@ -233,6 +233,7 @@ export function useData(): DataType {
     account: {
       address: accountAddress,
       isConnected,
+      isOwner: accountAddress === projectManagerOwner,
       totalBalance: accountTotalBalance,
       totalBurnBalance: accountTotalBurnBalance,
     },
