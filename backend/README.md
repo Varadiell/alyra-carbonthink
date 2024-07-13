@@ -16,6 +16,11 @@ Deploy contract on Base mainnet:
 $ pnpm hardhat ignition deploy ignition/modules/ProjectManager.ts --network baseMainnet --verify
 ```
 
+Run Hardhat verify:
+```
+$ pnpm hardhat verify --network baseSepolia <deployed_contract_address> "constructor_arg_1" "c_arg_2" "c_arg_x"
+```
+
 Run hardhat tests with coverage
 ```
 $ pnpm hardhat coverage
