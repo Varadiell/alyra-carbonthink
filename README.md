@@ -3,7 +3,7 @@
 # CarbonThink - Alyra
 ## The complete platform for Carbon Credits emission.
 
-Live Demo: https://alyra-carbonthink.vercel.app/
+Live Demo: https://alyra-carbonthink.vercel.app/ - Base Sepolia
 
 See live NFTs on testnet marketplaces:
 - https://testnets.opensea.io/collection/carbonthink-tco2-10
