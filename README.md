@@ -9,6 +9,10 @@ See live NFTs on testnet marketplaces:
 - https://testnets.opensea.io/collection/carbonthink-tco2-10
 - https://testnet.rarible.com/collection/base/0xEB94EeD2557f312C65dC03d2d7347e102de23689/items
 
+See smart contracts on Base Sepolia:
+- [TCO2 token contract](https://sepolia.basescan.org/address/0xEB94EeD2557f312C65dC03d2d7347e102de23689)
+- [ProjectManager contract](https://sepolia.basescan.org/address/0xb13498d53f71fc4c0819fb365816539f8d6822bc)
+
 Initial Specifications: [PDF](/specifications/CarbonThink%20-%20Specifications.pdf) - Made with LaTeX
 
 Alyra's Project Report: 
@@ -39,18 +43,24 @@ All files            |      100 |      100 |      100 |      100 |              
 
 ## Screenshots
 
+> Project Details
 ![image](https://github.com/user-attachments/assets/7e565afd-3edb-4c18-bebe-c458a0ac5186)
 
+> Project List
 ![image](https://github.com/user-attachments/assets/7e897b70-814f-4120-a70f-e2bf9917f93d)
 
+> Dashboard
 ![image](https://github.com/user-attachments/assets/86f674cd-98b3-4c91-b21c-44ef608f5db8)
 
+> Burn Page
 ![image](https://github.com/user-attachments/assets/bbe4243a-141f-4454-a008-c94ac7782ad2)
 
 ## Marketplaces
 
+> OpenSea, NFT info view with Metadata.
 ![image](https://github.com/user-attachments/assets/4f312e87-2677-46e5-8449-48faecb0791f)
 
+> Rarible, collection view.
 ![image](https://github.com/user-attachments/assets/e4b07d68-f6dd-4054-be38-cbdc01268f37)
 
 ------------------------------
