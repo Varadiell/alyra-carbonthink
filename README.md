@@ -15,7 +15,7 @@ See smart contracts on Base Sepolia:
 
 Initial Specifications: [PDF](/specifications/CarbonThink%20-%20Specifications.pdf) - Made with LaTeX
 
-Alyra's Project Report: [PDF](/specifications/CarbonThink%20-%20Alyra%20-%20Carnet%20de%20Projet%20RS6515.pdf)
+Alyra's Project Report: [PDF](/specifications/CarbonThink%20-%20Alyra%20-%20Project%20Report%20RS6515.pdf)
 
 
 ## CI/CD
